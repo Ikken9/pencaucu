@@ -2,11 +2,11 @@ package com.bd.pencaucu.domain.models;
 
 import lombok.Getter;
 import lombok.Setter;
+import java.sql.Blob;
 
 @Getter
 @Setter
-public class User {
-    private String id;
+public class Team {
     private String name;
-    private int rol;
+    private Blob picture;
 }

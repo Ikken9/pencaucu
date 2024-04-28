@@ -5,8 +5,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class User {
-    private String id;
-    private String name;
-    private int rol;
+public class Group {
+    private Scoreboard scoreboard;
 }
