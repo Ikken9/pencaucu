@@ -4,13 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.sql.Blob;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Team {
+public class Stadium {
     private String name;
-    private Blob picture;
+    private String country;
+    private int capacity;
 }
