@@ -32,7 +32,7 @@ public class MatchDaoImpl implements MatchDao {
 
     @Override
     public void save(Match match) {
-        String sql = "INSERT INTO Match VALUES(?, ?, ?)";
+        String sql = "INSERT INTO Match VALUES(?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
                 match.getDate(),
