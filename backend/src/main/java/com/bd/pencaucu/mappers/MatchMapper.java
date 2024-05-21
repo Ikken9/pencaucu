@@ -13,10 +13,10 @@ public class MatchMapper implements RowMapper<Match> {
     @Override
     public Match mapRow(ResultSet rs, int rowNum) throws SQLException {
         Match match = new Match();
-        String firstTeamName = rs.getString("first_team");
-        String secondTeamName = rs.getString("second_team");
-        Blob firstTeamPicture = rs.getBlob("first_team");
-        Blob secondTeamPicture = rs.getBlob("second_team");
+        String firstTeamName = rs.getString("first_team_name");
+        String secondTeamName = rs.getString("second_team_name");
+        Blob firstTeamPicture = rs.getBlob("first_team_flag");
+        Blob secondTeamPicture = rs.getBlob("second_team_flag");
 
         Team team1 = new Team();
         team1.setName(firstTeamName);

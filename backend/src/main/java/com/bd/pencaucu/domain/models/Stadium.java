@@ -10,7 +10,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Stadium {
+    private String id;
     private String name;
     private String country;
-    private int capacity;
+    private String city;
 }
