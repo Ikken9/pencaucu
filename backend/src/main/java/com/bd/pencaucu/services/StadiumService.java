@@ -2,6 +2,7 @@ package com.bd.pencaucu.services;
 
 import com.bd.pencaucu.domain.models.Stadium;
 import com.bd.pencaucu.persistance.interfaces.StadiumDao;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
