@@ -4,9 +4,11 @@ import com.bd.pencaucu.domain.models.Stadium;
 import com.bd.pencaucu.mappers.StadiumMapper;
 import com.bd.pencaucu.persistance.interfaces.StadiumDao;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class StadiumDaoImpl implements StadiumDao {
     
     private JdbcTemplate jdbcTemplate;

@@ -4,9 +4,11 @@ import com.bd.pencaucu.domain.models.Match;
 import com.bd.pencaucu.mappers.MatchMapper;
 import com.bd.pencaucu.persistance.interfaces.MatchDao;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class MatchDaoImpl implements MatchDao {
 
     private JdbcTemplate jdbcTemplate;
@@ -35,11 +37,9 @@ public class MatchDaoImpl implements MatchDao {
         String sql = "INSERT INTO Match VALUES(?, ?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
+                match.getId(),
                 match.getDate(),
-                match.getFirstTeam(),
-                match.getFirstTeamScore(),
-                match.getSecondTeam(),
-                match.getSecondTeamScore());
+                match.getAdminEmail());
     }
 
     @Override
@@ -48,11 +48,9 @@ public class MatchDaoImpl implements MatchDao {
                 "xd = ?";
 
         jdbcTemplate.update(sql,
+                match.getId(),
                 match.getDate(),
-                match.getFirstTeam(),
-                match.getFirstTeamScore(),
-                match.getSecondTeam(),
-                match.getSecondTeamScore());
+                match.getAdminEmail());
     }
 
     @Override
