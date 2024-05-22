@@ -11,9 +11,7 @@ import java.sql.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Match {
-    private Team firstTeam;
-    private Team secondTeam;
-    private int firstTeamScore;
-    private int secondTeamScore;
+    private int id;
     private Date date;
+    private String adminEmail;
 }
