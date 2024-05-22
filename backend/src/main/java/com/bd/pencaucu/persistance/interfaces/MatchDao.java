@@ -1,7 +1,6 @@
 package com.bd.pencaucu.persistance.interfaces;
 
 import com.bd.pencaucu.domain.models.Match;
-
 import java.util.List;
 
 public interface MatchDao {
