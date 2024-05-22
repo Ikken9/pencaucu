@@ -1,6 +1,6 @@
 package com.bd.pencaucu.controllers;
 
-import com.bd.pencaucu.domain.models.User;
+import com.bd.pencaucu.domain.models.Player;
 import com.bd.pencaucu.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,43 +19,43 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@RequestBody @PathVariable String id) {
-        User user = userService.getUserById(id);
+    public ResponseEntity<Player> getUserById(@RequestBody @PathVariable String id) {
+        Player player = userService.getUserById(id);
 
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
+        if (player != null) {
+            return new ResponseEntity<>(player, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<Player>> getAllUsers() {
+        List<Player> players = userService.getAllUsers();
 
-        if (users == null) {
+        if (players == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if (!users.isEmpty()) {
-            return new ResponseEntity<>(users, HttpStatus.OK);
+        } else if (!players.isEmpty()) {
+            return new ResponseEntity<>(players, HttpStatus.OK);
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        userService.createUser(user);
+    public ResponseEntity<Player> createUser(@RequestBody Player player) {
+        userService.createUser(player);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
-        userService.updateUser(user);
+    public ResponseEntity<Player> updateUser(@RequestBody Player player) {
+        userService.updateUser(player);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable String id) {
+    public ResponseEntity<Player> deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
