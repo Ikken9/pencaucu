@@ -1,6 +1,6 @@
 package com.bd.pencaucu.services;
 
-import com.bd.pencaucu.domain.models.User;
+import com.bd.pencaucu.domain.models.Player;
 import com.bd.pencaucu.persistance.interfaces.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,20 +13,20 @@ public class UserService {
 
     private final UserDao userDao;
 
-    public List<User> getAllUsers() {
+    public List<Player> getAllUsers() {
         return userDao.findAll();
     }
 
-    public User getUserById(String id) {
+    public Player getUserById(String id) {
         return userDao.findById(id);
     }
 
-    public void createUser(User user) {
-        userDao.save(user);
+    public void createUser(Player player) {
+        userDao.save(player);
     }
 
-    public void updateUser (User user) {
-        userDao.update(user);
+    public void updateUser (Player player) {
+        userDao.update(player);
     }
 
     public void deleteUser(String id) {
