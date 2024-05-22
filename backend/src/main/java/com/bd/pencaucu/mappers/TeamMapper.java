@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import com.bd.pencaucu.domain.models.Team;
 
-public class TeamMapper implements RowMapper<Team>{
+public class TeamMapper implements RowMapper<Team> {
     @Override
     public Team mapRow(ResultSet rs, int rowNum) throws SQLException {
         Team team = new Team();
