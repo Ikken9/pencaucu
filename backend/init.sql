@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS Matches(
     date DATETIME NOT NULL,
     admin_email VARCHAR(64) NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (admin_email) REFERENCES Admins(email)
+    FOREIGN KEY (admin_email) REFERENCES Admins(admin_email)
 );
 
 CREATE TABLE IF NOT EXISTS Teams(
@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS Bets(
     match_id INT NOT NULL,
     team_score INT NOT NULL,
     PRIMARY KEY (player_email, team_name, match_id),
-    FOREIGN KEY (player_email) REFERENCES Players(email),
+    FOREIGN KEY (player_email) REFERENCES Players(player_email),
     FOREIGN KEY (team_name) REFERENCES Teams(name),
     FOREIGN KEY (match_id) REFERENCES Matches(id)
 );
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS Player_Ranks(
     team_name VARCHAR(64) NOT NULL,
     final_position INT NOT NULL,
     PRIMARY KEY (player_email, team_name),
-    FOREIGN KEY (player_email) REFERENCES Players(email),
+    FOREIGN KEY (player_email) REFERENCES Players(player_email),
     FOREIGN KEY (team_name) REFERENCES Teams(name)
 );
 
