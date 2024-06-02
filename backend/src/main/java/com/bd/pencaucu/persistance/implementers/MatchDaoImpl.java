@@ -19,7 +19,7 @@ public class MatchDaoImpl implements MatchDao {
         List<Match> result = jdbcTemplate.query(sql, new MatchMapper(), id);
 
         if (!result.isEmpty()) {
-            result.getFirst();
+            return result.get(0);
         }
 
         return null;

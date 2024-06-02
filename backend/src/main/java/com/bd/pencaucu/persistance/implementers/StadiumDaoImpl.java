@@ -20,7 +20,7 @@ public class StadiumDaoImpl implements StadiumDao {
         List<Stadium> result = jdbcTemplate.query(sql, new StadiumMapper(), id);
 
         if (!result.isEmpty()) {
-            result.getFirst();
+            return result.get(0);
         }
 
         return null;
