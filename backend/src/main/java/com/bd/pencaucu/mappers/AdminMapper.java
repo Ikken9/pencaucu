@@ -1,4 +1,4 @@
 package com.bd.pencaucu.mappers;
 
-public class LoginMapper {
+public class AdminMapper {
 }

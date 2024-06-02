@@ -2,16 +2,26 @@ CREATE DATABASE IF NOT EXISTS pencaucu_db;
 
 USE pencaucu_db;
 
-CREATE TABLE IF NOT EXISTS Players(
+CREATE TABLE IF NOT EXISTS Users(
     email VARCHAR(64) NOT NULL,
     name VARCHAR(64) NOT NULL,
+    password VARCHAR(256) NOT NULL,
     PRIMARY KEY (email)
 );
 
-CREATE TABLE IF NOT EXISTS Admins(
-    email VARCHAR(64) NOT NULL,
+CREATE TABLE IF NOT EXISTS Players(
+    player_email VARCHAR(64) NOT NULL,
     name VARCHAR(64) NOT NULL,
-    PRIMARY KEY (email)
+    career VARCHAR(64) NOT NULL,
+    PRIMARY KEY (player_email),
+    FOREIGN KEY (player_email) REFERENCES Users(email)
+);
+
+CREATE TABLE IF NOT EXISTS Admins(
+    admin_email VARCHAR(64) NOT NULL,
+    name VARCHAR(64) NOT NULL,
+    PRIMARY KEY (admin_email),
+    FOREIGN KEY (admin_email) REFERENCES Users(email)
 );
 
 CREATE TABLE IF NOT EXISTS Matches(

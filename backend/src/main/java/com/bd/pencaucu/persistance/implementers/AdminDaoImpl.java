@@ -1,4 +1,4 @@
 package com.bd.pencaucu.persistance.implementers;
 
-public class LoginDaoImpl {
+public class AdminDaoImpl {
 }
