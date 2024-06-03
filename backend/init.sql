@@ -11,7 +11,6 @@ CREATE TABLE IF NOT EXISTS Users(
 
 CREATE TABLE IF NOT EXISTS Players(
     player_email VARCHAR(64) NOT NULL,
-    name VARCHAR(64) NOT NULL,
     career VARCHAR(64) NOT NULL,
     PRIMARY KEY (player_email),
     FOREIGN KEY (player_email) REFERENCES Users(email)
@@ -19,7 +18,6 @@ CREATE TABLE IF NOT EXISTS Players(
 
 CREATE TABLE IF NOT EXISTS Admins(
     admin_email VARCHAR(64) NOT NULL,
-    name VARCHAR(64) NOT NULL,
     PRIMARY KEY (admin_email),
     FOREIGN KEY (admin_email) REFERENCES Users(email)
 );

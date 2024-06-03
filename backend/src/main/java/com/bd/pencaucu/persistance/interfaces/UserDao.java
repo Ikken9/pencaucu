@@ -1,13 +1,13 @@
 package com.bd.pencaucu.persistance.interfaces;
 
-import com.bd.pencaucu.domain.models.Player;
+import com.bd.pencaucu.domain.models.User;
 
 import java.util.List;
 
 public interface UserDao {
-    Player findById(String id);
-    List<Player> findAll();
-    void save(Player player);
-    void update(Player player);
+    User findById(String id);
+    List<User> findAll();
+    void save(User user);
+    void update(User user);
     void delete(String id);
 }
