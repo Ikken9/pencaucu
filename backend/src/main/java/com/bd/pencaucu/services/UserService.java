@@ -3,22 +3,26 @@ package com.bd.pencaucu.services;
 import com.bd.pencaucu.domain.models.User;
 import com.bd.pencaucu.persistance.interfaces.UserDao;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserDao userDao;
 
-    public List<User> getAllUsers() {
-        return userDao.findAll();
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userDao.findById(username);
     }
 
-    public User getUserById(String id) {
-        return userDao.findById(id);
+    public List<User> getAllUsers() {
+        return userDao.findAll();
     }
 
     public void createUser(User user) {
@@ -32,4 +36,5 @@ public class UserService {
     public void deleteUser(String id) {
         userDao.delete(id);
     }
+
 }

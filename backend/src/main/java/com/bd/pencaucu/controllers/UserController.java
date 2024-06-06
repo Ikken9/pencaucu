@@ -1,26 +1,34 @@
 package com.bd.pencaucu.controllers;
 
+import com.bd.pencaucu.domain.models.LogInRequest;
 import com.bd.pencaucu.domain.models.User;
 import com.bd.pencaucu.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/users")
+@RestController("/users")
 public class UserController {
 
     private final UserService userService;
+
+    private final Argon2PasswordEncoder passwordEncoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@RequestBody @PathVariable String id) {
-        User user = userService.getUserById(id);
+    @GetMapping("{id}")
+    public ResponseEntity<UserDetails> getUserById(@RequestBody @PathVariable String id) {
+        UserDetails user = userService.loadUserByUsername(id);
 
         if (user != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
@@ -29,7 +37,7 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
 
@@ -42,21 +50,60 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping
+    @PostMapping()
     public ResponseEntity<User> createUser(@RequestBody User user) {
         userService.createUser(user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping()
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<User> deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> registerUser(@RequestBody User user) {
+        try {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            userService.createUser(user);
+            return new ResponseEntity<>(HttpStatus.OK);
+
+        } catch (Exception e) {
+            return new ResponseEntity<>(
+                    String.format("Failed to register user %s", user.getEmail()),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> logInUser(@RequestBody LogInRequest logInRequest) {
+        try {
+            UserDetails user = userService.loadUserByUsername(logInRequest.getEmail());
+            if (user != null && passwordEncoder.matches(logInRequest.getPassword(), user.getPassword())) {
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        user.getUsername(),
+                        user.getPassword()
+                );
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                return new ResponseEntity<>(
+                        "Login successful!",
+                        HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(
+                        "Invalid username or password.",
+                        HttpStatus.UNAUTHORIZED);
+            }
+
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error during authentication.", HttpStatus.BAD_REQUEST);
+        }
     }
 }
