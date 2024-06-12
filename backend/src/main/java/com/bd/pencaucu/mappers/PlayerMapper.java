@@ -13,6 +13,7 @@ public class PlayerMapper implements RowMapper<Player> {
         Player player = new Player();
         player.setEmail(rs.getString("email"));
         player.setCareer(rs.getString("career"));
+
         return player;
     }
 }

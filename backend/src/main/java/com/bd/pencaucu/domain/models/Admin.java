@@ -4,9 +4,8 @@ import lombok.*;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Admin {
     private String email;
-    private String name;
 }
