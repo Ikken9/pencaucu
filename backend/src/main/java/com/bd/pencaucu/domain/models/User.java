@@ -1,29 +1,29 @@
 package com.bd.pencaucu.domain.models;
 
+import com.bd.pencaucu.services.AdminService;
 import lombok.*;
-import org.springframework.boot.autoconfigure.task.TaskExecutionProperties;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements UserDetails {
+
     private String email;
     private String name;
     private String password;
-    private boolean isAdmin;
-    private int userPoints;
+
+    private AdminService adminService;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if (isAdmin) {
+        Admin adminUser = adminService.getAdminById(email);
+        if (adminUser != null) {
             SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
             return Collections.singletonList(authority);
         }

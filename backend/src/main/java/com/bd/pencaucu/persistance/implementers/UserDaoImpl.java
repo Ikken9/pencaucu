@@ -1,8 +1,10 @@
 package com.bd.pencaucu.persistance.implementers;
 
 import com.bd.pencaucu.domain.models.User;
+import com.bd.pencaucu.exceptions.InvalidUserRegistrationException;
 import com.bd.pencaucu.mappers.UserMapper;
 import com.bd.pencaucu.persistance.interfaces.UserDao;
+import jdk.jshell.spi.ExecutionControl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

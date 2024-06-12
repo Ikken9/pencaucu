@@ -2,8 +2,8 @@ package com.bd.pencaucu.controllers;
 
 import com.bd.pencaucu.domain.models.LogInRequest;
 import com.bd.pencaucu.domain.models.User;
+import com.bd.pencaucu.exceptions.InvalidUserRegistrationException;
 import com.bd.pencaucu.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -69,41 +69,33 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
-        try {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            userService.createUser(user);
-            return new ResponseEntity<>(HttpStatus.OK);
-
-        } catch (Exception e) {
-            return new ResponseEntity<>(
-                    String.format("Failed to register user %s", user.getEmail()),
-                    HttpStatus.BAD_REQUEST
-            );
+    public ResponseEntity<String> registerUser(@RequestBody User user) throws InvalidUserRegistrationException {
+        if (!user.getEmail().endsWith("@ucu.edu.uy")
+                || !user.getEmail().endsWith("@correo.ucu.edu.uy")) {
+            return new ResponseEntity<>("Invalid email domain.",
+                    HttpStatus.BAD_REQUEST);
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userService.createUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> logInUser(@RequestBody LogInRequest logInRequest) {
-        try {
-            UserDetails user = userService.loadUserByUsername(logInRequest.getEmail());
-            if (user != null && passwordEncoder.matches(logInRequest.getPassword(), user.getPassword())) {
-                Authentication authentication = new UsernamePasswordAuthenticationToken(
-                        user.getUsername(),
-                        user.getPassword()
-                );
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                return new ResponseEntity<>(
-                        "Login successful!",
-                        HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(
-                        "Invalid username or password.",
-                        HttpStatus.UNAUTHORIZED);
-            }
-
-        } catch (Exception e) {
-            return new ResponseEntity<>("Error during authentication.", HttpStatus.BAD_REQUEST);
+        UserDetails user = userService.loadUserByUsername(logInRequest.getEmail());
+        if (user != null && passwordEncoder.matches(logInRequest.getPassword(), user.getPassword())) {
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    user.getUsername(),
+                    user.getPassword()
+            );
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            return new ResponseEntity<>(
+                    "Login successful!",
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(
+                    "Invalid username or password.",
+                    HttpStatus.UNAUTHORIZED);
         }
     }
 }
