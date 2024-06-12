@@ -1,5 +1,6 @@
 package com.bd.pencaucu.exceptions.handler;
 
+import com.bd.pencaucu.exceptions.InvalidUserRegistrationException;
 import com.bd.pencaucu.exceptions.ResourceNotFoundException;
 import com.bd.pencaucu.exceptions.ResourceAlreadyExistsException;
 import org.springframework.http.HttpStatus;
@@ -65,5 +66,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         body.put("request description", req.getDescription(false));
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> handleInvalidUserRegistrationException(InvalidUserRegistrationException ex, WebRequest req) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        body.put("request description", req.getDescription(false));
+
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 }
