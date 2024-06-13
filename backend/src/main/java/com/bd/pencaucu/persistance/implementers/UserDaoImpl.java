@@ -22,7 +22,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findById(String id) throws UsernameNotFoundException {
-        String sql = "SELECT * FROM Users WHERE email = ?";
+        String sql = "SELECT email, name, last_name, password FROM Users WHERE email = ?";
         List<User> users = jdbcTemplate.query(sql, new UserMapper(), id);
 
         if (!users.isEmpty()) {
@@ -56,6 +56,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void delete(String id) {
-
+        String sql = "DELETE FROM Users WHERE id = ?";
+        jdbcTemplate.update(sql, id);
     }
 }

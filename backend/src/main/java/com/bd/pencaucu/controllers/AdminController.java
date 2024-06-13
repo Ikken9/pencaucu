@@ -43,20 +43,20 @@ public class AdminController {
     }
 
     @PostMapping
-    public ResponseEntity<Admin> createUser(@RequestBody Admin admin) {
-        adminService.createUser(admin);
+    public ResponseEntity<Admin> createAdmin(@RequestBody Admin admin) {
+        adminService.createAdmin(admin);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<Admin> updateUser(@RequestBody Admin admin) {
-        adminService.updateUser(admin);
+    public ResponseEntity<Admin> updateAdmin(@RequestBody Admin admin) {
+        adminService.updateAdmin(admin);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Admin> deleteUser(@PathVariable String id) {
-        adminService.deleteUser(id);
+    public ResponseEntity<Admin> deleteAdmin(@PathVariable String id) {
+        adminService.deleteAdmin(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

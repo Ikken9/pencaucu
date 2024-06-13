@@ -5,6 +5,7 @@ import com.bd.pencaucu.exceptions.ResourceNotFoundException;
 import com.bd.pencaucu.exceptions.ResourceAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -68,7 +69,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler(ResourceNotFoundException.class)
+    @ExceptionHandler(InvalidUserRegistrationException.class)
     public ResponseEntity<Object> handleInvalidUserRegistrationException(InvalidUserRegistrationException ex, WebRequest req) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
@@ -76,5 +77,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         body.put("request description", req.getDescription(false));
 
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<Object> handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest req) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        body.put("request description", req.getDescription(false));
+
+        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 }

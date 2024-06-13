@@ -30,11 +30,7 @@ public class UserController {
     public ResponseEntity<UserDetails> getUserById(@RequestBody @PathVariable String id) {
         UserDetails user = userService.loadUserByUsername(id);
 
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping()
@@ -50,12 +46,6 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping()
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        userService.createUser(user);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
     @PutMapping()
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         userService.updateUser(user);
@@ -68,16 +58,20 @@ public class UserController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PostMapping("/register")
+    @PostMapping()
     public ResponseEntity<String> registerUser(@RequestBody User user) throws InvalidUserRegistrationException {
         if (!user.getEmail().endsWith("@ucu.edu.uy")
-                || !user.getEmail().endsWith("@correo.ucu.edu.uy")) {
-            return new ResponseEntity<>("Invalid email domain.",
+                && !user.getEmail().endsWith("@correo.ucu.edu.uy")) {
+            String domain = user.getEmail().split("@")[1];
+            return new ResponseEntity<>(
+                    String.format("Email domain %s is not valid.", domain),
                     HttpStatus.BAD_REQUEST);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.createUser(user);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(
+                String.format("User with email %s has been registered.", user.getEmail()),
+                HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
