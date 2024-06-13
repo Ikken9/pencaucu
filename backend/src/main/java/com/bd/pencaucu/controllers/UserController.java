@@ -30,11 +30,7 @@ public class UserController {
     public ResponseEntity<UserDetails> getUserById(@RequestBody @PathVariable String id) {
         UserDetails user = userService.loadUserByUsername(id);
 
-        if (user != null) {
-            return new ResponseEntity<>(user, HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping()
