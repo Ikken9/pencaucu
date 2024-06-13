@@ -3,6 +3,7 @@ package com.bd.pencaucu.persistance.implementers;
 import com.bd.pencaucu.domain.models.Admin;
 import com.bd.pencaucu.mappers.AdminMapper;
 import com.bd.pencaucu.persistance.interfaces.AdminDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,7 @@ public class AdminDaoImpl implements AdminDao {
 
     private final String ADMIN_NOT_FOUND_MSG = "Admin with email %s not found";
 
+    @Autowired
     JdbcTemplate jdbcTemplate;
 
     @Override

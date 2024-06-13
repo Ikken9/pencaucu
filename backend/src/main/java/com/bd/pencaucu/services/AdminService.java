@@ -21,9 +21,9 @@ public class AdminService {
         return adminDao.findById(id);
     }
 
-    public void createUser(Admin admin) { adminDao.save(admin); }
+    public void createAdmin(Admin admin) { adminDao.save(admin); }
 
-    public void updateUser(Admin admin) { adminDao.update(admin); }
+    public void updateAdmin(Admin admin) { adminDao.update(admin); }
 
-    public void deleteUser(String id) { adminDao.delete(id); }
+    public void deleteAdmin(String id) { adminDao.delete(id); }
 }

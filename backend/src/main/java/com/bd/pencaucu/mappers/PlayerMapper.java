@@ -12,7 +12,7 @@ public class PlayerMapper implements RowMapper<Player> {
     public Player mapRow(ResultSet rs, int rowNum) throws SQLException {
         Player player = new Player();
         player.setEmail(rs.getString("email"));
-        player.setCareer(rs.getString("career"));
+        player.setCareerId(rs.getInt("career_id"));
 
         return player;
     }

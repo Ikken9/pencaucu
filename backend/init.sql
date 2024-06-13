@@ -2,6 +2,12 @@ CREATE DATABASE IF NOT EXISTS pencaucu_db;
 
 USE pencaucu_db;
 
+CREATE TABLE IF NOT EXISTS Careers(
+    career_id INT NOT NULL AUTO_INCREMENT,
+    career_name VARCHAR(64) NOT NULL,
+    PRIMARY KEY (career_id)
+);
+
 CREATE TABLE IF NOT EXISTS Users(
     email VARCHAR(64) NOT NULL,
     name VARCHAR(64) NOT NULL,
@@ -11,9 +17,10 @@ CREATE TABLE IF NOT EXISTS Users(
 
 CREATE TABLE IF NOT EXISTS Players(
     player_email VARCHAR(64) NOT NULL,
-    career VARCHAR(64) NOT NULL,
+    career_id INT NOT NULL,
     PRIMARY KEY (player_email),
-    FOREIGN KEY (player_email) REFERENCES Users(email)
+    FOREIGN KEY (player_email) REFERENCES Users(email),
+    FOREIGN KEY (career_id) REFERENCES Careers(career_id)
 );
 
 CREATE TABLE IF NOT EXISTS Admins(
@@ -92,3 +99,9 @@ CREATE TABLE IF NOT EXISTS Group_Stages(
     FOREIGN KEY (match_id) REFERENCES Matches(id),
     FOREIGN KEY (group_id) REFERENCES Group_Stages(id)
 );
+
+# CAREER EXAMPLE DATA INSERT
+INSERT INTO Careers(career_name) VALUES ("Ingeniería en Informática");
+INSERT INTO Careers(career_name) VALUES ("Ingeniería en Alimentos");
+INSERT INTO Careers(career_name) VALUES ("Ingeniería en Electrónica");
+INSERT INTO Careers(career_name) VALUES ("Ingeniería Industrial");

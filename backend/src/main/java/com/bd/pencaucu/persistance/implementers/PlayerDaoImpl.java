@@ -3,6 +3,7 @@ package com.bd.pencaucu.persistance.implementers;
 import com.bd.pencaucu.domain.models.Player;
 import com.bd.pencaucu.mappers.PlayerMapper;
 import com.bd.pencaucu.persistance.interfaces.PlayerDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,7 @@ public class PlayerDaoImpl implements PlayerDao {
 
     private final String PLAYER_NOT_FOUND_MSG = "Player with email %s not found";
 
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
@@ -37,11 +39,11 @@ public class PlayerDaoImpl implements PlayerDao {
 
     @Override
     public void save(Player player) {
-        String sql = "INSERT INTO Players (player_email, career) VALUES (?, ?)";
+        String sql = "INSERT INTO Players (player_email, career_id) VALUES (?, ?)";
 
         jdbcTemplate.update(sql,
                 player.getEmail(),
-                player.getCareer());
+                player.getCareerId());
 
     }
 
