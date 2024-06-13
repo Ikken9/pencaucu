@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Player {
     private String email;
-    private int careerId;
+    private String careerName;
 }

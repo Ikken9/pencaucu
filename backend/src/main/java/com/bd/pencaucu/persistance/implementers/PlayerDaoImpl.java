@@ -43,7 +43,7 @@ public class PlayerDaoImpl implements PlayerDao {
 
         jdbcTemplate.update(sql,
                 player.getEmail(),
-                player.getCareerId());
+                player.getCareerName());
 
     }
 

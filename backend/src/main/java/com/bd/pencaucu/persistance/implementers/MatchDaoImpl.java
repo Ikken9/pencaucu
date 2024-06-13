@@ -3,6 +3,7 @@ package com.bd.pencaucu.persistance.implementers;
 import com.bd.pencaucu.domain.models.Match;
 import com.bd.pencaucu.mappers.MatchMapper;
 import com.bd.pencaucu.persistance.interfaces.MatchDao;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -11,11 +12,12 @@ import java.util.List;
 @Repository
 public class MatchDaoImpl implements MatchDao {
 
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
     public Match findById(String id) {
-        String sql = "SELECT * FROM Match WHERE id = ?";
+        String sql = "SELECT id, date, admin_email FROM Match WHERE id = ?";
         List<Match> result = jdbcTemplate.query(sql, new MatchMapper(), id);
 
         if (!result.isEmpty()) {
@@ -27,14 +29,14 @@ public class MatchDaoImpl implements MatchDao {
 
     @Override
     public List<Match> findAll() {
-        String sql = "SELECT * FROM Match";
+        String sql = "SELECT id, date, admin_email FROM Match";
 
         return jdbcTemplate.query(sql, new MatchMapper());
     }
 
     @Override
     public void save(Match match) {
-        String sql = "INSERT INTO Match VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Match(id, date, admin_email) VALUES(?, ?, ?)";
 
         jdbcTemplate.update(sql,
                 match.getId(),
@@ -45,12 +47,13 @@ public class MatchDaoImpl implements MatchDao {
     @Override
     public void update(Match match) {
         String sql = "UPDATE Match SET " +
-                "xd = ?";
+                "date = ?," +
+                "admin_email = ? WHERE id = ?";
 
         jdbcTemplate.update(sql,
-                match.getId(),
                 match.getDate(),
-                match.getAdminEmail());
+                match.getAdminEmail(),
+                match.getId());
     }
 
     @Override

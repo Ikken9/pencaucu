@@ -3,9 +3,8 @@ CREATE DATABASE IF NOT EXISTS pencaucu_db;
 USE pencaucu_db;
 
 CREATE TABLE IF NOT EXISTS Careers(
-    career_id INT NOT NULL AUTO_INCREMENT,
     career_name VARCHAR(64) NOT NULL,
-    PRIMARY KEY (career_id)
+    PRIMARY KEY (career_name)
 );
 
 CREATE TABLE IF NOT EXISTS Users(
@@ -17,10 +16,10 @@ CREATE TABLE IF NOT EXISTS Users(
 
 CREATE TABLE IF NOT EXISTS Players(
     player_email VARCHAR(64) NOT NULL,
-    career_id INT NOT NULL,
+    career_name VARCHAR(64) NOT NULL,
     PRIMARY KEY (player_email),
     FOREIGN KEY (player_email) REFERENCES Users(email),
-    FOREIGN KEY (career_id) REFERENCES Careers(career_id)
+    FOREIGN KEY (career_name) REFERENCES Careers(career_name)
 );
 
 CREATE TABLE IF NOT EXISTS Admins(
