@@ -3,17 +3,17 @@ package com.bd.pencaucu.persistance.implementers;
 import com.bd.pencaucu.domain.models.Match;
 import com.bd.pencaucu.mappers.MatchMapper;
 import com.bd.pencaucu.persistance.interfaces.MatchDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class MatchDaoImpl implements MatchDao {
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public Match findById(String id) {
@@ -29,14 +29,14 @@ public class MatchDaoImpl implements MatchDao {
 
     @Override
     public List<Match> findAll() {
-        String sql = "SELECT id, date, admin_email FROM Match";
+        String sql = "SELECT * FROM Matches";
 
         return jdbcTemplate.query(sql, new MatchMapper());
     }
 
     @Override
     public void save(Match match) {
-        String sql = "INSERT INTO Match(id, date, admin_email) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO Matches (id, date, admin_email) VALUES(?, ?, ?)";
 
         jdbcTemplate.update(sql,
                 match.getId(),
@@ -46,7 +46,7 @@ public class MatchDaoImpl implements MatchDao {
 
     @Override
     public void update(Match match) {
-        String sql = "UPDATE Match SET " +
+        String sql = "UPDATE Matches SET " +
                 "date = ?," +
                 "admin_email = ? WHERE id = ?";
 
@@ -58,7 +58,7 @@ public class MatchDaoImpl implements MatchDao {
 
     @Override
     public void delete(String id) {
-        String sql = "DELETE FROM Match WHERE id = ?";
+        String sql = "DELETE FROM Matches WHERE id = ?";
 
         jdbcTemplate.update(sql, id);
     }

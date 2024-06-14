@@ -4,20 +4,19 @@ import com.bd.pencaucu.domain.models.Result;
 import com.bd.pencaucu.exceptions.ResourceNotFoundException;
 import com.bd.pencaucu.mappers.ResultMapper;
 import com.bd.pencaucu.persistance.interfaces.ResultDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 public class ResultDaoImpl implements ResultDao {
 
     private final String RESULT_NOT_FOUND_MSG = "Results with %s %s not found";
 
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Override
     public List<Result> findByMatchId(int matchId) throws ResourceNotFoundException {
