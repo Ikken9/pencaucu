@@ -1,15 +1,11 @@
-use std::thread::Scope;
 use leptos::*;
-use leptos::html::*;
-use leptos_router::*;
-use leptos::logging::log;
 use crate::models::auth_model::{EmailAddress, Password};
-use crate::services::{match_service, auth_service};
+use crate::services:: auth_service;
 
 
 #[component]
 pub fn Login() -> impl IntoView {
-    let (login_error, set_login_error) = create_signal(None::<String>);
+    let (login_error, _set_login_error) = create_signal(None::<String>);
     let (wait_for_response, set_wait_for_response) = create_signal(false);
 
     let login_action =
@@ -20,7 +16,7 @@ pub fn Login() -> impl IntoView {
 
             async move {
                 set_wait_for_response.update(|w| *w = true);
-                let result = auth_service::login(email, password).await;
+                let _result = auth_service::login(email, password).await;
                 set_wait_for_response.update(|w| *w = false);
 
             }
