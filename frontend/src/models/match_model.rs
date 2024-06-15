@@ -1,12 +1,11 @@
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, Clone, Hash, Eq, PartialEq)]
-pub struct MatchKey(i32);
-
-// The result of the query fetcher.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MatchData {
+#[derive(Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct Match {
     pub(crate) id: u32,
     pub(crate) date: String,
-    pub(crate) admin_email: String
+    pub(crate) first_team_name: String,
+    pub(crate) second_team_name: String,
+    pub(crate) first_team_score: String,
+    pub(crate) second_team_score: String,
 }
