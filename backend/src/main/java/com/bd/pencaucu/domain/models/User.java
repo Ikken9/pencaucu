@@ -16,7 +16,6 @@ public class User implements UserDetails {
 
     private String email;
     private String name;
-    private String lastName;
     private String password;
 
     private AdminService adminService;

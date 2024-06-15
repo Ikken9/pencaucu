@@ -16,7 +16,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                     .requestMatchers(
-                            "/matches",
+                            "/matches/**",
                             "/auth/register",
                             "/auth/login",
                             "/players").permitAll()

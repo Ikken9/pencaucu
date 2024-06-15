@@ -18,7 +18,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User findById(String id) throws UsernameNotFoundException {
-        String sql = "SELECT email, name, last_name, password FROM Users WHERE email = ?";
+        String sql = "SELECT email, name FROM Users WHERE email = ?";
         List<User> users = jdbcTemplate.query(sql, new UserMapper(), id);
 
         if (!users.isEmpty()) {
@@ -38,12 +38,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void save(User user) {
-        String sql = "INSERT INTO Users (email, name, last_name, password) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Users (email, name) VALUES (?, ?, ?, ?)";
 
         jdbcTemplate.update(sql,
                 user.getEmail(),
                 user.getName(),
-                user.getLastName(),
                 user.getPassword());
     }
 
