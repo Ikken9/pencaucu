@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use leptos::logging::log;
 use log::{error, info};
 use reqwest::{Client, Response};
 use crate::models::auth_model::{EmailAddress, Password, Username};
@@ -16,7 +15,7 @@ pub async fn login(email: EmailAddress, password: Password) -> Result<Response, 
         .await;
 
     match res {
-        Ok(mut response) => {
+        Ok(response) => {
             match response.text().await {
                 Ok(text) => {
                     info!("Login response: {}", text);
@@ -54,7 +53,7 @@ pub async fn register(username: Username, email_address: EmailAddress, password:
         .await;
 
     match res {
-        Ok(mut response) => {
+        Ok(response) => {
             match response.text().await {
                 Ok(text) => {
                     info!("Register response: {}", text);
