@@ -1,6 +1,7 @@
 package com.bd.pencaucu.controllers;
 
 import com.bd.pencaucu.domain.models.Match;
+import com.bd.pencaucu.dto.MatchDTO;
 import com.bd.pencaucu.services.MatchService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class MatchController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Match> getMatchById(@PathVariable String id) {
-        Match match = matchService.getMatchById(id);
+    public ResponseEntity<MatchDTO> getMatchById(@PathVariable String id) {
+        MatchDTO match = matchService.getMatchById(id);
 
         if (match != null) {
             return new ResponseEntity<>(match, HttpStatus.OK);
@@ -30,8 +31,8 @@ public class MatchController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Match>> getAllMatches() {
-        List<Match> matches = matchService.getAllMatches();
+    public ResponseEntity<List<MatchDTO>> getAllMatches() {
+        List<MatchDTO> matches = matchService.getAllMatches();
 
         if (matches == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
