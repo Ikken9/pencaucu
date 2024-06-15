@@ -99,26 +99,74 @@ CREATE TABLE IF NOT EXISTS Player_Ranks(
 );
 
 #LOAD DUMMY DATA TO DATABASE
-# REGISTER ADMIN USER
+# CAREER EXAMPLE DATA INSERT
+INSERT INTO Careers(career_name) VALUES ('Ingeniería en Informática');
+INSERT INTO Careers(career_name) VALUES ('Ingeniería en Alimentos');
+INSERT INTO Careers(career_name) VALUES ('Ingeniería en Electrónica');
+INSERT INTO Careers(career_name) VALUES ('Ingeniería Industrial');
+
+# REGISTER USER
 INSERT INTO Users(email, name)
     VALUES (
            'martin.caraballo@correo.ucu.edu.uy',
            'Martin'
           );
 
+INSERT INTO Users(email, name)
+    VALUES (
+            'dali.fernandez@correo.ucu.edu.uy',
+            'Dali'
+           );
+
+INSERT INTO Users(email, name)
+    VALUES (
+           'flacacho.hernandez@correo.ucu.edu.uy',
+           'Flacacho'
+           );
+
+INSERT INTO Users(email, name)
+    VALUES(
+           'santiago.berrueta@correo.ucu.edu.uy',
+           'Santiago'
+          );
+
+# REGISTER USERS PASSWORDS
 INSERT INTO Logins(user_email, password)
     VALUES (
             'martin.caraballo@correo.ucu.edu.uy',
             '$argon2id$v=19$m=16384,t=2,p=1$d3wl2tx3lAa1WcCqtEyO8Q$Oy9THcFIYwk2sb2WODcW1xsZVXFcQwqWJmVF+ZZeOu0'
            );
 
+INSERT INTO Logins(user_email, password)
+    VALUES (
+           'dali.fernandez@correo.ucu.edu.uy',
+           '$argon2id$v=19$m=16384,t=2,p=1$d3wl2tx3lAa1WcCqtEyO8Q$Oy9THcFIYwk2sb2WODcW1xsZVXFcQwqWJmVF+ZZeOu0'
+           );
+
+INSERT INTO Logins(user_email, password)
+    VALUES (
+           'flacacho.hernandez@correo.ucu.edu.uy',
+           '$argon2id$v=19$m=16384,t=2,p=1$d3wl2tx3lAa1WcCqtEyO8Q$Oy9THcFIYwk2sb2WODcW1xsZVXFcQwqWJmVF+ZZeOu0'
+           );
+
+INSERT INTO Logins(user_email, password)
+    VALUES (
+            'santiago.berrueta@correo.ucu.edu.uy',
+            '$argon2id$v=19$m=16384,t=2,p=1$d3wl2tx3lAa1WcCqtEyO8Q$Oy9THcFIYwk2sb2WODcW1xsZVXFcQwqWJmVF+ZZeOu0'
+           );
+
+# REGISTER ADMIN USER
 INSERT INTO Admins VALUES ('martin.caraballo@correo.ucu.edu.uy');
 
-# CAREER EXAMPLE DATA INSERT
-INSERT INTO Careers(career_name) VALUES ('Ingeniería en Informática');
-INSERT INTO Careers(career_name) VALUES ('Ingeniería en Alimentos');
-INSERT INTO Careers(career_name) VALUES ('Ingeniería en Electrónica');
-INSERT INTO Careers(career_name) VALUES ('Ingeniería Industrial');
+# REGISTER PLAYER USERS
+INSERT INTO Players(player_email, career_name)
+    VALUES ('dali.fernandez@correo.ucu.edu.uy', 'Ingeniería en Informática');
+
+INSERT INTO Players(player_email, career_name)
+    VALUES ('flacacho.hernandez@correo.ucu.edu.uy', 'Ingeniería en Electrónica');
+
+INSERT INTO Players(player_email, career_name)
+    VALUES ('santiago.berrueta@correo.ucu.edu.uy', 'Ingeniería Industrial');
 
 # TEAMS EXAMPLE DATA INSERT
 INSERT INTO Teams(name, group_letter, flag_image)
@@ -176,6 +224,12 @@ INSERT INTO Matches(id, date, stadium_id, team_name, faced_team_name, admin_emai
 INSERT INTO Matches(id, date, stadium_id, team_name, faced_team_name, admin_email)
     VALUES (6, '2024-06-23 22:00:00', 'HRS-MIA-EEUU', 'Uruguay', 'Panamá', 'martin.caraballo@correo.ucu.edu.uy');
 
+INSERT INTO Matches(id, date, stadium_id, team_name, faced_team_name, admin_email)
+    VALUES (7, '2024-05-20 21:00:00', 'MBS-ATL-EEUU', 'Argentina', 'Uruguay', 'martin.caraballo@correo.ucu.edu.uy');
+
+INSERT INTO Matches(id, date, stadium_id, team_name, faced_team_name, admin_email)
+    VALUES (8, '2024-04-18 20:00:00', 'MBS-ATL-EEUU', 'Uruguay', 'Canadá', 'martin.caraballo@correo.ucu.edu.uy');
+
 # RESULTS EXAMPLE DATA INSERT
 INSERT INTO Results(match_id)
     VALUES (1);
@@ -194,6 +248,12 @@ INSERT INTO Results(match_id)
 
 INSERT INTO Results(match_id)
     VALUES (6);
+
+INSERT INTO Results(match_id, team_score, faced_team_score)
+    VALUES (7, 3, 1);
+
+INSERT INTO Results(match_id, team_score, faced_team_score)
+    VALUES (8, 4, 2);
 
 # STADIUMS EXAMPLE DATA INSERT
 INSERT INTO Stadiums(id, country, state, city, name)
@@ -258,4 +318,96 @@ INSERT INTO Knockout_Stage(id, name)
     VALUES (
            3,
            'Final'
+       );
+
+# PLAYER RANKS EXAMPLE DATA INSERT
+INSERT INTO Player_Ranks(player_email, team_name, final_position)
+    VALUES (
+            'dali.fernandez@correo.ucu.edu.uy',
+            'Uruguay',
+            1
+           );
+
+INSERT INTO Player_Ranks(player_email, team_name, final_position)
+    VALUES (
+           'dali.fernandez@correo.ucu.edu.uy',
+           'Argentina',
+           2
+       );
+
+INSERT INTO Player_Ranks(player_email, team_name, final_position)
+    VALUES (
+           'flacacho.hernandez@correo.ucu.edu.uy',
+           'Canadá',
+           1
+       );
+
+INSERT INTO Player_Ranks(player_email, team_name, final_position)
+    VALUES (
+           'flacacho.hernandez@correo.ucu.edu.uy',
+           'Perú',
+           2
+       );
+
+INSERT INTO Player_Ranks(player_email, team_name, final_position)
+    VALUES (
+           'santiago.berrueta@correo.ucu.edu.uy',
+           'Bolivia',
+           1
+       );
+
+INSERT INTO Player_Ranks(player_email, team_name, final_position)
+    VALUES (
+           'santiago.berrueta@correo.ucu.edu.uy',
+           'Venezuela',
+           2
+       );
+
+# PLAYER BET EXAMPLE DATA INSERT
+INSERT INTO Bets(player_email, match_id, team_score, faced_team_score)
+    VALUES (
+            'dali.fernandez@correo.ucu.edu.uy',
+            7,
+            2,
+            2
+           );
+
+INSERT INTO Bets(player_email, match_id, team_score, faced_team_score)
+    VALUES (
+           'dali.fernandez@correo.ucu.edu.uy',
+           8,
+           1,
+           1
+       );
+
+INSERT INTO Bets(player_email, match_id, team_score, faced_team_score)
+    VALUES (
+           'flacacho.hernandez@correo.ucu.edu.uy',
+           7,
+           3,
+           1
+       );
+
+INSERT INTO Bets(player_email, match_id, team_score, faced_team_score)
+    VALUES (
+           'flacacho.hernandez@correo.ucu.edu.uy',
+           8,
+           4,
+           2
+       );
+
+INSERT INTO Bets(player_email, match_id, team_score, faced_team_score)
+    VALUES (
+           'santiago.berrueta@correo.ucu.edu.uy',
+           7,
+           3,
+           2
+       );
+
+INSERT INTO Bets(player_email, match_id, team_score, faced_team_score)
+    VALUES (
+           'santiago.berrueta@correo.ucu.edu.uy',
+           8,
+           5,
+           3
        );

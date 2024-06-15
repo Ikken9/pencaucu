@@ -1,4 +1,4 @@
-package com.bd.pencaucu.mappers;
+package com.bd.pencaucu.mappers.models;
 
 import com.bd.pencaucu.domain.models.Admin;
 import org.springframework.jdbc.core.RowMapper;

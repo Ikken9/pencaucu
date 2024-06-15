@@ -1,6 +1,5 @@
-package com.bd.pencaucu.mappers;
+package com.bd.pencaucu.mappers.models;
 
-import com.bd.pencaucu.domain.models.Player;
 import com.bd.pencaucu.domain.models.User;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -14,7 +13,6 @@ public class UserMapper implements RowMapper<User> {
         User user = new User();
         user.setEmail(rs.getString("email"));
         user.setName(rs.getString("name"));
-        user.setPassword(rs.getString("password"));
 
         return user;
     }

@@ -11,6 +11,5 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 public class PlayerDTO implements Serializable {
     private String name;
-    private String lastName;
     private int points;
 }

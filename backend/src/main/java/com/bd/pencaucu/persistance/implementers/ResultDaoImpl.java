@@ -2,7 +2,7 @@ package com.bd.pencaucu.persistance.implementers;
 
 import com.bd.pencaucu.domain.models.Result;
 import com.bd.pencaucu.exceptions.ResourceNotFoundException;
-import com.bd.pencaucu.mappers.ResultMapper;
+import com.bd.pencaucu.mappers.models.ResultMapper;
 import com.bd.pencaucu.persistance.interfaces.ResultDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

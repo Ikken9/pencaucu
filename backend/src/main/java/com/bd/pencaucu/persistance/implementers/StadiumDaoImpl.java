@@ -1,7 +1,7 @@
 package com.bd.pencaucu.persistance.implementers;
 
 import com.bd.pencaucu.domain.models.Stadium;
-import com.bd.pencaucu.mappers.StadiumMapper;
+import com.bd.pencaucu.mappers.models.StadiumMapper;
 import com.bd.pencaucu.persistance.interfaces.StadiumDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

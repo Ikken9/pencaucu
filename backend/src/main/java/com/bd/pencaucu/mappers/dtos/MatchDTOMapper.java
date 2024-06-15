@@ -1,6 +1,5 @@
-package com.bd.pencaucu.mappers;
+package com.bd.pencaucu.mappers.dtos;
 
-import com.bd.pencaucu.domain.models.Match;
 import com.bd.pencaucu.dto.MatchDTO;
 import org.springframework.jdbc.core.RowMapper;
 
