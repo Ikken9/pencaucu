@@ -1,5 +1,6 @@
 package com.bd.pencaucu.persistance.implementers;
 
+import com.bd.pencaucu.domain.models.Login;
 import com.bd.pencaucu.domain.models.User;
 import com.bd.pencaucu.mappers.UserMapper;
 import com.bd.pencaucu.persistance.interfaces.UserDao;
@@ -38,12 +39,11 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void save(User user) {
-        String sql = "INSERT INTO Users (email, name) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO Users (email, name) VALUES (?, ?)";
 
         jdbcTemplate.update(sql,
                 user.getEmail(),
-                user.getName(),
-                user.getPassword());
+                user.getName());
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.bd.pencaucu.controllers;
 import com.bd.pencaucu.domain.models.Login;
 import com.bd.pencaucu.domain.models.User;
 import com.bd.pencaucu.exceptions.InvalidUserRegistrationException;
+import com.bd.pencaucu.services.LoginService;
 import com.bd.pencaucu.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,11 @@ public class AuthController {
 
     private final Argon2PasswordEncoder passwordEncoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
     private final UserService userService;
+    private final LoginService loginService;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, LoginService loginService) {
         this.userService = userService;
+        this.loginService = loginService;
     }
 
     @PostMapping("/register")
@@ -37,8 +40,11 @@ public class AuthController {
                     String.format("Email domain %s is not valid.", domain),
                     HttpStatus.BAD_REQUEST);
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        Login login = new Login();
+        login.setEmail(user.getEmail());
+        login.setPassword(passwordEncoder.encode(user.getPassword()));
         userService.createUser(user);
+        loginService.saveLoginUser(login);
         return new ResponseEntity<>(
                 String.format("User with email %s has been registered.", user.getEmail()),
                 HttpStatus.CREATED);
@@ -46,10 +52,10 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<String> logInUser(@RequestBody Login login) {
-        UserDetails user = userService.loadUserByUsername(login.getEmail());
+        Login user = loginService.findLoginId(login.getEmail());
         if (user != null && passwordEncoder.matches(login.getPassword(), user.getPassword())) {
             Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    user.getUsername(),
+                    user.getEmail(),
                     user.getPassword()
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);

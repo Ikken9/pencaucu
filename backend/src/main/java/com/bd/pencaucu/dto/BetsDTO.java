@@ -3,8 +3,8 @@ package com.bd.pencaucu.dto;
 import java.io.Serializable;
 
 public class BetsDTO implements Serializable {
-    private String firstTeamName;
-    private String secondTeamName;
-    private Integer firstTeamScore;
-    private Integer secondTeamScore;
+    private String teamName;
+    private String facedTeamName;
+    private Integer teamScore;
+    private Integer facedTeamScore;
 }
