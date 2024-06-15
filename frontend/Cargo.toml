@@ -15,3 +15,4 @@ web-sys = "0.3.69"
 log = "0.4.21"
 serde = { version = "1.0.203", features = ["derive"] }
 reqwest = { version = "0.12.4", features = ["json"] }
+reqwasm = "0.5.0"
