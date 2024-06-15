@@ -5,17 +5,16 @@ mod routes;
 use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
+use crate::routes::bets_route::Bet;
 use crate::routes::matches_route::*;
 use crate::routes::login_route::*;
 use crate::routes::register_route::*;
-use crate::services::bets_service::Bet;
 
 
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
     let (is_routing, set_is_routing) = create_signal(false);
-    println!("xd");
     view! {
         // <Stylesheet id="leptos" href="/pkg/hackernews.css"/>
         <Link rel="shortcut icon" type_="image/ico" href="/favicon.ico"/>
@@ -34,7 +33,7 @@ pub fn App() -> impl IntoView {
                     <Route path="/auth/login" view=Login/>
                     <Route path="/auth/register" view=Register/>
                     <Route path="/matches" view=Matches/>
-                    <Route path="/matches/:id" view=Match/>
+                    <Route path="/matches/:id/bet" view=Bet/>
                     <Route path="/*any" view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
             </main>
