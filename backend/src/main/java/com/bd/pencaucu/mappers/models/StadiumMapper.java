@@ -1,4 +1,4 @@
-package com.bd.pencaucu.mappers;
+package com.bd.pencaucu.mappers.models;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

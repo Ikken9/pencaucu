@@ -1,7 +1,7 @@
 package com.bd.pencaucu.persistance.implementers;
 
 import com.bd.pencaucu.domain.models.Admin;
-import com.bd.pencaucu.mappers.AdminMapper;
+import com.bd.pencaucu.mappers.models.AdminMapper;
 import com.bd.pencaucu.persistance.interfaces.AdminDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

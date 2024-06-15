@@ -1,4 +1,4 @@
-package com.bd.pencaucu.mappers;
+package com.bd.pencaucu.mappers.models;
 
 import java.sql.Blob;
 import java.sql.ResultSet;

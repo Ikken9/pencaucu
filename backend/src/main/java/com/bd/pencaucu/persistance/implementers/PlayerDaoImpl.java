@@ -1,7 +1,7 @@
 package com.bd.pencaucu.persistance.implementers;
 
 import com.bd.pencaucu.domain.models.Player;
-import com.bd.pencaucu.mappers.PlayerMapper;
+import com.bd.pencaucu.mappers.models.PlayerMapper;
 import com.bd.pencaucu.persistance.interfaces.PlayerDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

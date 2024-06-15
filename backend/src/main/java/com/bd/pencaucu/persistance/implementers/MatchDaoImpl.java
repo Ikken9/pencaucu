@@ -2,7 +2,7 @@ package com.bd.pencaucu.persistance.implementers;
 
 import com.bd.pencaucu.domain.models.Match;
 import com.bd.pencaucu.dto.MatchDTO;
-import com.bd.pencaucu.mappers.MatchDTOMapper;
+import com.bd.pencaucu.mappers.dtos.MatchDTOMapper;
 import com.bd.pencaucu.persistance.interfaces.MatchDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

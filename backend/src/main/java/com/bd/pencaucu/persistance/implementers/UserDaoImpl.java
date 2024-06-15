@@ -1,8 +1,7 @@
 package com.bd.pencaucu.persistance.implementers;
 
-import com.bd.pencaucu.domain.models.Login;
 import com.bd.pencaucu.domain.models.User;
-import com.bd.pencaucu.mappers.UserMapper;
+import com.bd.pencaucu.mappers.models.UserMapper;
 import com.bd.pencaucu.persistance.interfaces.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
