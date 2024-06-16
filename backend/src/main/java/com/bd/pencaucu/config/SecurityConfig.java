@@ -19,7 +19,7 @@ public class SecurityConfig {
                             "/matches/**",
                             "/auth/register",
                             "/auth/login",
-                            "/players").permitAll()
+                            "/players/**").permitAll()
                     .requestMatchers(
                             "/admins").hasAuthority("ROLE_ADMIN")
                     .anyRequest()

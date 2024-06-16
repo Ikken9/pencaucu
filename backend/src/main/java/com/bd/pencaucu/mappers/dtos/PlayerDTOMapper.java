@@ -10,6 +10,10 @@ public class PlayerDTOMapper implements RowMapper<PlayerDTO> {
 
     @Override
     public PlayerDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
-        return null;
+        PlayerDTO playerDTO = new PlayerDTO();
+        playerDTO.setUsername(rs.getString("username"));
+        playerDTO.setPoints(rs.getInt("player_score"));
+
+        return playerDTO;
     }
 }

@@ -15,7 +15,7 @@ import java.util.Collections;
 public class User implements UserDetails {
 
     private String email;
-    private String name;
+    private String username;
     private String password;
 
     private AdminService adminService;

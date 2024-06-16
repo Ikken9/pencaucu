@@ -1,6 +1,7 @@
 package com.bd.pencaucu.services;
 
 import com.bd.pencaucu.domain.models.Player;
+import com.bd.pencaucu.dto.PlayerDTO;
 import com.bd.pencaucu.persistance.interfaces.PlayerDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,12 +13,12 @@ import java.util.List;
 public class PlayerService {
     private final PlayerDao playerDao;
 
-    public List<Player> getAllPlayers() {
+    public List<PlayerDTO> getAllPlayers() {
         return playerDao.findAll();
     }
 
-    public Player getPlayerById(String id) {
-        return playerDao.findById(id);
+    public PlayerDTO getPlayerById(String username) {
+        return playerDao.findById(username);
     }
 
     public void createPlayer(Player player) {

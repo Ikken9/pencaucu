@@ -1,6 +1,8 @@
 package com.bd.pencaucu.persistance.implementers;
 
 import com.bd.pencaucu.domain.models.Player;
+import com.bd.pencaucu.dto.PlayerDTO;
+import com.bd.pencaucu.mappers.dtos.PlayerDTOMapper;
 import com.bd.pencaucu.mappers.models.PlayerMapper;
 import com.bd.pencaucu.persistance.interfaces.PlayerDao;
 import lombok.RequiredArgsConstructor;
@@ -17,23 +19,63 @@ public class PlayerDaoImpl implements PlayerDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public Player findById(String id) throws UsernameNotFoundException {
-        String sql = "SELECT player_email, career FROM Players WHERE player_email = ?";
-        List<Player> players = jdbcTemplate.query(sql, new PlayerMapper(), id);
+    public PlayerDTO findById(String username) throws UsernameNotFoundException {
+        String sql =    "SELECT p.player_email, u.username, " +
+                            "SUM(CASE " +
+                                "WHEN r.team_score = b.team_score AND r.faced_team_score = b.faced_team_score THEN 4 " +
+                                "WHEN (r.team_score > r.faced_team_score) AND (b.team_score >= r.team_score) THEN 2 " +
+                                "WHEN (r.team_score = r.faced_team_score) AND (b.team_score = b.faced_team_score) THEN 2 " +
+                                "WHEN (r.team_score < r.faced_team_score) AND (b.faced_team_score >= r.faced_team_score) THEN 2 " +
+                                "ELSE 0 END) AS player_score " +
+                        "FROM " +
+                            "Players p " +
+                                "INNER JOIN " +
+                            "Bets b ON p.player_email = b.player_email " +
+                                "INNER JOIN " +
+                            "Results r ON b.match_id = r.match_id " +
+                                "INNER JOIN " +
+                            "Matches m ON b.match_id = m.id " +
+                                "INNER JOIN " +
+                            "Users u ON u.email = p.player_email " +
+                        "WHERE u.username = ? " +
+                        "GROUP BY " +
+                            "p.player_email, " +
+                            "u.username;";
+
+        List<PlayerDTO> players = jdbcTemplate.query(sql, new PlayerDTOMapper(), username);
 
         if (!players.isEmpty()) {
             return players.get(0);
         }
 
-        String PLAYER_NOT_FOUND_MSG = "Player with email %s not found";
-        throw new UsernameNotFoundException(String.format(PLAYER_NOT_FOUND_MSG, id));
+        String PLAYER_NOT_FOUND_MSG = "Player with username %s not found";
+        throw new UsernameNotFoundException(String.format(PLAYER_NOT_FOUND_MSG, username));
     }
 
     @Override
-    public List<Player> findAll() {
-        String sql = "SELECT player_email, career FROM Players";
+    public List<PlayerDTO> findAll() {
+        String sql =    "SELECT p.player_email, u.username, " +
+                            "SUM(CASE " +
+                                "WHEN r.team_score = b.team_score AND r.faced_team_score = b.faced_team_score THEN 4 " +
+                                "WHEN (r.team_score > r.faced_team_score) AND (b.team_score >= r.team_score) THEN 2 " +
+                                "WHEN (r.team_score = r.faced_team_score) AND (b.team_score = b.faced_team_score) THEN 2 " +
+                                "WHEN (r.team_score < r.faced_team_score) AND (b.faced_team_score >= r.faced_team_score) THEN 2 " +
+                                "ELSE 0 END) AS player_score " +
+                        "FROM " +
+                            "Players p " +
+                                "INNER JOIN " +
+                            "Bets b ON p.player_email = b.player_email " +
+                                "INNER JOIN " +
+                            "Results r ON b.match_id = r.match_id " +
+                                "INNER JOIN " +
+                            "Matches m ON b.match_id = m.id " +
+                                "INNER JOIN " +
+                            "Users u ON u.email = p.player_email " +
+                        "GROUP BY " +
+                            "p.player_email, " +
+                            "u.username;";
 
-        return jdbcTemplate.query(sql, new PlayerMapper());
+        return jdbcTemplate.query(sql, new PlayerDTOMapper());
     }
 
     @Override

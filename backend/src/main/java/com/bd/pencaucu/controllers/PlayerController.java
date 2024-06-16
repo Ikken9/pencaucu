@@ -1,6 +1,7 @@
 package com.bd.pencaucu.controllers;
 
 import com.bd.pencaucu.domain.models.Player;
+import com.bd.pencaucu.dto.PlayerDTO;
 import com.bd.pencaucu.services.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class PlayerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Player> getPlayerById(@RequestBody @PathVariable String id) {
-        Player player = playerService.getPlayerById(id);
+    public ResponseEntity<PlayerDTO> getPlayerById(@RequestBody @PathVariable String id) {
+        PlayerDTO player = playerService.getPlayerById(id);
 
         if (player != null) {
             return new ResponseEntity<>(player, HttpStatus.OK);
@@ -30,8 +31,8 @@ public class PlayerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Player>> getAllPlayers() {
-        List<Player> players = playerService.getAllPlayers();
+    public ResponseEntity<List<PlayerDTO>> getAllPlayers() {
+        List<PlayerDTO> players = playerService.getAllPlayers();
 
         if (players == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

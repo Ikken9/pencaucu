@@ -10,6 +10,6 @@ import java.io.Serializable;
 @Setter
 @RequiredArgsConstructor
 public class PlayerDTO implements Serializable {
-    private String name;
+    private String username;
     private int points;
 }

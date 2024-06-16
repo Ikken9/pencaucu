@@ -2,6 +2,8 @@ CREATE DATABASE IF NOT EXISTS pencaucu_db;
 
 USE pencaucu_db;
 
+ALTER DATABASE pencaucu_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
 CREATE TABLE IF NOT EXISTS Careers(
     career_name VARCHAR(64) NOT NULL,
     PRIMARY KEY (career_name)
@@ -9,7 +11,7 @@ CREATE TABLE IF NOT EXISTS Careers(
 
 CREATE TABLE IF NOT EXISTS Users(
     email VARCHAR(64) NOT NULL,
-    name VARCHAR(64) NOT NULL,
+    username VARCHAR(64) UNIQUE NOT NULL,
     PRIMARY KEY (email)
 );
 
@@ -106,25 +108,25 @@ INSERT INTO Careers(career_name) VALUES ('Ingeniería en Electrónica');
 INSERT INTO Careers(career_name) VALUES ('Ingeniería Industrial');
 
 # REGISTER USER
-INSERT INTO Users(email, name)
+INSERT INTO Users(email, username)
     VALUES (
            'martin.caraballo@correo.ucu.edu.uy',
            'Martin'
           );
 
-INSERT INTO Users(email, name)
+INSERT INTO Users(email, username)
     VALUES (
             'dali.fernandez@correo.ucu.edu.uy',
             'Dali'
            );
 
-INSERT INTO Users(email, name)
+INSERT INTO Users(email, username)
     VALUES (
            'flacacho.hernandez@correo.ucu.edu.uy',
            'Flacacho'
            );
 
-INSERT INTO Users(email, name)
+INSERT INTO Users(email, username)
     VALUES(
            'santiago.berrueta@correo.ucu.edu.uy',
            'Santiago'
