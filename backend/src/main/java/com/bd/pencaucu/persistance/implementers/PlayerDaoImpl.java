@@ -79,7 +79,7 @@ public class PlayerDaoImpl implements PlayerDao {
 
     @Override
     public void save(Player player) {
-        String sql = "INSERT INTO Players (player_email, name, career) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO Players (player_email, career_name) VALUES (?, ?)";
 
         jdbcTemplate.update(sql,
                 player.getEmail(),
