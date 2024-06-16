@@ -1,6 +1,6 @@
 package com.bd.pencaucu.controllers;
 
-import com.bd.pencaucu.domain.models.User;
+import com.bd.pencaucu.models.User;
 import com.bd.pencaucu.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

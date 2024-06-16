@@ -1,14 +1,15 @@
 package com.bd.pencaucu.persistance.implementers;
 
-import com.bd.pencaucu.domain.models.Match;
-import com.bd.pencaucu.dto.MatchDTO;
-import com.bd.pencaucu.mappers.dtos.MatchDTOMapper;
+import com.bd.pencaucu.models.Match;
+import com.bd.pencaucu.models.dto.MatchDTO;
+import com.bd.pencaucu.mappers.models.dto.MatchDTOMapper;
 import com.bd.pencaucu.persistance.interfaces.MatchDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.*;
+import java.util.List;
+
 
 @Repository
 @RequiredArgsConstructor

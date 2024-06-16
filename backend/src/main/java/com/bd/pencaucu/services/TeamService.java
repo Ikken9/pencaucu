@@ -1,6 +1,6 @@
 package com.bd.pencaucu.services;
 
-import com.bd.pencaucu.domain.models.Team;
+import com.bd.pencaucu.models.Team;
 import com.bd.pencaucu.persistance.interfaces.TeamDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

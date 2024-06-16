@@ -1,6 +1,6 @@
 package com.bd.pencaucu.persistance.interfaces;
 
-import com.bd.pencaucu.domain.models.Stadium;
+import com.bd.pencaucu.models.Stadium;
 
 import java.util.List;
 

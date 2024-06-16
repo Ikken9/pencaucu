@@ -1,6 +1,6 @@
 package com.bd.pencaucu.controllers;
 
-import com.bd.pencaucu.domain.models.Admin;
+import com.bd.pencaucu.models.Admin;
 import com.bd.pencaucu.services.AdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

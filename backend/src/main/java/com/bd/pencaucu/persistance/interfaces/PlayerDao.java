@@ -1,7 +1,7 @@
 package com.bd.pencaucu.persistance.interfaces;
 
-import com.bd.pencaucu.domain.models.Player;
-import com.bd.pencaucu.dto.PlayerDTO;
+import com.bd.pencaucu.models.Player;
+import com.bd.pencaucu.models.dto.PlayerDTO;
 
 import java.util.List;
 

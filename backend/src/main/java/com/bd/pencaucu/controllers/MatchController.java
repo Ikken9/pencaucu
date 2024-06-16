@@ -1,7 +1,7 @@
 package com.bd.pencaucu.controllers;
 
-import com.bd.pencaucu.domain.models.Match;
-import com.bd.pencaucu.dto.MatchDTO;
+import com.bd.pencaucu.models.Match;
+import com.bd.pencaucu.models.dto.MatchDTO;
 import com.bd.pencaucu.services.MatchService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.bd.pencaucu.domain.models;
+package com.bd.pencaucu.models;
 
 import com.bd.pencaucu.services.AdminService;
 import lombok.*;
@@ -15,7 +15,7 @@ import java.util.Collections;
 public class User implements UserDetails {
 
     private String email;
-    private String username;
+    private String name;
     private String password;
 
     private AdminService adminService;

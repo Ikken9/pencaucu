@@ -1,7 +1,7 @@
 package com.bd.pencaucu.controllers;
 
-import com.bd.pencaucu.domain.models.Player;
-import com.bd.pencaucu.dto.PlayerDTO;
+import com.bd.pencaucu.models.Player;
+import com.bd.pencaucu.models.dto.PlayerDTO;
 import com.bd.pencaucu.services.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

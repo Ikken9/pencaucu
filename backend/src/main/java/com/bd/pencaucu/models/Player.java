@@ -1,4 +1,4 @@
-package com.bd.pencaucu.domain.models;
+package com.bd.pencaucu.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,9 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Stadium {
-    private String id;
-    private String name;
-    private String country;
-    private String city;
+public class Player {
+    private String email;
+    private String careerName;
 }

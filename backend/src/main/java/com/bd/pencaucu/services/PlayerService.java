@@ -1,7 +1,7 @@
 package com.bd.pencaucu.services;
 
-import com.bd.pencaucu.domain.models.Player;
-import com.bd.pencaucu.dto.PlayerDTO;
+import com.bd.pencaucu.models.Player;
+import com.bd.pencaucu.models.dto.PlayerDTO;
 import com.bd.pencaucu.persistance.interfaces.PlayerDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

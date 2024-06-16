@@ -1,6 +1,6 @@
 package com.bd.pencaucu.mappers.models;
 
-import com.bd.pencaucu.domain.models.User;
+import com.bd.pencaucu.models.User;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -12,7 +12,7 @@ public class UserMapper implements RowMapper<User> {
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User user = new User();
         user.setEmail(rs.getString("email"));
-        user.setUsername(rs.getString("username"));
+        user.setName(rs.getString("username"));
 
         return user;
     }

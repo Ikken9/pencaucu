@@ -1,6 +1,6 @@
 package com.bd.pencaucu.mappers.models;
 
-import com.bd.pencaucu.domain.models.Admin;
+import com.bd.pencaucu.models.Admin;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

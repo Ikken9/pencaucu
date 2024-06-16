@@ -1,6 +1,6 @@
 package com.bd.pencaucu.persistance.implementers;
 
-import com.bd.pencaucu.domain.models.User;
+import com.bd.pencaucu.models.User;
 import com.bd.pencaucu.mappers.models.UserMapper;
 import com.bd.pencaucu.persistance.interfaces.UserDao;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,6 @@
 package com.bd.pencaucu.controllers;
 
-import com.bd.pencaucu.domain.models.Stadium;
+import com.bd.pencaucu.models.Stadium;
 import com.bd.pencaucu.services.StadiumService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

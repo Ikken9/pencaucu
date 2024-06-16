@@ -1,6 +1,6 @@
 package com.bd.pencaucu.controllers;
 
-import com.bd.pencaucu.domain.models.Team;
+import com.bd.pencaucu.models.Team;
 
 import com.bd.pencaucu.services.TeamService;
 import org.springframework.http.HttpStatus;

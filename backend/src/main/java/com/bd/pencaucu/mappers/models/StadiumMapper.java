@@ -3,7 +3,7 @@ package com.bd.pencaucu.mappers.models;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.bd.pencaucu.domain.models.Stadium;
+import com.bd.pencaucu.models.Stadium;
 import org.springframework.jdbc.core.RowMapper;
 
 public class StadiumMapper implements RowMapper<Stadium>{

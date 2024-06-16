@@ -1,6 +1,6 @@
 package com.bd.pencaucu.persistance.implementers;
 
-import com.bd.pencaucu.domain.models.Login;
+import com.bd.pencaucu.models.Login;
 import com.bd.pencaucu.mappers.models.LoginMapper;
 import com.bd.pencaucu.persistance.interfaces.LoginDao;
 import lombok.RequiredArgsConstructor;

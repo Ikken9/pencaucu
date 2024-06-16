@@ -1,6 +1,6 @@
 package com.bd.pencaucu.persistance.implementers;
 
-import com.bd.pencaucu.domain.models.Result;
+import com.bd.pencaucu.models.Result;
 import com.bd.pencaucu.exceptions.ResourceNotFoundException;
 import com.bd.pencaucu.mappers.models.ResultMapper;
 import com.bd.pencaucu.persistance.interfaces.ResultDao;

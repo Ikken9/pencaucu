@@ -1,6 +1,6 @@
 package com.bd.pencaucu.services;
 
-import com.bd.pencaucu.domain.models.Result;
+import com.bd.pencaucu.models.Result;
 import com.bd.pencaucu.persistance.interfaces.ResultDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

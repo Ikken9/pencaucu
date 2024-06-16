@@ -1,7 +1,7 @@
 package com.bd.pencaucu.controllers;
 
-import com.bd.pencaucu.domain.models.Login;
-import com.bd.pencaucu.domain.models.User;
+import com.bd.pencaucu.models.Login;
+import com.bd.pencaucu.models.User;
 import com.bd.pencaucu.exceptions.InvalidUserRegistrationException;
 import com.bd.pencaucu.services.LoginService;
 import com.bd.pencaucu.services.UserService;
@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

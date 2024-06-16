@@ -1,4 +1,4 @@
-package com.bd.pencaucu.dto;
+package com.bd.pencaucu.models.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

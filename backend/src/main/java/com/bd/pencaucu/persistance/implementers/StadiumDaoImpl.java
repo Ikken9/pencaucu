@@ -1,6 +1,6 @@
 package com.bd.pencaucu.persistance.implementers;
 
-import com.bd.pencaucu.domain.models.Stadium;
+import com.bd.pencaucu.models.Stadium;
 import com.bd.pencaucu.mappers.models.StadiumMapper;
 import com.bd.pencaucu.persistance.interfaces.StadiumDao;
 import lombok.RequiredArgsConstructor;

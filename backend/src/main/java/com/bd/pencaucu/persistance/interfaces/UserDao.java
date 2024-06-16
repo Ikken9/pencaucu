@@ -1,6 +1,6 @@
 package com.bd.pencaucu.persistance.interfaces;
 
-import com.bd.pencaucu.domain.models.User;
+import com.bd.pencaucu.models.User;
 
 import java.util.List;
 

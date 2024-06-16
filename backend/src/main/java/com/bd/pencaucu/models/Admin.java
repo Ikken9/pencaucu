@@ -1,4 +1,4 @@
-package com.bd.pencaucu.domain.models;
+package com.bd.pencaucu.models;
 
 import lombok.*;
 

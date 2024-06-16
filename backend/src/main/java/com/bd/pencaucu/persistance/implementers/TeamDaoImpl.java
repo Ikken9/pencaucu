@@ -1,6 +1,6 @@
 package com.bd.pencaucu.persistance.implementers;
 
-import com.bd.pencaucu.domain.models.Team;
+import com.bd.pencaucu.models.Team;
 import com.bd.pencaucu.persistance.interfaces.TeamDao;
 import org.springframework.stereotype.Repository;
 

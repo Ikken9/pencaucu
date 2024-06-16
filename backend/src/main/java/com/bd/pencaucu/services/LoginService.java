@@ -1,6 +1,6 @@
 package com.bd.pencaucu.services;
 
-import com.bd.pencaucu.domain.models.Login;
+import com.bd.pencaucu.models.Login;
 import com.bd.pencaucu.persistance.interfaces.LoginDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

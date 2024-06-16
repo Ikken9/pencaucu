@@ -1,6 +1,6 @@
-package com.bd.pencaucu.mappers.dtos;
+package com.bd.pencaucu.mappers.models.dto;
 
-import com.bd.pencaucu.dto.PlayerDTO;
+import com.bd.pencaucu.models.dto.PlayerDTO;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;

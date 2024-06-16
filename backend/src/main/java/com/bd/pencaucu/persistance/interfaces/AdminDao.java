@@ -1,6 +1,6 @@
 package com.bd.pencaucu.persistance.interfaces;
 
-import com.bd.pencaucu.domain.models.Admin;
+import com.bd.pencaucu.models.Admin;
 
 import java.util.List;
 
