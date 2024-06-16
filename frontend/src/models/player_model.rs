@@ -1,8 +1,7 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Player {
-    name: String,
-    last_name: String,
-    points: String
+    pub(crate) username: String,
+    pub(crate) points: u64
 }
