@@ -8,6 +8,7 @@ use leptos_router::*;
 use crate::routes::bets_route::Bet;
 use crate::routes::matches_route::*;
 use crate::routes::login_route::*;
+use crate::routes::ranking_route::Ranking;
 use crate::routes::register_route::*;
 
 
@@ -34,6 +35,7 @@ pub fn App() -> impl IntoView {
                     <Route path="/auth/register" view=Register/>
                     <Route path="/matches" view=Matches/>
                     <Route path="/matches/:id/bet" view=Bet/>
+                    <Route path="/ranking" view=Ranking/>
                     <Route path="/*any" view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
             </main>
