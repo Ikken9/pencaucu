@@ -1,9 +1,11 @@
 package com.bd.pencaucu.controllers;
 
 import com.bd.pencaucu.models.Login;
+import com.bd.pencaucu.models.Player;
 import com.bd.pencaucu.models.User;
 import com.bd.pencaucu.exceptions.InvalidUserRegistrationException;
 import com.bd.pencaucu.services.LoginService;
+import com.bd.pencaucu.services.PlayerService;
 import com.bd.pencaucu.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +26,12 @@ public class AuthController {
     private final Argon2PasswordEncoder passwordEncoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
     private final UserService userService;
     private final LoginService loginService;
+    private final PlayerService playerService;
 
-    public AuthController(UserService userService, LoginService loginService) {
+    public AuthController(UserService userService, LoginService loginService, PlayerService playerService) {
         this.userService = userService;
         this.loginService = loginService;
+        this.playerService = playerService;
     }
 
     @PostMapping("/register")
@@ -42,8 +46,15 @@ public class AuthController {
         Login login = new Login();
         login.setEmail(user.getEmail());
         login.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        Player player = new Player();
+        player.setEmail(user.getEmail());
+        player.setCareerName(user.getCareer());
+
         userService.createUser(user);
         loginService.saveLoginUser(login);
+        playerService.createPlayer(player);
+
         return new ResponseEntity<>(
                 String.format("User with email %s has been registered.", user.getEmail()),
                 HttpStatus.CREATED);
