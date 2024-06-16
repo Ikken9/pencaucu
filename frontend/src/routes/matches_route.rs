@@ -22,11 +22,10 @@ pub fn Match(match_data: Match) -> impl IntoView {
 
 #[component]
 pub fn Matches() -> impl IntoView {
-    // Create a resource that fetches match data
     let matches_data = create_resource(
         || (),  // The initial state for the resource
         |_| async {
-            log!("Fetching matches...");  // Log when fetching starts
+            log!("Fetching matches...");
             let result = match_service::get_matches().await;
             match result {
                 Ok(matches) => {
@@ -41,25 +40,21 @@ pub fn Matches() -> impl IntoView {
         },
     );
 
-    // Define the view for this component
     view! {
-        <Suspense fallback=|| view! { "Loading matches..." }>  // Display loading text while fetching data
+        <Suspense fallback=|| view! { "Loading matches..." }>
             {move || matches_data.get().map(|matches| match matches {
-                // If data fetching fails
                 None => view! { <div>"Error loading matches."</div> },
-                // If data fetching succeeds
                 Some(matches) => view! {
                     <div class="matches-container">
-                        // Iterate over the matches
                         <For
-                            each=move || matches.clone().into_iter().enumerate()  // Enumerate matches
-                            key=|(_, match_data)| match_data.id.clone()  // Use match ID as key
+                            each=move || matches.clone().into_iter().enumerate()
+                            key=|(_, match_data)| match_data.id.clone()
                             children=move |(_, match_item)| {
                                 let match_memo = create_memo(move |_| {
-                                    match_item.clone()  // Create a memo for the match item
+                                    match_item.clone()
                                 });
                                 view! {
-                                    <Match match_data=match_memo() />  // Render the Match component
+                                    <Match match_data=match_memo() />
                                 }
                             }
                         />
