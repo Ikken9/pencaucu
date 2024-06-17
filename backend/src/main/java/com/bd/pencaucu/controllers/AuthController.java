@@ -1,18 +1,24 @@
 package com.bd.pencaucu.controllers;
 
+import com.bd.pencaucu.config.TokenProvider;
 import com.bd.pencaucu.models.Login;
 import com.bd.pencaucu.models.Player;
 import com.bd.pencaucu.models.User;
 import com.bd.pencaucu.exceptions.InvalidUserRegistrationException;
+import com.bd.pencaucu.models.dto.JwtDTO;
 import com.bd.pencaucu.services.LoginService;
 import com.bd.pencaucu.services.PlayerService;
 import com.bd.pencaucu.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,15 +29,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final Argon2PasswordEncoder passwordEncoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
+    private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
     private final UserService userService;
     private final LoginService loginService;
     private final PlayerService playerService;
+    private final TokenProvider tokenProvider;
 
-    public AuthController(UserService userService, LoginService loginService, PlayerService playerService) {
+    public AuthController(UserService userService,
+                          LoginService loginService,
+                          PlayerService playerService,
+                          PasswordEncoder passwordEncoder,
+                          AuthenticationManager authenticationManager, TokenProvider tokenProvider) {
         this.userService = userService;
         this.loginService = loginService;
         this.playerService = playerService;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.tokenProvider = tokenProvider;
     }
 
     @PostMapping("/register")
@@ -61,21 +76,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> logInUser(@RequestBody Login login) {
-        Login user = loginService.findLoginId(login.getEmail());
-        if (user != null && passwordEncoder.matches(login.getPassword(), user.getPassword())) {
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    user.getEmail(),
-                    user.getPassword()
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            return new ResponseEntity<>(
-                    "Login successful!",
-                    HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(
-                    "Invalid username or password.",
-                    HttpStatus.UNAUTHORIZED);
-        }
+    public ResponseEntity<JwtDTO> logInUser(@RequestBody Login login) throws AuthenticationException {
+        Authentication auth = new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword());
+        Authentication authUser = authenticationManager.authenticate(auth);
+        String accessToken = tokenProvider.generateAccessToken((Login) authUser.getPrincipal());
+        return ResponseEntity.ok(new JwtDTO(accessToken));
     }
 }

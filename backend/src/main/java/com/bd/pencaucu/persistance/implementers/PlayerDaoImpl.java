@@ -20,21 +20,21 @@ public class PlayerDaoImpl implements PlayerDao {
     @Override
     public PlayerDTO findById(String username) throws UsernameNotFoundException {
         String sql =    "SELECT p.player_email, u.username, " +
-                            "SUM(CASE " +
+                            "COALESCE(SUM(CASE " +
                                 "WHEN r.team_score = b.team_score AND r.faced_team_score = b.faced_team_score THEN 4 " +
                                 "WHEN (r.team_score > r.faced_team_score) AND (b.team_score >= r.team_score) THEN 2 " +
                                 "WHEN (r.team_score = r.faced_team_score) AND (b.team_score = b.faced_team_score) THEN 2 " +
                                 "WHEN (r.team_score < r.faced_team_score) AND (b.faced_team_score >= r.faced_team_score) THEN 2 " +
-                                "ELSE 0 END) AS player_score " +
+                                "ELSE 0 END), 0) AS player_score " +
                         "FROM " +
                             "Players p " +
-                                "INNER JOIN " +
+                                "LEFT JOIN " +
                             "Bets b ON p.player_email = b.player_email " +
-                                "INNER JOIN " +
+                                "LEFT JOIN " +
                             "Results r ON b.match_id = r.match_id " +
-                                "INNER JOIN " +
+                                "LEFT JOIN " +
                             "Matches m ON b.match_id = m.id " +
-                                "INNER JOIN " +
+                                "LEFT JOIN " +
                             "Users u ON u.email = p.player_email " +
                         "WHERE u.username = ? " +
                         "GROUP BY " +
@@ -54,21 +54,21 @@ public class PlayerDaoImpl implements PlayerDao {
     @Override
     public List<PlayerDTO> findAll() {
         String sql =    "SELECT p.player_email, u.username, " +
-                            "SUM(CASE " +
+                            "COALESCE(SUM(CASE " +
                                 "WHEN r.team_score = b.team_score AND r.faced_team_score = b.faced_team_score THEN 4 " +
                                 "WHEN (r.team_score > r.faced_team_score) AND (b.team_score >= r.team_score) THEN 2 " +
                                 "WHEN (r.team_score = r.faced_team_score) AND (b.team_score = b.faced_team_score) THEN 2 " +
                                 "WHEN (r.team_score < r.faced_team_score) AND (b.faced_team_score >= r.faced_team_score) THEN 2 " +
-                                "ELSE 0 END) AS player_score " +
+                                "ELSE 0 END), 0) AS player_score " +
                         "FROM " +
                             "Players p " +
-                                "INNER JOIN " +
+                                "LEFT JOIN " +
                             "Bets b ON p.player_email = b.player_email " +
-                                "INNER JOIN " +
+                                "LEFT JOIN " +
                             "Results r ON b.match_id = r.match_id " +
-                                "INNER JOIN " +
+                                "LEFT JOIN " +
                             "Matches m ON b.match_id = m.id " +
-                                "INNER JOIN " +
+                                "LEFT JOIN " +
                             "Users u ON u.email = p.player_email " +
                         "GROUP BY " +
                             "p.player_email, " +

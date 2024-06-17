@@ -20,8 +20,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDetails> getUserById(@RequestBody @PathVariable String id) {
-        UserDetails user = userService.loadUserByUsername(id);
+    public ResponseEntity<User> getUserById(@RequestBody @PathVariable String id) {
+        User user = userService.findUserById(id);
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
