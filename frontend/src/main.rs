@@ -17,9 +17,9 @@ pub fn App() -> impl IntoView {
     provide_meta_context();
     let (is_routing, set_is_routing) = create_signal(false);
     view! {
-        // <Stylesheet id="leptos" href="/pkg/hackernews.css"/>
+        // <Stylesheet id="leptos" href="styles.css"/>
         <Link rel="shortcut icon" type_="image/ico" href="/favicon.ico"/>
-        <Meta name="description" content="Leptos implementation of a HackerNews demo."/>
+        <Meta name="description" content="PencaUCU App"/>
         // adding `set_is_routing` causes the router to wait for async data to load on new pages
         <Router set_is_routing>
             <div class="routing-progress">
