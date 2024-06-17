@@ -55,9 +55,15 @@ pub fn Ranking() -> impl IntoView {
 #[component]
 pub fn Player(player_data: Player) -> impl IntoView {
     view! {
-        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-md mb-4">
-            <h2 class="text-xl font-semibold text-gray-800">{format!("{}", player_data.username)}</h2>
-            <p class="text-gray-600">{format!("Points: {}", player_data.points)}</p>
-        </div>
+        <div class="flex items-center space-x-4 rtl:space-x-reverse">
+         <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+               {player_data.username}
+            </p>
+         </div>
+         <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
+            {player_data.points}
+         </div>
+      </div>
     }
 }
