@@ -12,12 +12,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
     private final UserDao userDao;
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User findUserById(String username) throws UsernameNotFoundException {
         return userDao.findById(username);
     }
 

@@ -5,6 +5,7 @@ import com.bd.pencaucu.mappers.models.LoginMapper;
 import com.bd.pencaucu.persistance.interfaces.LoginDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
@@ -17,8 +18,11 @@ public class LoginDaoImpl implements LoginDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public Login findById(String id) {
-        String sql = "SELECT user_email, password FROM Logins WHERE user_email = ?";
+    public UserDetails findById(String id) {
+        String sql =    "SELECT user_email, password, IF(admin_email IS NULL, false, true) as is_admin " +
+                        "FROM Logins l " +
+                            "LEFT JOIN Admins a ON l.user_email = admin_email " +
+                            "WHERE user_email = ?";
 
         List<Login> result = jdbcTemplate.query(sql, new LoginMapper(), id);
 

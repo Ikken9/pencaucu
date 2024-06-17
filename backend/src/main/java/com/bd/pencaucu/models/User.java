@@ -12,48 +12,11 @@ import java.util.Collections;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements UserDetails {
+public class User {
 
     private String email;
     private String username;
     private String password;
     private String career;
 
-    private AdminService adminService;
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Admin adminUser = adminService.getAdminById(email);
-        if (adminUser != null) {
-            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_ADMIN");
-            return Collections.singletonList(authority);
-        }
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_USER");
-        return Collections.singletonList(authority);
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
 }

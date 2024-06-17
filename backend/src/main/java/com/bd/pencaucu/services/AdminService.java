@@ -1,6 +1,7 @@
 package com.bd.pencaucu.services;
 
 import com.bd.pencaucu.models.Admin;
+import com.bd.pencaucu.persistance.implementers.AdminDaoImpl;
 import com.bd.pencaucu.persistance.interfaces.AdminDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

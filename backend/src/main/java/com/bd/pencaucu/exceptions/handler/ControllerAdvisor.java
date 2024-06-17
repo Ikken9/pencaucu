@@ -5,6 +5,7 @@ import com.bd.pencaucu.exceptions.ResourceNotFoundException;
 import com.bd.pencaucu.exceptions.ResourceAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -87,5 +88,15 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         body.put("request description", req.getDescription(false));
 
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException ex, WebRequest req) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", "Incorrect username or password");
+        body.put("request description", req.getDescription(false));
+
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
     }
 }
