@@ -60,8 +60,16 @@ pub fn Ranking() -> impl IntoView {
 
 #[component]
 pub fn Player(player_data: Player) -> impl IntoView {
+    let mut profile_pic = String::from("https://raw.githubusercontent.com/Ikken9/pencaucu/dev/cdn/default.jpg");
+    if let Some(pic) = player_data.profile_picture {
+        profile_pic = pic;
+    }
+
     view! {
         <div class="flex items-center justify-between w-full match-card bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 p-2 rounded-lg shadow-md mb-1 sm:p-4 h-24">
+            <div>
+                <img class="h-10 w-10 rounded-full" src={profile_pic} />
+            </div>
             <div class="text-xl text-zinc-300 ">
                 {player_data.username}
             </div>
