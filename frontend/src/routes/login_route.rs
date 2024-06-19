@@ -11,7 +11,6 @@ pub fn Login() -> impl IntoView {
 
     let login_action =
         create_action(move |(email, password): &(String, String)| {
-            log::debug!("Try to login with {email}");
             let email = EmailAddress(email.to_string());
             let password = Password(password.to_string());
 
@@ -32,9 +31,9 @@ pub fn Login() -> impl IntoView {
             error=login_error.into()
             disabled
         />
-        <p class="mt-10 text-center text-sm text-gray-500">
+        <p class="mt-10 text-center text-sm text-zinc-300">
             "Don't have an account? "
-            <A href="/auth/register" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign Up!</A>
+            <A href="/register" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign Up!</A>
         </p>
     }
 }
@@ -60,9 +59,9 @@ fn LoginForm(
         <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div class="sm:mx-auto sm:w-full sm:max-w-sm">
                 <img class="mx-auto h-40 w-40" src="https://raw.githubusercontent.com/Ikken9/pencaucu/dev/frontend/assets/logo.png" alt="Copa Logo"/>
-                <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+                <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-zinc-300">Sign in to your account</h2>
             </div>
-            <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+            <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-4 sm:p-8">
                 <form class="space-y-6" on:submit=|ev| ev.prevent_default()>
                     {move || {
                         error
@@ -72,9 +71,9 @@ fn LoginForm(
                             })
                     }}
                     <div>
-                        <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+                        <label for="email" class="block text-sm font-medium leading-6 text-zinc-300">Email address</label>
                         <div class="mt-2">
-                            <input id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            <input id="email" name="email" type="email" autocomplete="email" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 ring-gradient-to-r from-purple-500 via-purple-600 to-purple-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
                                 placeholder="Email address"
                                 prop:disabled=move || disabled.get()
                                 on:keyup=move |ev: ev::KeyboardEvent| {
@@ -90,13 +89,10 @@ fn LoginForm(
                     </div>
                     <div>
                         <div class="flex items-center justify-between">
-                            <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
-                            <div class="text-sm">
-                                <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
-                            </div>
+                            <label for="password" class="block text-sm font-medium leading-6 text-zinc-300">Password</label>
                         </div>
                         <div class="mt-2">
-                            <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            <input id="password" name="password" type="password" autocomplete="current-password" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 ring-gradient-to-r from-purple-500 via-purple-600 to-purple-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
                                 placeholder="Password"
                                 prop:disabled=move || disabled.get()
                                 on:keyup=move |ev: ev::KeyboardEvent| {
@@ -118,7 +114,7 @@ fn LoginForm(
                         </div>
                     </div>
                     <div>
-                        <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        <button type="submit" class="flex w-full justify-center rounded-md text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5"
                         prop:disabled=move || button_is_disabled.get()
                         on:click=move |_| dispatch_action()
                         >

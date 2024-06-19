@@ -37,18 +37,21 @@ pub fn Matches() -> impl IntoView {
                     let (playing, pending, ended) = classify_matches(matches);
 
                     view! {
-                        <div>
-                            <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-                                <ul class="flex flex-wrap -mb-px">
-                                    <li class="me-2">
+                        <div class="p-3">
+                            <div class= "font-kanit text-xl font-bold italic text-zinc-300">
+                            MATCHES
+                            </div>
+                            <div class="font-kanit text-sm font-medium text-center text-gray-500 border-b border-b-secondary-gray">
+                                <ul class="justify-center justify-evenly flex flex-wrap -mb-px">
+                                    <li class="me-1">
                                         <a
                                             href="#"
                                             class=move || format!(
-                                                "inline-block p-4 border-b-2 rounded-t-lg {} {}",
+                                                "inline-block p-2 border-b-2 rounded-t-lg {} {}",
                                                 if *active_tab.get() == String::from("Playing") {
-                                                    "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500"
+                                                    "text-zinc-300 border-b-4 border-violet-500"
                                                 } else {
-                                                    "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                                    "border-transparent hover:text-gray-600 hover:border-gray-300"
                                                 },
                                                 if *active_tab.get() == String::from("Playing") { "active" } else { "" }
                                             )
@@ -57,15 +60,15 @@ pub fn Matches() -> impl IntoView {
                                             "Playing"
                                         </a>
                                     </li>
-                                    <li class="me-2">
+                                    <li class="me-1">
                                         <a
                                             href="#"
                                             class=move || format!(
-                                                "inline-block p-4 border-b-2 rounded-t-lg {} {}",
+                                                "inline-block p-2 border-b-2 rounded-t-lg {} {}",
                                                 if *active_tab.get() == String::from("Pending") {
-                                                    "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500"
+                                                    "text-zinc-300 border-b-4 border-violet-500"
                                                 } else {
-                                                    "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                                    "border-transparent hover:text-gray-600 hover:border-gray-300"
                                                 },
                                                 if *active_tab.get() == String::from("Pending") { "active" } else { "" }
                                             )
@@ -74,15 +77,15 @@ pub fn Matches() -> impl IntoView {
                                             "Pending"
                                         </a>
                                     </li>
-                                    <li class="me-2">
+                                    <li class="me-1">
                                         <a
                                             href="#"
                                             class=move || format!(
-                                                "inline-block p-4 border-b-2 rounded-t-lg {} {}",
+                                                "inline-block p-2 border-b-4 border-b-2 rounded-t-lg {} {}",
                                                 if *active_tab.get() == String::from("Ended") {
-                                                    "text-blue-600 border-blue-600 dark:text-blue-500 dark:border-blue-500"
+                                                    "text-zinc-300 border-violet-500"
                                                 } else {
-                                                    "border-transparent hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+                                                    "border-transparent hover:text-gray-600 hover:border-gray-300"
                                                 },
                                                 if *active_tab.get() == String::from("Ended") { "active" } else { "" }
                                             )
@@ -95,9 +98,9 @@ pub fn Matches() -> impl IntoView {
                             </div>
                             <div class="tab-content mt-4">
                                 {match &*active_tab.get() {
-                                    "Playing" => view! { <MatchList matches=playing.clone() /> }.into_view(),
-                                    "Pending" => view! { <MatchList matches=pending.clone() /> }.into_view(),
-                                    "Ended" => view! { <MatchList matches=ended.clone() /> }.into_view(),
+                                    "Playing" => view! { <MatchList matches=playing.clone() bettable=false /> }.into_view(),
+                                    "Pending" => view! { <MatchList matches=pending.clone() bettable=true /> }.into_view(),
+                                    "Ended" => view! { <MatchList matches=ended.clone() bettable=false /> }.into_view(),
                                     _ => view! { <div>"Unknown tab"</div> }.into_view(),
                                 }}
                             </div>
@@ -110,39 +113,41 @@ pub fn Matches() -> impl IntoView {
 }
 
 #[component]
-pub fn Match(match_data: Match) -> impl IntoView {
+pub fn Match(match_data: Match, bettable: bool) -> impl IntoView {
     let formatted_date = u64_to_date(match_data.date).format("%A %d, %B - %H:%M").to_string();
     view! {
-        <div class="match-card bg-white p-2 rounded-lg shadow-md flex flex-col items-center mb-4 border border-gray-300 sm:p-4 h-24">
+        <div class="match-card bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 p-2 rounded-lg shadow-md flex flex-col items-center mb-1 sm:p-4 h-24">
             <div class="flex items-center justify-between w-full">
                 <div class="flex items-center relative z-10">
-                    <img class="h-14 w-14 rounded-lg" src={match_data.team_picture_url} alt={&match_data.first_team_name} />
+                    <img class="h-14 w-14 rounded-lg" src={match_data.team_picture_url} alt="first-team-name"/>
                     <div class="ml-2 text-sm sm:ml-3 sm:text-base">
-                        <div class="font-semibold">{&match_data.first_team_name}</div>
+                        <div class="font-semibold text-slate-50">{&match_data.first_team_name}</div>
                     </div>
                 </div>
-                <button type="button" class="absolute left-1/2 transform -translate-x-1/2 z-30 text-gray-900 bg-gradient-to-r from-lime-200 via-lime-400 to-lime-500 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-lime-300 dark:focus:ring-lime-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mt-7 mb-2">
-                    Bet
-                </button>
+                <Show when=move || {bettable == true} fallback=|| view! { <div></div> }>
+                    <button type="button" class="mt-2 absolute left-1/2 transform -translate-x-1/2 z-10 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5">
+                        Bet
+                    </button>
+                </Show>
                 <div class="flex items-center relative z-10">
                     <div class="mr-2 text-sm sm:mr-4 sm:text-base">
-                        <div class="font-semibold">{&match_data.second_team_name}</div>
+                        <div class="font-semibold text-slate-50">{&match_data.second_team_name}</div>
                     </div>
-                    <img class="h-14 w-14 rounded-lg" src={match_data.faced_team_picture_url} alt={&match_data.second_team_name} />
+                    <img class="h-14 w-14 rounded-lg" src={match_data.faced_team_picture_url} alt="second-team-name" />
                 </div>
             </div>
-            <div class="flex items-center justify-between w-full mt-2 text-gray-600 text-xs sm:text-sm">
-                <div class="text-gray-600">{formatted_date}</div>
-                <div class="text-gray-600">{match_data.stadium_name}</div>
+            <div class="flex items-center justify-between w-full mt-2 pt-1 text-gray-600 text-xs sm:text-sm border-t border-secondary-gray-2 mb-4">
+                <div class="text-zinc-300">{formatted_date}</div>
+                <div class="text-zinc-300">{match_data.stadium_name}</div>
             </div>
         </div>
     }
 }
 
 #[component]
-pub fn MatchList(matches: Vec<Match>) -> impl IntoView {
+pub fn MatchList(matches: Vec<Match>, bettable: bool) -> impl IntoView {
     view! {
-        <div class="grid gap-4">
+        <div class="grid gap-2">
             <For
                 each=move || matches.clone().into_iter().enumerate()
                 key=|(_, match_data)| match_data.id.clone()
@@ -151,29 +156,10 @@ pub fn MatchList(matches: Vec<Match>) -> impl IntoView {
                         match_item.clone()
                     });
                     view! {
-                        <Match match_data=match_memo() />
+                        <Match match_data=match_memo() bettable=bettable />
                     }
                 }
             />
-        </div>
-    }
-}
-
-#[component]
-pub fn Tabs() -> impl IntoView {
-    view! {
-        <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700">
-            <ul class="flex flex-wrap -mb-px">
-                <li class="me-2">
-                <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Playing</a>
-                </li>
-                <li class="me-2">
-                <a href="#" class="inline-block p-4 text-blue-600 border-b-2 border-blue-600 rounded-t-lg active dark:text-blue-500 dark:border-blue-500" aria-current="page">Pending</a>
-                </li>
-                <li class="me-2">
-                <a href="#" class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300">Ended</a>
-                </li>
-            </ul>
         </div>
     }
 }

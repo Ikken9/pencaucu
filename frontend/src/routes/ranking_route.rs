@@ -32,7 +32,13 @@ pub fn Ranking() -> impl IntoView {
                     </div>
                 },
                 Some(players) => view! {
-                    <div class="players-container">
+                    <div class="players-container grid gap-2 p-3">
+                        <div class="font-kanit text-xl font-bold italic text-zinc-300">
+                            RANKING
+                        </div>
+                        <div class="font-kanit text-sm text-zinc-300 border-b border-b-secondary-gray">
+                            {format!("Player count: {:?}", players.len())}
+                        </div>
                         <For
                             each=move || players.clone().into_iter().enumerate()
                             key=|(_, player_data)| player_data.username.clone()
@@ -55,15 +61,13 @@ pub fn Ranking() -> impl IntoView {
 #[component]
 pub fn Player(player_data: Player) -> impl IntoView {
     view! {
-        <div class="flex items-center space-x-4 rtl:space-x-reverse">
-         <div class="flex-1 min-w-0">
-            <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-               {player_data.username}
-            </p>
-         </div>
-         <div class="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-            {player_data.points}
-         </div>
-      </div>
+        <div class="flex items-center justify-between w-full match-card bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 p-2 rounded-lg shadow-md mb-1 sm:p-4 h-24">
+            <div class="text-xl text-zinc-300 ">
+                {player_data.username}
+            </div>
+            <div class="font-kanit text-xl font-bold italic text-zinc-300">
+                {format!("{} PTS", player_data.points)}
+            </div>
+        </div>
     }
 }
