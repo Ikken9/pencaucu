@@ -1,5 +1,6 @@
 package com.bd.pencaucu.persistance.implementers;
 
+import com.bd.pencaucu.exceptions.ResourceAlreadyExistsException;
 import com.bd.pencaucu.models.Player;
 import com.bd.pencaucu.models.dto.PlayerDTO;
 import com.bd.pencaucu.mappers.models.dto.PlayerDTOMapper;
@@ -18,7 +19,7 @@ public class PlayerDaoImpl implements PlayerDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public PlayerDTO findById(String username) throws UsernameNotFoundException {
+    public PlayerDTO findById(String username) throws UsernameNotFoundException, ResourceAlreadyExistsException {
         String sql =    "SELECT p.player_email, u.username, " +
                             "COALESCE(SUM(CASE " +
                                 "WHEN r.team_score = b.team_score AND r.faced_team_score = b.faced_team_score THEN 4 " +
