@@ -29,9 +29,8 @@ pub fn App() -> impl IntoView {
             </nav>
             <main>
                 <Routes>
-                    <Route path="/" view=Home/>
-                    <Route path="/auth/login" view=Login/>
-                    <Route path="/auth/register" view=Register/>
+                    <Route path="/login" view=Login/>
+                    <Route path="/register" view=Register/>
                     <Route path="/matches" view=Matches/>
                     <Route path="/matches/:id/bet" view=Bet/>
                     <Route path="/ranking" view=Ranking/>
@@ -39,15 +38,6 @@ pub fn App() -> impl IntoView {
                 </Routes>
             </main>
         </Router>
-    }
-}
-
-#[component]
-pub fn Home() -> impl IntoView {
-    view! {
-        <h1>
-            Home
-        </h1>
     }
 }
 
