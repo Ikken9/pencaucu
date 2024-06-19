@@ -1,5 +1,6 @@
 use std::collections::HashMap;
-use log::{error, info};
+use leptos::logging::error;
+use leptos::tracing::info;
 use reqwest::{Client, Response};
 use crate::models::auth_model::{EmailAddress, Password, Username};
 
