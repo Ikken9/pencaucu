@@ -39,7 +39,6 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void save(User user) {
         String sql = "INSERT INTO Users (email, username) VALUES (?, ?)";
-
         jdbcTemplate.update(sql,
                 user.getEmail(),
                 user.getUsername());
