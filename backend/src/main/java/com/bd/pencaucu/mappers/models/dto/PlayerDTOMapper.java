@@ -13,6 +13,7 @@ public class PlayerDTOMapper implements RowMapper<PlayerDTO> {
         PlayerDTO playerDTO = new PlayerDTO();
         playerDTO.setUsername(rs.getString("username"));
         playerDTO.setPoints(rs.getInt("player_score"));
+        playerDTO.setProfilePictureUrl(rs.getString("profile_picture"));
 
         return playerDTO;
     }
