@@ -12,4 +12,5 @@ import lombok.Setter;
 public class Player {
     private String email;
     private String careerName;
+    private String profilePictureUrl;
 }

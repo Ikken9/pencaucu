@@ -11,5 +11,6 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 public class PlayerDTO implements Serializable {
     private String username;
+    private String profilePictureUrl;
     private int points;
 }
