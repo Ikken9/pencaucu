@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS Logins(
 CREATE TABLE IF NOT EXISTS Players(
     player_email VARCHAR(64) NOT NULL,
     career_name VARCHAR(64) NOT NULL,
+    profile_picture VARCHAR(256),
     PRIMARY KEY (player_email),
     FOREIGN KEY (player_email) REFERENCES Users(email),
     FOREIGN KEY (career_name) REFERENCES Careers(career_name)
@@ -43,7 +44,7 @@ CREATE TABLE IF NOT EXISTS Knockout_Stage(
 CREATE TABLE IF NOT EXISTS Teams(
     name VARCHAR(64) NOT NULL,
     group_letter CHAR NOT NULL,
-    flag_image VARCHAR(128),
+    flag_image VARCHAR(256),
     PRIMARY KEY (name)
 );
 
