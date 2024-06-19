@@ -62,6 +62,7 @@ public class AuthController {
         Player player = new Player();
         player.setEmail(user.getEmail());
         player.setCareerName(user.getCareer());
+        player.setProfilePictureUrl(user.getProfilePictureUrl());
 
         userService.createUser(user);
         loginService.saveLoginUser(login);

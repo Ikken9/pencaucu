@@ -25,10 +25,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                     .requestMatchers(
                             "/auth/register",
-                            "/auth/login").permitAll()
+                            "/auth/login",
+                            "/careers").permitAll()
                     .requestMatchers(
                             "/admins/**",
-                            "/players/**").hasAuthority("ROLE_ADMIN")
+                            "/players/**",
+                            "/careers/").hasAuthority("ROLE_ADMIN")
                     .anyRequest()
                     .authenticated()
                 )

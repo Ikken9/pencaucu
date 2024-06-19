@@ -20,7 +20,7 @@ public class PlayerDaoImpl implements PlayerDao {
 
     @Override
     public PlayerDTO findById(String username) throws UsernameNotFoundException, ResourceAlreadyExistsException {
-        String sql =    "SELECT p.player_email, u.username, " +
+        String sql =    "SELECT p.player_email, u.username, p.profile_picture, " +
                             "COALESCE(SUM(CASE " +
                                 "WHEN r.team_score = b.team_score AND r.faced_team_score = b.faced_team_score THEN 4 " +
                                 "WHEN (r.team_score > r.faced_team_score) AND (b.team_score >= r.team_score) THEN 2 " +
@@ -54,7 +54,7 @@ public class PlayerDaoImpl implements PlayerDao {
 
     @Override
     public List<PlayerDTO> findAll() {
-        String sql =    "SELECT p.player_email, u.username, " +
+        String sql =    "SELECT p.player_email, u.username, p.profile_picture, " +
                             "COALESCE(SUM(CASE " +
                                 "WHEN r.team_score = b.team_score AND r.faced_team_score = b.faced_team_score THEN 4 " +
                                 "WHEN (r.team_score > r.faced_team_score) AND (b.team_score >= r.team_score) THEN 2 " +
@@ -80,11 +80,12 @@ public class PlayerDaoImpl implements PlayerDao {
 
     @Override
     public void save(Player player) {
-        String sql = "INSERT INTO Players (player_email, career_name) VALUES (?, ?)";
+        String sql = "INSERT INTO Players (player_email, career_name, profile_picture) VALUES (?, ?, ?)";
 
         jdbcTemplate.update(sql,
                 player.getEmail(),
-                player.getCareerName());
+                player.getCareerName(),
+                player.getProfilePictureUrl());
 
     }
 
