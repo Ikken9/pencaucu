@@ -1,5 +1,7 @@
 use leptos::*;
+use leptos::logging::log;
 use leptos_router::*;
+use reqwest::header::AUTHORIZATION;
 use reqwest::StatusCode;
 use crate::models::auth_model::{EmailAddress, Password};
 use crate::services::login_service;
@@ -11,46 +13,51 @@ pub fn Login() -> impl IntoView {
     let (wait_for_response, set_wait_for_response) = create_signal(false);
     let navigate = use_navigate();
 
-    let login_action =
-        create_action(move |(email, password): &(String, String)| {
-            let email = EmailAddress(email.to_string());
-            let password = Password(password.to_string());
+    let login_action = create_action(move |(email, password): &(String, String)| {
+        let email = EmailAddress(email.clone());
+        let password = Password(password.clone());
 
-            {
-                let value = navigate.clone();
-                async move {
-                    set_wait_for_response.update(|w| *w = true);
-                    match login_service::login(email, password).await {
-                        Ok(res) => {
-                            let status_code = res.status();
-                            match status_code {
-                                StatusCode::BAD_REQUEST => {
-                                    set_login_error.set(Some(format!("{}: Unable to login", status_code.to_string())));
-                                },
-                                StatusCode::OK => {
-                                    if let Some(token) = res.headers().get("Authorization").and_then(|h| h.to_str().ok()) {
-                                        // Store the token in localStorage or sessionStorage
-                                        web_sys::window().unwrap().session_storage().unwrap().unwrap().set_item("token", token).unwrap();
-                                    }
-                                    set_login_error.set(None);
-                                    value("/matches", NavigateOptions::default()); // Navigate to the login page
-                                },
-                                StatusCode::INTERNAL_SERVER_ERROR => {
-                                    set_login_error.set(Some(String::from("Something went wrong...")));
+        let navigate = navigate.clone();
+        async move {
+            set_wait_for_response.set(true);
+            match login_service::login(email, password).await {
+                Ok(res) => {
+                    let status_code = res.status();
+                    match status_code {
+                        StatusCode::BAD_REQUEST => {
+                            set_login_error.set(Some("Unable to login".to_string()));
+                        },
+                        StatusCode::OK | StatusCode::NOT_MODIFIED => {
+                            if let Some(auth_header) = res.headers().get(AUTHORIZATION) {
+                                if let Ok(token) = auth_header.to_str() {
+                                    let window = web_sys::window().expect("No global window exists");
+                                    let local_storage = window.local_storage().unwrap().expect("local storage is `None`");
+                                    local_storage.set_item("token", token).expect("should be able to set item in local storage");
+                                    log!("Token stored in local storage");
+                                } else {
+                                    log!("Failed to convert Authorization header to string");
                                 }
-                                _ => {}
+                            } else {
+                                log!("Authorization header not found");
                             }
+                            set_login_error.set(None);
+                            navigate("/matches", NavigateOptions::default());
+                        },
+                        StatusCode::INTERNAL_SERVER_ERROR => {
+                            set_login_error.set(Some("Something went wrong...".to_string()));
                         }
-                        Err(e) => {
-                            set_login_error.set(Some(e.to_string()));
+                        _ => {
+                            set_login_error.set(Some("Unexpected error occurred".to_string()));
                         }
                     }
-                    set_wait_for_response.update(|w| *w = false);
-
+                }
+                Err(e) => {
+                    set_login_error.set(Some(e.to_string()));
                 }
             }
-
-        });
+            set_wait_for_response.set(false);
+        }
+    });
 
     let disabled = Signal::derive(move || wait_for_response.get());
 
