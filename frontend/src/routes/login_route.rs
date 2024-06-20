@@ -1,25 +1,55 @@
 use leptos::*;
 use leptos_router::*;
+use reqwest::StatusCode;
 use crate::models::auth_model::{EmailAddress, Password};
-use crate::services:: auth_service;
+use crate::services::login_service;
 
 
 #[component]
 pub fn Login() -> impl IntoView {
-    let (login_error, _set_login_error) = create_signal(None::<String>);
+    let (login_error, set_login_error) = create_signal(None::<String>);
     let (wait_for_response, set_wait_for_response) = create_signal(false);
+    let navigate = use_navigate();
 
     let login_action =
         create_action(move |(email, password): &(String, String)| {
             let email = EmailAddress(email.to_string());
             let password = Password(password.to_string());
 
-            async move {
-                set_wait_for_response.update(|w| *w = true);
-                let _result = auth_service::login(email, password).await;
-                set_wait_for_response.update(|w| *w = false);
+            {
+                let value = navigate.clone();
+                async move {
+                    set_wait_for_response.update(|w| *w = true);
+                    match login_service::login(email, password).await {
+                        Ok(res) => {
+                            let status_code = res.status();
+                            match status_code {
+                                StatusCode::BAD_REQUEST => {
+                                    set_login_error.set(Some(format!("{}: Unable to login", status_code.to_string())));
+                                },
+                                StatusCode::OK => {
+                                    if let Some(token) = res.headers().get("Authorization").and_then(|h| h.to_str().ok()) {
+                                        // Store the token in localStorage or sessionStorage
+                                        web_sys::window().unwrap().session_storage().unwrap().unwrap().set_item("token", token).unwrap();
+                                    }
+                                    set_login_error.set(None);
+                                    value("/matches", NavigateOptions::default()); // Navigate to the login page
+                                },
+                                StatusCode::INTERNAL_SERVER_ERROR => {
+                                    set_login_error.set(Some(String::from("Something went wrong...")));
+                                }
+                                _ => {}
+                            }
+                        }
+                        Err(e) => {
+                            set_login_error.set(Some(e.to_string()));
+                        }
+                    }
+                    set_wait_for_response.update(|w| *w = false);
 
+                }
             }
+
         });
 
     let disabled = Signal::derive(move || wait_for_response.get());
@@ -31,10 +61,6 @@ pub fn Login() -> impl IntoView {
             error=login_error.into()
             disabled
         />
-        <p class="mt-10 text-center text-sm text-zinc-300">
-            "Don't have an account? "
-            <A href="/register" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign Up!</A>
-        </p>
     }
 }
 
@@ -121,6 +147,10 @@ fn LoginForm(
                             {action_label}
                         </button>
                     </div>
+                    <p class="mt-10 text-center text-sm text-zinc-300">
+                        "Don't have an account? "
+                        <A href="/register" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign Up!</A>
+                    </p>
                 </form>
             </div>
         </div>
