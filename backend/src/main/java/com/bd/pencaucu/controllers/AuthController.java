@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("")
 public class AuthController {
 
     private final PasswordEncoder passwordEncoder;

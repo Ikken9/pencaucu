@@ -14,61 +14,56 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResultDaoImpl implements ResultDao {
 
-    private final String RESULT_NOT_FOUND_MSG = "Results with %s %s not found";
-
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Result> findByMatchId(int matchId) throws ResourceNotFoundException {
-        String sql = "SELECT team_name, match_id, score FROM Matches WHERE match_id = ?";
+    public Result findById(int matchId) throws ResourceNotFoundException {
+        String sql = "SELECT match_id, team_score, faced_team_score FROM Results WHERE match_id = ?";
         List<Result> results = jdbcTemplate.query(sql, new ResultMapper(), matchId);
 
         if (!results.isEmpty()) {
-            return results;
+            return results.get(0);
         }
 
-        throw new ResourceNotFoundException(String.format(RESULT_NOT_FOUND_MSG, "match id", matchId));
+        String RESULT_NOT_FOUND_MSG = "Results with match_id %d not found";
+        throw new ResourceNotFoundException(String.format(RESULT_NOT_FOUND_MSG, matchId));
     }
 
     @Override
-    public List<Result> findByTeamName(String teamName) throws ResourceNotFoundException {
-        String sql = "SELECT team_name, match_id, score FROM Matches WHERE team_name = ?";
-        List<Result> results = jdbcTemplate.query(sql, new ResultMapper(), teamName);
+    public List<Result> findAll() {
+        String sql = "SELECT match_id, team_score, faced_team_score FROM Results";
+        List<Result> results = jdbcTemplate.query(sql, new ResultMapper());
 
         if (!results.isEmpty()) {
             return results;
         }
-
-        throw new ResourceNotFoundException(String.format(RESULT_NOT_FOUND_MSG, "team name", teamName));
+        throw new ResourceNotFoundException("Results not found");
     }
 
     @Override
     public void save(Result result) {
-        String sql = "INSERT INTO Results(team_name, match_id, score) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO Results(match_id, team_score, faced_team_score) VALUES(?, ?, ?)";
 
         jdbcTemplate.update(sql,
-                result.getTeamName(),
                 result.getMatchId(),
-                result.getScore());
+                result.getTeamScore(),
+                result.getFacedTeamScore());
     }
 
     @Override
     public void update(Result result) {
-        String sql = "UPDATE Results SET score = ? WHERE team_name = ? AND match_id = ?";
+        String sql = "UPDATE Results SET team_score = ?, faced_team_score = ? WHERE match_id = ?";
 
         jdbcTemplate.update(sql,
-                result.getScore(),
-                result.getTeamName(),
+                result.getTeamScore(),
+                result.getFacedTeamScore(),
                 result.getMatchId());
     }
 
     @Override
-    public void delete(Result result) {
-        String sql = "DELETE FROM Results WHERE team_name = ? AND match_id = ?";
+    public void delete(int id) {
+        String sql = "DELETE FROM Results WHERE match_id = ?";
 
-        jdbcTemplate.update(sql,
-                result.getTeamName(),
-                result.getMatchId());
-
+        jdbcTemplate.update(sql, id);
     }
 }

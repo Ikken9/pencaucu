@@ -13,12 +13,12 @@ public class ResultService {
 
     private final ResultDao resultDao;
 
-    public List<Result> findResultsByMatchId(int matchId) {
-        return resultDao.findByMatchId(matchId);
+    public Result findResultsById(int matchId) {
+        return resultDao.findById(matchId);
     }
 
-    public List<Result> finResultsByTeamName(String teamName) {
-        return resultDao.findByTeamName(teamName);
+    public List<Result> findAllResults() {
+        return resultDao.findAll();
     }
 
     public void submitResult(Result result) {
@@ -29,7 +29,7 @@ public class ResultService {
         resultDao.update(result);
     }
 
-    public void deleteResult(Result result) {
-        resultDao.delete(result);
+    public void deleteResult(int id) {
+        resultDao.delete(id);
     }
 }

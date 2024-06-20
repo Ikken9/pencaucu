@@ -12,7 +12,7 @@ public class MatchDTOMapper implements RowMapper<MatchDTO> {
     public MatchDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
         MatchDTO matchDTO = new MatchDTO();
         matchDTO.setId(rs.getInt("id"));
-        matchDTO.setDate(rs.getDate("date"));
+        matchDTO.setDate(rs.getTimestamp("date"));
         matchDTO.setTeamName(rs.getString("team_name"));
         matchDTO.setFacedTeamName(rs.getString("faced_team_name"));
         matchDTO.setStadiumName(rs.getString("name"));

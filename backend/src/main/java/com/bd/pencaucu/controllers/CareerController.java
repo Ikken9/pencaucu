@@ -32,13 +32,13 @@ public class CareerController {
         throw new ResourceNotFoundException("No careers found");
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<String> createCareer(@RequestBody Career career) {
         careerService.createCareer(career);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PutMapping()
+    @PutMapping
     public ResponseEntity<Career> updateCareer(@RequestBody Career career) {
         careerService.updateCareer(career);
 

@@ -4,7 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.sql.Date;
+
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -12,6 +13,10 @@ import java.sql.Date;
 @AllArgsConstructor
 public class Match {
     private int id;
-    private Date date;
+    private Timestamp date;
+    private int knockoutStageId;
+    private String stadiumId;
+    private String teamName;
+    private String facedTeamName;
     private String adminEmail;
 }

@@ -11,9 +11,9 @@ public class ResultMapper implements RowMapper<Result> {
     @Override
     public Result mapRow(ResultSet rs, int rowNum) throws SQLException {
         Result result = new Result();
-        result.setTeamName(rs.getString("team_name"));
         result.setMatchId(rs.getInt("match_id"));
-        result.setScore(rs.getInt("score"));
+        result.setTeamScore(rs.getInt("team_score"));
+        result.setFacedTeamScore(rs.getInt("faced_team_score"));
 
         return result;
     }

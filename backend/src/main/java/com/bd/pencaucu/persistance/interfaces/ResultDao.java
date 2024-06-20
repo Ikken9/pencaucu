@@ -5,9 +5,9 @@ import com.bd.pencaucu.models.Result;
 import java.util.List;
 
 public interface ResultDao {
-    List<Result> findByMatchId(int matchId);
-    List<Result> findByTeamName(String teamName);
+    Result findById(int matchId);
+    List<Result> findAll();
     void save(Result result);
     void update(Result result);
-    void delete(Result result);
+    void delete(int id);
 }

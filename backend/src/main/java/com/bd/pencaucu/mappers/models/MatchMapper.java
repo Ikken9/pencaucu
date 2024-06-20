@@ -12,7 +12,7 @@ public class MatchMapper implements RowMapper<Match> {
     public Match mapRow(ResultSet rs, int rowNum) throws SQLException {
         Match match = new Match();
         match.setId(rs.getInt("id"));
-        match.setDate(rs.getDate("date"));
+        match.setDate(rs.getTimestamp("date"));
         match.setAdminEmail(rs.getString("admin_email"));
 
         return match;

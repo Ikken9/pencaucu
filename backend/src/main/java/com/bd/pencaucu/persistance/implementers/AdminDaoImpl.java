@@ -42,7 +42,7 @@ public class AdminDaoImpl implements AdminDao {
 
     @Override
     public void save(Admin admin) {
-        String sql = "INSERT INTO Admins (admin_email, name) VALUES (?, ?)";
+        String sql = "INSERT INTO Admins (admin_email) VALUES (?)";
 
         jdbcTemplate.update(sql, admin.getEmail());
     }
