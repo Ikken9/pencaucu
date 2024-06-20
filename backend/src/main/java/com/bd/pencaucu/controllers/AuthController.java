@@ -5,10 +5,10 @@ import com.bd.pencaucu.models.Login;
 import com.bd.pencaucu.models.Player;
 import com.bd.pencaucu.models.User;
 import com.bd.pencaucu.exceptions.InvalidUserRegistrationException;
-import com.bd.pencaucu.models.dto.JwtDTO;
 import com.bd.pencaucu.services.LoginService;
 import com.bd.pencaucu.services.PlayerService;
 import com.bd.pencaucu.services.UserService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -74,10 +74,13 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JwtDTO> logInUser(@RequestBody Login login) throws AuthenticationException {
+    public ResponseEntity<String> logInUser(@RequestBody Login login) throws AuthenticationException {
         Authentication auth = new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword());
         Authentication authUser = authenticationManager.authenticate(auth);
         String accessToken = tokenProvider.generateAccessToken((Login) authUser.getPrincipal());
-        return ResponseEntity.ok(new JwtDTO(accessToken));
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.set("Authorization", "Bearer " + accessToken);
+        return new ResponseEntity<>("Login successful!", httpHeaders, HttpStatus.OK);
     }
 }
