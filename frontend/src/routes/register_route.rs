@@ -32,8 +32,11 @@ pub fn Register() -> impl IntoView {
                                 },
                                 StatusCode::CREATED => {
                                     if let Some(token) = res.headers().get("Authorization").and_then(|h| h.to_str().ok()) {
-                                        // Store the token in localStorage or sessionStorage
-                                        web_sys::window().unwrap().session_storage().unwrap().unwrap().set_item("token", token).unwrap();
+
+                                        let window = web_sys::window().expect("No global window exists");
+                                        let local_storage = window.local_storage().expect("").expect("local storage is `None`");
+
+                                        local_storage.set_item("token", token).expect("should be able to set item in local storage");
                                     }
                                     set_register_error.set(None);
                                     value("/login", NavigateOptions::default()); // Navigate to the login page
