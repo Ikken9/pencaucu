@@ -26,10 +26,10 @@ public class SecurityConfig {
                     .requestMatchers(
                             "/register",
                             "/login",
-                            "/careers").permitAll()
+                            "/careers",
+                            "/players/**").permitAll()
                     .requestMatchers(
-                            "/admins/**",
-                            "/players/**").hasAuthority("ROLE_ADMIN")
+                            "/admins/**").hasAuthority("ROLE_ADMIN")
                     .anyRequest()
                     .authenticated()
                 )
