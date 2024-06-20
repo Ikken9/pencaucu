@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Result {
-    private String teamName;
     private int matchId;
-    private int score;
+    private int teamScore;
+    private int facedTeamScore;
 }

@@ -8,6 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 
@@ -60,22 +64,36 @@ public class MatchDaoImpl implements MatchDao {
 
     @Override
     public void save(Match match) {
-        String sql = "INSERT INTO Matches (id, date, admin_email) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO Matches (" +
+                        "id, date, knockout_stage_id, stadium_id, team_name, faced_team_name, admin_email" +
+                     ") VALUES (?, ?, ?, ?, ?, ?, ?);";
 
         jdbcTemplate.update(sql,
                 match.getId(),
                 match.getDate(),
+                match.getKnockoutStageId(),
+                match.getStadiumId(),
+                match.getTeamName(),
+                match.getFacedTeamName(),
                 match.getAdminEmail());
     }
 
     @Override
     public void update(Match match) {
         String sql = "UPDATE Matches SET " +
-                "date = ?," +
-                "admin_email = ? WHERE id = ?";
+                        "date = ?," +
+                        "knockout_stage = ?," +
+                        "stadium_id = ?," +
+                        "team_name = ?," +
+                        "faced_team_name = ?," +
+                        "admin_email = ? WHERE id = ?";
 
         jdbcTemplate.update(sql,
-                match.getDate(),
+                match.getDate().toLocalDateTime(),
+                match.getKnockoutStageId(),
+                match.getStadiumId(),
+                match.getTeamName(),
+                match.getFacedTeamName(),
                 match.getAdminEmail(),
                 match.getId());
     }

@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
 @RequiredArgsConstructor
 public class MatchDTO implements Serializable {
     private int id;
-    private Date date;
+    private Timestamp date;
     private String knockoutStage;
     private String stadiumName;
     private String teamName;
