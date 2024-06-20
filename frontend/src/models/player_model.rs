@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 pub struct Player {
     pub(crate) username: String,
 
-    #[serde(rename = "profilePicture")]
+    #[serde(rename = "profilePictureUrl")]
     pub(crate) profile_picture: Option<String>,
 
     pub(crate) points: u64
