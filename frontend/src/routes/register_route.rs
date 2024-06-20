@@ -2,8 +2,9 @@ use leptos::*;
 use leptos::leptos_dom::{error, log};
 use leptos_router::*;
 use reqwest::StatusCode;
-use crate::models::auth_model::{Username, EmailAddress, Career, Password};
-use crate::services::{auth_service, career_service, match_service};
+use crate::models::auth_model::{Username, EmailAddress, Password};
+use crate::models::career_model::Career;
+use crate::services::{register_service, career_service, match_service};
 
 #[component]
 pub fn Register() -> impl IntoView {
@@ -15,14 +16,14 @@ pub fn Register() -> impl IntoView {
         create_action(move |(username, email, career, password): &(String, String, String, String)| {
             let username = Username(username.to_string());
             let email = EmailAddress(email.to_string());
-            let career = Career(career.to_string());
+            let career = Career { name: career.clone() };
             let password = Password(password.to_string());
 
             {
                 let value = navigate.clone();
                 async move {
                     set_wait_for_response.update(|w| *w = true);
-                    match auth_service::register(username, email, career, password).await {
+                    match register_service::register(username, email, career, password).await {
                         Ok(res) => {
                             let status_code = res.status();
                             match status_code {
@@ -30,9 +31,16 @@ pub fn Register() -> impl IntoView {
                                     set_register_error.set(Some(String::from("That email is already registered")));
                                 },
                                 StatusCode::CREATED => {
+                                    if let Some(token) = res.headers().get("Authorization").and_then(|h| h.to_str().ok()) {
+                                        // Store the token in localStorage or sessionStorage
+                                        web_sys::window().unwrap().session_storage().unwrap().unwrap().set_item("token", token).unwrap();
+                                    }
                                     set_register_error.set(None);
                                     value("/login", NavigateOptions::default()); // Navigate to the login page
                                 },
+                                StatusCode::INTERNAL_SERVER_ERROR => {
+                                    set_register_error.set(Some(String::from("Something went wrong...")));
+                                }
                                 _ => {}
                             }
                         }
@@ -70,8 +78,26 @@ fn RegisterForm(
     let (career, set_career) = create_signal(String::new());
     let (password, set_password) = create_signal(String::new());
 
-    let dispatch_action =
-        move || action.dispatch((username.get(), email.get(), career.get(), password.get()));
+    // Fetch careers data
+    let careers_data = create_resource(
+        || (),  // The initial state for the resource
+        |_| async {
+            log!("Fetching careers...");
+            let result = career_service::get_careers().await;
+            match result {
+                Ok(careers) => {
+                    log!("Successfully fetched careers.");
+                    Some(careers)
+                }
+                Err(e) => {
+                    error!("Error fetching careers: {:?}", e);
+                    None
+                }
+            }
+        },
+    );
+
+    let dispatch_action = move || action.dispatch((username.get(), email.get(), career.get(), password.get()));
 
     let button_is_disabled = Signal::derive(move || {
         disabled.get() || username.get().is_empty() || email.get().is_empty() || career.get().is_empty() || password.get().is_empty()
@@ -89,11 +115,9 @@ fn RegisterForm(
                     dispatch_action();
                 }>
                     {move || {
-                        error
-                            .get()
-                            .map(|err| {
-                                view! { <p style="color:red;">{err}</p> }
-                            })
+                        error.get().map(|err| {
+                            view! { <p style="color:red;">{err}</p> }
+                        })
                     }}
                     <div>
                         <label for="username" class="block text-sm font-medium leading-6 text-zinc-300">"Username"</label>
@@ -130,15 +154,26 @@ fn RegisterForm(
                         </div>
                     </div>
                     <div>
-                        <button id="dropdownDefaultButton" type="button" data-dropdown-toggle="dropdown" class="flex w-full justify-center font-medium text-sm text-center rounded-md text-white bg-blue-700 hover:bg-blue-800 px-4 py-1.5 me-1.5 mb-0.5"
-                        >
-                            Choose a career
-                            <svg class="w-2.5 h-2.5 ms-4 mt-0.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 1">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                            </svg>
-                        </button>
-                        <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                            <Careers/>
+                        <label for="career" class="block text-sm font-medium leading-6 text-zinc-300">"Career"</label>
+                        <div class="mt-2">
+                            <select id="career" name="career" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                prop:disabled=move || disabled.get()
+                                on:change=move |ev| {
+                                    let val = event_target_value(&ev);
+                                    set_career.update(|v| *v = val);
+                                }
+                            >
+                                <option value="">Select a career</option>
+                                {move || careers_data.get().map(|careers| {
+                                    if let Some(careers_list) = careers {
+                                        careers_list.iter().map(|c| {
+                                            view! { <option value={c.name.clone()}>{c.name.clone()}</option> }
+                                        }).collect::<Vec<_>>()
+                                    } else {
+                                        vec![view! { <option value="">Error loading careers</option> }]
+                                    }
+                                }).unwrap_or_else(|| vec![view! { <option value="">Error loading careers</option> }])}
+                            </select>
                         </div>
                     </div>
                     <div>
@@ -172,59 +207,12 @@ fn RegisterForm(
                             {action_label}
                         </button>
                     </div>
-                        <p class="mt-10 text-center text-sm text-zinc-300">
-                            "Already have an account? "
-                            <A href="/login" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">"Sign In!"</A>
-                        </p>
+                    <p class="mt-10 text-center text-sm text-zinc-300">
+                        "Already have an account? "
+                        <A href="/login" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">"Sign In!"</A>
+                    </p>
                 </form>
             </div>
         </div>
     }
 }
-
-#[component]
-pub fn Careers() -> impl IntoView {
-    let careers_data = create_resource(
-        || (),  // The initial state for the resource
-        |_| async {
-            log!("Fetching careers...");
-            let result = career_service::get_careers().await;
-            match result {
-                Ok(careers) => {
-                    log!("Successfully fetched careers.");
-                    Some(careers)
-                }
-                Err(e) => {
-                    error!("Error fetching careers: {:?}", e);
-                    None
-                }
-            }
-        },
-    );
-
-    view! {
-        <div class="p-4">
-            {move || careers_data.get().map(|careers| match careers {
-                None => view! { <div>"Error loading careers."</div> },
-                Some(careers_list) => view! {
-                    <div>
-                        <ul>
-                            <For
-                                each=move || careers_list.clone().into_iter().enumerate()
-                                key=|(_, career)| career.0.clone()
-                                children=move |(_, career)| {
-                                    view! {
-                                        <li href="#" class="block px-4 py-2 hover:bg-gray-100">
-                                            {career.0.clone()}
-                                        </li>
-                                    }
-                                }
-                            />
-                        </ul>
-                    </div>
-                }
-            })}
-        </div>
-    }
-}
-
