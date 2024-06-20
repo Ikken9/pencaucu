@@ -97,12 +97,12 @@ pub fn Matches() -> impl IntoView {
                                 </ul>
                             </div>
                             <div class="tab-content mt-4">
-                                {match &*active_tab.get() {
+                                { match &*active_tab.get() {
                                     "Playing" => view! { <MatchList matches=playing.clone() bettable=false /> }.into_view(),
                                     "Pending" => view! { <MatchList matches=pending.clone() bettable=true /> }.into_view(),
                                     "Ended" => view! { <MatchList matches=ended.clone() bettable=false /> }.into_view(),
                                     _ => view! { <div>"Unknown tab"</div> }.into_view(),
-                                }}
+                                } }
                             </div>
                         </div>
                     }

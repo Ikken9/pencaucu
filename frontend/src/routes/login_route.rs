@@ -58,7 +58,7 @@ fn LoginForm(
     view! {
         <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-                <img class="mx-auto h-40 w-40" src="https://raw.githubusercontent.com/Ikken9/pencaucu/dev/frontend/assets/logo.png" alt="Copa Logo"/>
+                // <img class="mx-auto h-40 w-40" src="https://raw.githubusercontent.com/Ikken9/pencaucu/dev/frontend/assets/logo.png" alt="Copa Logo"/>
                 <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-zinc-300">Sign in to your account</h2>
             </div>
             <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-4 sm:p-8">
