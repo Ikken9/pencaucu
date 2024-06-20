@@ -2,7 +2,7 @@ use reqwest::Client;
 use crate::models::match_model::Match;
 
 pub async fn get_matches() -> Result<Vec<Match>, reqwest::Error> {
-    let token = web_sys::window().unwrap().session_storage().unwrap().unwrap().get_item("token").unwrap_or(None);
+    let token = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("token").unwrap();
     let client = Client::new();
 
     let req_builder = client.get("http://localhost:8080/matches");
