@@ -4,3 +4,4 @@ pub mod login_route;
 pub mod bets_route;
 pub mod profile_route;
 pub mod register_route;
+pub mod admin_route;

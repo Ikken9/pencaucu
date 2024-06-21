@@ -1,3 +1,5 @@
+use std::time::{Duration, UNIX_EPOCH};
+use chrono::{DateTime, Local};
 use reqwest::Client;
 use crate::models::match_model::Match;
 
@@ -43,4 +45,13 @@ pub async fn get_match(id: &str) -> Result<Match, reqwest::Error> {
     } else {
         Err(res.error_for_status().unwrap_err())
     }
+}
+
+pub fn u64_to_date(timestamp: u64) -> DateTime<Local> {
+    // Convert u64 timestamp (milliseconds since UNIX_EPOCH) to SystemTime
+    let unix_epoch = UNIX_EPOCH;
+    let system_time = unix_epoch + Duration::from_millis(timestamp);
+
+    // Convert SystemTime to DateTime<Local> (or other timezone if needed)
+    DateTime::<Local>::from(system_time)
 }

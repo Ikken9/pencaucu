@@ -2,8 +2,10 @@ use std::time::{Duration, UNIX_EPOCH};
 use chrono::{DateTime, Local, NaiveDateTime};
 use leptos::*;
 use leptos::logging::{error, log};
+use leptos_router::use_navigate;
 use crate::models::match_model::Match;
 use crate::services::match_service;
+use crate::services::match_service::u64_to_date;
 
 
 #[component]
@@ -114,6 +116,23 @@ pub fn Matches() -> impl IntoView {
 
 #[component]
 pub fn Match(match_data: Match, bettable: bool) -> impl IntoView {
+    let navigate = use_navigate();
+
+    let on_bet_click = move || {
+        let match_id = match_data.id.clone();
+        let navigate = navigate.clone();
+        spawn_local(async move {
+            match make_bet_request(&match_id).await {
+                Ok(_) => {
+                    navigate(&format!("/bet/{}", match_id), NavigateOptions::default());
+                }
+                Err(e) => {
+                    error!("Error making bet request: {:?}", e);
+                }
+            }
+        });
+    };
+
     let formatted_date = u64_to_date(match_data.date).format("%A %d, %B - %H:%M").to_string();
     view! {
         <div class="match-card bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 p-2 rounded-lg shadow-md flex flex-col items-center mb-1 sm:p-4 h-24">
@@ -183,13 +202,4 @@ fn classify_matches(matches: Vec<Match>) -> (Vec<Match>, Vec<Match>, Vec<Match>)
     }
 
     (playing, pending, ended)
-}
-
-fn u64_to_date(timestamp: u64) -> DateTime<Local> {
-    // Convert u64 timestamp (milliseconds since UNIX_EPOCH) to SystemTime
-    let unix_epoch = UNIX_EPOCH;
-    let system_time = unix_epoch + Duration::from_millis(timestamp);
-
-    // Convert SystemTime to DateTime<Local> (or other timezone if needed)
-    DateTime::<Local>::from(system_time)
 }
