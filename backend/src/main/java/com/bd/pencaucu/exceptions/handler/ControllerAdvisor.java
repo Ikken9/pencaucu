@@ -34,7 +34,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleSQLException(SQLException ex, WebRequest req) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("message", ex.getMessage());
+        body.put("message", "Database error.");
         body.put("request description", req.getDescription(false));
 
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
