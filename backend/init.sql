@@ -36,9 +36,8 @@ CREATE TABLE IF NOT EXISTS Admins(
 );
 
 CREATE TABLE IF NOT EXISTS Knockout_Stage(
-    id INT,
     name VARCHAR(64) NOT NULL,
-    PRIMARY KEY (id)
+    PRIMARY KEY (name)
 );
 
 CREATE TABLE IF NOT EXISTS Teams(
@@ -51,13 +50,13 @@ CREATE TABLE IF NOT EXISTS Teams(
 CREATE TABLE IF NOT EXISTS Matches(
     id INT AUTO_INCREMENT,
     date DATETIME NOT NULL,
-    knockout_stage_id INT,
+    knockout_stage VARCHAR(64),
     stadium_id VARCHAR(20) NOT NULL,
     team_name VARCHAR(64) NOT NULL,
     faced_team_name VARCHAR(64) NOT NULL,
     admin_email VARCHAR(64) NOT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (knockout_stage_id) REFERENCES Knockout_Stage(id),
+    FOREIGN KEY (knockout_stage) REFERENCES Knockout_Stage(name),
     FOREIGN KEY (team_name) REFERENCES Teams(name),
     FOREIGN KEY (faced_team_name) REFERENCES Teams(name),
     FOREIGN KEY (admin_email) REFERENCES Admins(admin_email)

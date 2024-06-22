@@ -29,10 +29,6 @@ public class AdminDaoImpl implements AdminDao {
         throw new UsernameNotFoundException(String.format(ADMIN_NOT_FOUND_MSG, id));
     }
 
-    public boolean isAdmin(String email) {
-        return true;
-    }
-
     @Override
     public List<Admin> findAll() {
         String sql = "SELECT admin_email FROM Admins";
