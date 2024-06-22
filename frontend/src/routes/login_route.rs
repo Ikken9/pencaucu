@@ -17,6 +17,8 @@ pub fn Login() -> impl IntoView {
         let email = EmailAddress(email.clone());
         let password = Password(password.clone());
 
+        let email_clone = email.clone();
+
         let navigate = navigate.clone();
         async move {
             set_wait_for_response.set(true);
@@ -28,14 +30,13 @@ pub fn Login() -> impl IntoView {
                             set_login_error.set(Some("Unable to login".to_string()));
                         },
                         StatusCode::OK | StatusCode::NOT_MODIFIED => {
+                            let window = web_sys::window().expect("No global window exists");
+                            let local_storage = window.local_storage().unwrap().expect("local storage is `None`");
+                            local_storage.set_item("playerEmail", &email_clone.to_string()).expect("should be able to save player email in the local storage");
+
                             if let Some(auth_header) = res.headers().get(AUTHORIZATION) {
                                 if let Ok(token) = auth_header.to_str() {
-                                    let window = web_sys::window().expect("No global window exists");
-                                    let local_storage = window.local_storage().unwrap().expect("local storage is `None`");
                                     local_storage.set_item("token", token).expect("should be able to set item in local storage");
-                                    log!("Token stored in local storage");
-                                } else {
-                                    log!("Failed to convert Authorization header to string");
                                 }
                             } else {
                                 log!("Authorization header not found");
