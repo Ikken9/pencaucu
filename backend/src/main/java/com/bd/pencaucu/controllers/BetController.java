@@ -18,9 +18,9 @@ public class BetController {
         this.betService = betService;
     }
 
-    @GetMapping("/{username}/{matchId}")
-    public ResponseEntity<Bet> getBetsById(@PathVariable String username, @PathVariable int matchId) {
-        Bet bet = betService.getBetById(username, matchId);
+    @GetMapping("/{playerEmail}/{matchId}")
+    public ResponseEntity<Bet> getBetsById(@PathVariable String playerEmail, @PathVariable int matchId) {
+        Bet bet = betService.getBetById(playerEmail, matchId);
 
         if (bet == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
