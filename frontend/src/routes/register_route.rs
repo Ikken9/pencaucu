@@ -5,7 +5,7 @@ use reqwest::header::AUTHORIZATION;
 use reqwest::StatusCode;
 use crate::models::auth_model::{Username, EmailAddress, Password};
 use crate::models::career_model::Career;
-use crate::services::{register_service, career_service, match_service};
+use crate::services::{register_service, career_service};
 
 #[component]
 pub fn Register() -> impl IntoView {
