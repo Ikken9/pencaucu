@@ -7,7 +7,7 @@ use crate::services::match_service::u64_to_date;
 pub fn Bet() -> impl IntoView {
     let params = use_params_map();
     let match_data = create_resource(
-        move || params.get().get("id").cloned().unwrap_or_default(),
+        move || params.get().get("match-id").cloned().unwrap_or_default(),
         move |id| async move {
             if id.is_empty() {
                 None

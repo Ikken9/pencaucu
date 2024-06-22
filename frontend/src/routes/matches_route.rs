@@ -2,8 +2,9 @@ use std::time::{Duration, UNIX_EPOCH};
 use chrono::{DateTime, Local, NaiveDateTime};
 use leptos::*;
 use leptos::logging::{error, log};
-use leptos_router::use_navigate;
+use leptos_router::{NavigateOptions, use_navigate};
 use crate::models::match_model::Match;
+use crate::services::bets_service::make_bet;
 use crate::services::match_service;
 use crate::services::match_service::u64_to_date;
 
@@ -116,23 +117,6 @@ pub fn Matches() -> impl IntoView {
 
 #[component]
 pub fn Match(match_data: Match, bettable: bool) -> impl IntoView {
-    let navigate = use_navigate();
-
-    let on_bet_click = move || {
-        let match_id = match_data.id.clone();
-        let navigate = navigate.clone();
-        spawn_local(async move {
-            match make_bet_request(&match_id).await {
-                Ok(_) => {
-                    navigate(&format!("/bet/{}", match_id), NavigateOptions::default());
-                }
-                Err(e) => {
-                    error!("Error making bet request: {:?}", e);
-                }
-            }
-        });
-    };
-
     let formatted_date = u64_to_date(match_data.date).format("%A %d, %B - %H:%M").to_string();
     view! {
         <div class="match-card bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 p-2 rounded-lg shadow-md flex flex-col items-center mb-1 sm:p-4 h-24">
@@ -144,7 +128,23 @@ pub fn Match(match_data: Match, bettable: bool) -> impl IntoView {
                     </div>
                 </div>
                 <Show when=move || {bettable == true} fallback=|| view! { <div></div> }>
-                    <button type="button" class="mt-2 absolute left-1/2 transform -translate-x-1/2 z-10 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5">
+                    <button type="button" class="mt-2 absolute left-1/2 transform -translate-x-1/2 z-10 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5"
+                        on:click=move |_| {
+                            let match_id = match_data.id.clone();
+                            let stored_email = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("playerEmail").unwrap();
+                            let navigate = use_navigate();
+                            spawn_local(async move {
+                                match stored_email {
+                                    Some(email) => {
+                                        navigate.clone()(&format!("/bets/{}/{}", email, match_id), NavigateOptions::default());
+                                    }
+                                    None => {
+                                        error!("Unable to retrieve player email");
+                                    }
+                                }
+                            });
+                        }
+                    >
                         Bet
                     </button>
                 </Show>

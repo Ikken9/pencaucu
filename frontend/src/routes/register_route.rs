@@ -1,6 +1,7 @@
 use leptos::*;
 use leptos::leptos_dom::{error, log};
 use leptos_router::*;
+use reqwest::header::AUTHORIZATION;
 use reqwest::StatusCode;
 use crate::models::auth_model::{Username, EmailAddress, Password};
 use crate::models::career_model::Career;
@@ -19,41 +20,46 @@ pub fn Register() -> impl IntoView {
             let career = Career { name: career.clone() };
             let password = Password(password.to_string());
 
-            {
-                let value = navigate.clone();
-                async move {
-                    set_wait_for_response.update(|w| *w = true);
-                    match register_service::register(username, email, career, password).await {
-                        Ok(res) => {
-                            let status_code = res.status();
-                            match status_code {
-                                StatusCode::CONFLICT => {
-                                    set_register_error.set(Some(String::from("That email is already registered")));
-                                },
-                                StatusCode::CREATED => {
-                                    if let Some(token) = res.headers().get("Authorization").and_then(|h| h.to_str().ok()) {
+            let email_clone = email.clone();
 
-                                        let window = web_sys::window().expect("No global window exists");
-                                        let local_storage = window.local_storage().expect("").expect("local storage is `None`");
+            let value = navigate.clone();
+            async move {
+                set_wait_for_response.update(|w| *w = true);
+                match register_service::register(username, email, career, password).await {
+                    Ok(res) => {
+                        let status_code = res.status();
+                        match status_code {
+                            StatusCode::CONFLICT => {
+                                set_register_error.set(Some(String::from("That email is already registered")));
+                            },
+                            StatusCode::CREATED => {
+                                let window = web_sys::window().expect("No global window exists");
+                                let local_storage = window.local_storage().expect("").expect("local storage is `None`");
+                                local_storage.set_item("playerEmail", &email_clone.to_string()).expect("should be able to save player email in the local storage");
 
+                                if let Some(auth_header) = res.headers().get(AUTHORIZATION) {
+                                    if let Ok(token) = auth_header.to_str() {
                                         local_storage.set_item("token", token).expect("should be able to set item in local storage");
                                     }
-                                    set_register_error.set(None);
-                                    value("/login", NavigateOptions::default()); // Navigate to the login page
-                                },
-                                StatusCode::INTERNAL_SERVER_ERROR => {
-                                    set_register_error.set(Some(String::from("Something went wrong...")));
+                                } else {
+                                    log!("Authorization header not found");
                                 }
-                                _ => {}
+                                set_register_error.set(None);
+                                value("/login", NavigateOptions::default()); // Navigate to the login page
+                            },
+                            StatusCode::INTERNAL_SERVER_ERROR => {
+                                set_register_error.set(Some(String::from("Something went wrong...")));
                             }
-                        }
-                        Err(e) => {
-                            set_register_error.set(Some(e.to_string()));
+                            _ => {}
                         }
                     }
-                    set_wait_for_response.update(|w| *w = false);
+                    Err(e) => {
+                        set_register_error.set(Some(e.to_string()));
+                    }
                 }
+                set_wait_for_response.update(|w| *w = false);
             }
+
 
         });
 
