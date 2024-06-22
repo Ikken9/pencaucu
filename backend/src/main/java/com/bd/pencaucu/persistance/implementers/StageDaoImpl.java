@@ -18,7 +18,7 @@ public class StageDaoImpl implements StageDao {
 
     @Override
     public List<Stage> getAllStages() {
-        String sql = "SELECT id, name FROM Knockout_Stage";
+        String sql = "SELECT name FROM Knockout_Stage";
 
         return jdbcTemplate.query(sql, new StageMapper());
     }

@@ -108,29 +108,29 @@ INSERT IGNORE INTO Teams(name, group_letter, flag_image)
 VALUES ('Bolivia', 'C', 'https://ssl.gstatic.com/onebox/media/sports/logos/SGxeD7yhwPj53FmPBmMMHg_96x96.png');
 
 -- MATCHES EXAMPLE DATA INSERT
-INSERT IGNORE INTO Matches(id, date, knockout_stage_id, stadium_id, team_name, faced_team_name, admin_email)
-VALUES (1, '2024-06-20 21:00:00', 1, 'MBS-ATL-EEUU', 'Argentina', 'Canadá', 'martin.caraballo@correo.ucu.edu.uy');
+INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+VALUES (1, '2024-06-20 21:00:00', 'Fase de Grupos', 'MBS-ATL-EEUU', 'Argentina', 'Canadá', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage_id, stadium_id, team_name, faced_team_name, admin_email)
-VALUES (2, '2024-06-21 21:00:00', 1, 'ATS-ARL-EEUU', 'Perú', 'Chile', 'martin.caraballo@correo.ucu.edu.uy');
+INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+VALUES (2, '2024-06-21 21:00:00', 'Fase de Grupos', 'ATS-ARL-EEUU', 'Perú', 'Chile', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage_id, stadium_id, team_name, faced_team_name, admin_email)
-VALUES (3, '2024-06-22 19:00:00', 1, 'LS-SC-EEUU', 'Ecuador', 'Venezuela', 'martin.caraballo@correo.ucu.edu.uy');
+INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+VALUES (3, '2024-06-22 19:00:00', 'Fase de Grupos', 'LS-SC-EEUU', 'Ecuador', 'Venezuela', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage_id, stadium_id, team_name, faced_team_name, admin_email)
-VALUES (4, '2024-06-22 22:00:00', 1, 'NRG-HSN-EEUU', 'México', 'Jamaica', 'martin.caraballo@correo.ucu.edu.uy');
+INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+VALUES (4, '2024-06-22 22:00:00', 'Fase de Grupos', 'NRG-HSN-EEUU', 'México', 'Jamaica', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage_id, stadium_id, team_name, faced_team_name, admin_email)
-VALUES (5, '2024-06-23 19:00:00', 1, 'ATS-ARL-EEUU', 'Estados Unidos', 'Bolivia', 'martin.caraballo@correo.ucu.edu.uy');
+INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+VALUES (5, '2024-06-23 19:00:00', 'Fase de Grupos', 'ATS-ARL-EEUU', 'Estados Unidos', 'Bolivia', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage_id, stadium_id, team_name, faced_team_name, admin_email)
-VALUES (6, '2024-06-23 22:00:00', 1, 'HRS-MIA-EEUU', 'Uruguay', 'Panamá', 'martin.caraballo@correo.ucu.edu.uy');
+INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+VALUES (6, '2024-06-23 22:00:00', 'Fase de Grupos', 'HRS-MIA-EEUU', 'Uruguay', 'Panamá', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage_id, stadium_id, team_name, faced_team_name, admin_email)
-VALUES (7, '2024-05-20 21:00:00', 1, 'MBS-ATL-EEUU', 'Argentina', 'Uruguay', 'martin.caraballo@correo.ucu.edu.uy');
+INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+VALUES (7, '2024-05-20 21:00:00', 'Fase de Grupos', 'MBS-ATL-EEUU', 'Argentina', 'Uruguay', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage_id, stadium_id, team_name, faced_team_name, admin_email)
-VALUES (8, '2024-04-18 20:00:00', 1, 'MBS-ATL-EEUU', 'Uruguay', 'Canadá', 'martin.caraballo@correo.ucu.edu.uy');
+INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+VALUES (8, '2024-04-18 20:00:00', 'Fase de Grupos', 'MBS-ATL-EEUU', 'Uruguay', 'Canadá', 'martin.caraballo@correo.ucu.edu.uy');
 
 -- RESULTS EXAMPLE DATA INSERT
 INSERT IGNORE INTO Results(match_id)
@@ -159,17 +159,17 @@ INSERT IGNORE INTO Stadiums(id, country, state, city, name)
 VALUES ('HRS-MIA-EEUU', 'Estados Unidos', 'Florida', 'Miami', 'Hard Rock Stadium');
 
 -- KNOCKOUT STAGE EXAMPLE DATA INSERT
-INSERT IGNORE INTO Knockout_Stage(id, name)
-VALUES (1, 'Fase de Grupos');
+INSERT IGNORE INTO Knockout_Stage(name)
+VALUES ('Fase de Grupos');
 
-INSERT IGNORE INTO Knockout_Stage(id, name)
-VALUES (2, 'Cuartos de final');
+INSERT IGNORE INTO Knockout_Stage(name)
+VALUES ('Cuartos de final');
 
-INSERT IGNORE INTO Knockout_Stage(id, name)
-VALUES (3, 'Semifinal');
+INSERT IGNORE INTO Knockout_Stage(name)
+VALUES ('Semifinal');
 
-INSERT IGNORE INTO Knockout_Stage(id, name)
-VALUES (4, 'Final');
+INSERT IGNORE INTO Knockout_Stage(name)
+VALUES ('Final');
 
 -- PLAYER RANKS EXAMPLE DATA INSERT
 INSERT IGNORE INTO Player_Ranks(player_email, team_name, final_position)

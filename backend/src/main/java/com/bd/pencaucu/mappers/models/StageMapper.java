@@ -10,7 +10,6 @@ public class StageMapper implements RowMapper<Stage> {
     @Override
     public Stage mapRow(ResultSet rs, int rowNum) throws SQLException {
         Stage stage = new Stage();
-        stage.setId(rs.getInt("id"));
         stage.setName(rs.getString("name"));
 
         return stage;
