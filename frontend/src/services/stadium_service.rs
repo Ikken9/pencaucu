@@ -2,7 +2,7 @@ use reqwest::Client;
 use crate::models::stadium_model::Stadium;
 
 pub async fn get_stadiums() -> Result<Vec<Stadium>, reqwest::Error> {
-    let token = web_sys::window().unwrap().session_storage().unwrap().unwrap().get_item("token").unwrap();
+    let token = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("token").unwrap();
     let client = Client::new();
 
     let req_builder = client.get("http://localhost:8080/stadiums");

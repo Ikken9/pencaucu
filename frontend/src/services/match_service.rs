@@ -1,6 +1,7 @@
+use std::collections::HashMap;
 use std::time::{Duration, UNIX_EPOCH};
 use chrono::{DateTime, Local};
-use reqwest::Client;
+use reqwest::{Client, Response};
 use crate::models::match_model::Match;
 
 pub async fn get_matches() -> Result<Vec<Match>, reqwest::Error> {
@@ -44,6 +45,38 @@ pub async fn get_match(id: &str) -> Result<Match, reqwest::Error> {
         Ok(m)
     } else {
         Err(res.error_for_status().unwrap_err())
+    }
+}
+
+pub async fn upload_match(team_name: String, faced_team_name: String, date: String, stage_name: String, stadium_id: String) -> Result<Response, reqwest::Error> {
+    let token = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("token").unwrap();
+
+    let mut map = HashMap::new();
+    map.insert("teamName", team_name);
+    map.insert("facedTeamName", faced_team_name);
+    map.insert("date", date);
+    map.insert("knockoutStageId", stage_name);
+    map.insert("stadiumId", stadium_id);
+
+    let client = Client::new();
+
+    let req_builder = client.post("http://localhost:8080/matches");
+
+    let req = if let Some(token) = token {
+        req_builder.bearer_auth(token)
+    } else {
+        req_builder
+    };
+
+    let res = req.send().await;
+
+    match res {
+        Ok(response) => {
+            Ok(response)
+        }
+        Err(e) => {
+            Err(e)
+        }
     }
 }
 
