@@ -16,11 +16,10 @@ public class BetDaoImpl implements BetDao {
     JdbcTemplate jdbcTemplate;
 
     @Override
-    public Bet findById(String username, int matchId) {
-        String sql =    "SELECT player_email, match_id, team_score, faced_team_score FROM Bets b " +
-                            "INNER JOIN Users u ON u.email = b.player_email " +
-                        "WHERE u.username = ? AND match_id = ?";
-        List<Bet> bets  = jdbcTemplate.query(sql, new BetMapper(), username, matchId);
+    public Bet findById(String playerEmail, int matchId) {
+        String sql =    "SELECT player_email, match_id, team_score, faced_team_score FROM Bets " +
+                        "WHERE player_email = ? AND match_id = ?";
+        List<Bet> bets  = jdbcTemplate.query(sql, new BetMapper(), playerEmail, matchId);
 
         if (!bets.isEmpty()) {
             return bets.get(0);
