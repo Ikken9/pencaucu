@@ -5,3 +5,4 @@ pub mod bets_service;
 pub mod player_service;
 pub mod career_service;
 pub mod login_service;
+pub(crate) mod stage_service;
