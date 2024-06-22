@@ -32,8 +32,8 @@ pub fn App() -> impl IntoView {
                     <Route path="/login" view=Login/>
                     <Route path="/register" view=Register/>
                     <Route path="/matches" view=Matches/>
-                    <Route path="/matches/:id/bet" view=Bet/>
                     <Route path="/ranking" view=Ranking/>
+                    <Route path="/bets/:email/:match-id" view=Bet/>
                     <Route path="/*any" view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
             </main>
