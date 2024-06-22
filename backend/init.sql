@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS Teams(
 );
 
 CREATE TABLE IF NOT EXISTS Matches(
-    id INT NOT NULL,
+    id INT AUTO_INCREMENT,
     date DATETIME NOT NULL,
     knockout_stage_id INT,
     stadium_id VARCHAR(20) NOT NULL,
