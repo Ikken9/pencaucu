@@ -1,7 +1,6 @@
 package com.bd.pencaucu.persistance.interfaces;
 
 import com.bd.pencaucu.models.Career;
-import com.bd.pencaucu.models.User;
 
 import java.util.List;
 

@@ -18,17 +18,15 @@ public class BetController {
         this.betService = betService;
     }
 
-    @GetMapping("/{username}")
-    public ResponseEntity<List<Bet>> getBetsById(@PathVariable String username) {
-        List<Bet> bets = betService.getBetsById(username);
+    @GetMapping("/{username}/{matchId}")
+    public ResponseEntity<Bet> getBetsById(@PathVariable String username, @PathVariable int matchId) {
+        Bet bet = betService.getBetById(username, matchId);
 
-        if (bets == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else if (!bets.isEmpty()) {
-            return new ResponseEntity<>(bets, HttpStatus.OK);
+        if (bet == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(bet, HttpStatus.OK);
     }
 
     @PostMapping

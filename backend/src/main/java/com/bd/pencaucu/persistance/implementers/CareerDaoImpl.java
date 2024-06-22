@@ -1,6 +1,5 @@
 package com.bd.pencaucu.persistance.implementers;
 
-import com.bd.pencaucu.exceptions.ResourceNotFoundException;
 import com.bd.pencaucu.mappers.models.CareerMapper;
 import com.bd.pencaucu.models.Career;
 import com.bd.pencaucu.persistance.interfaces.CareerDao;

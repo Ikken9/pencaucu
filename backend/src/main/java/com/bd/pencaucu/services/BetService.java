@@ -13,7 +13,7 @@ public class BetService {
 
     private final BetDao betDao;
 
-    public List<Bet> getBetsById(String username) { return betDao.findById(username); }
+    public Bet getBetById(String username, int matchId) { return betDao.findById(username, matchId); }
 
     public void submitBet(Bet bet) { betDao.save(bet); }
 

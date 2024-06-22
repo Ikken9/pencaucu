@@ -4,7 +4,7 @@ import com.bd.pencaucu.models.Bet;
 import java.util.List;
 
 public interface BetDao {
-    List<Bet> findById(String username);
+    Bet findById(String username, int matchId);
     void save(Bet bet);
     void update(Bet bet);
     void delete(Bet bet);
