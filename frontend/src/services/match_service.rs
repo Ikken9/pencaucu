@@ -26,7 +26,7 @@ pub async fn get_matches() -> Result<Vec<Match>, reqwest::Error> {
 }
 
 pub async fn get_match(id: &str) -> Result<Match, reqwest::Error> {
-    let token = web_sys::window().unwrap().session_storage().unwrap().unwrap().get_item("token").unwrap_or(None);
+    let token = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("token").unwrap();
     let client = Client::new();
 
     let req_builder = client.get(format!("http://localhost:8080/matches/{}", id));
