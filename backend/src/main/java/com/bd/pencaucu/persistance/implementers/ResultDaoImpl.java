@@ -1,8 +1,10 @@
 package com.bd.pencaucu.persistance.implementers;
 
+import com.bd.pencaucu.mappers.models.dto.MatchDTOMapper;
 import com.bd.pencaucu.models.Result;
 import com.bd.pencaucu.exceptions.ResourceNotFoundException;
 import com.bd.pencaucu.mappers.models.ResultMapper;
+import com.bd.pencaucu.models.dto.MatchDTO;
 import com.bd.pencaucu.persistance.interfaces.ResultDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,6 +29,37 @@ public class ResultDaoImpl implements ResultDao {
 
         String RESULT_NOT_FOUND_MSG = "Results with match_id %d not found";
         throw new ResourceNotFoundException(String.format(RESULT_NOT_FOUND_MSG, matchId));
+    }
+
+    @Override
+    public List<MatchDTO> findAllPending() {
+        String sql =    "SELECT m.id, m.date, ks.name, s.name, m.team_name, m.faced_team_name, " +
+                            "r.team_score, r.faced_team_score, " +
+                            "t1.flag_image, t2.flag_image " +
+                        "FROM Matches m " +
+                            "LEFT JOIN Teams t1 ON m.team_name = t1.name " +
+                            "LEFT JOIN Teams t2 ON m.faced_team_name = t2.name " +
+                            "LEFT JOIN Stadiums s ON m.stadium_id = s.id " +
+                            "LEFT JOIN Results r ON r.match_id = m.id " +
+                            "LEFT JOIN Knockout_Stage ks ON ks.name = m.knockout_stage " +
+                        "WHERE r.match_id IS NULL";
+
+        return jdbcTemplate.query(sql, new MatchDTOMapper());
+    }
+
+    @Override
+    public List<MatchDTO> findAllSubmitted() {
+        String sql =    "SELECT m.id, m.date, ks.name, s.name, m.team_name, m.faced_team_name, " +
+                            "r.team_score, r.faced_team_score, " +
+                            "t1.flag_image, t2.flag_image " +
+                        "FROM Results r " +
+                            "JOIN Matches m ON r.match_id = m.id " +
+                            "JOIN Teams t1 ON m.team_name = t1.name " +
+                            "JOIN Teams t2 ON m.faced_team_name = t2.name " +
+                            "JOIN Stadiums s ON m.stadium_id = s.id " +
+                            "JOIN Knockout_Stage ks ON ks.name = m.knockout_stage";
+
+        return jdbcTemplate.query(sql, new MatchDTOMapper());
     }
 
     @Override
