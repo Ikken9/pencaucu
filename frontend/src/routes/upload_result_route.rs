@@ -2,23 +2,41 @@ use chrono::{Local, NaiveDateTime};
 use leptos::*;
 use leptos::leptos_dom::{error, log};
 use crate::models::match_model::Match;
-use crate::services::match_service;
+use crate::services::{match_service, result_service};
 use crate::services::match_service::timestamp_to_date;
 
 #[component]
 pub fn UploadResult() -> impl IntoView {
-    let matches_data = create_resource(
+    let pending_results = create_resource(
         || (),  // The initial state for the resource
         |_| async {
-            log!("Fetching matches...");
-            let result = match_service::get_matches().await;
+            log!("Fetching pending results...");
+            let result = result_service::get_pending_results().await;
             match result {
-                Ok(matches) => {
-                    log!("Successfully fetched matches.");
-                    Some(matches)
+                Ok(pending_results) => {
+                    log!("Successfully fetched pending results.");
+                    Some(pending_results)
                 }
                 Err(e) => {
-                    error!("Error fetching matches: {:?}", e);
+                    error!("Error fetching pending results: {:?}", e);
+                    None
+                }
+            }
+        },
+    );
+
+    let submitted_results = create_resource(
+        || (),  // The initial state for the resource
+        |_| async {
+            log!("Fetching submitted results...");
+            let result = result_service::get_submitted_results().await;
+            match result {
+                Ok(submitted_results) => {
+                    log!("Successfully fetched submitted results.");
+                    Some(submitted_results)
+                }
+                Err(e) => {
+                    error!("Error fetching submitted results: {:?}", e);
                     None
                 }
             }
@@ -27,14 +45,11 @@ pub fn UploadResult() -> impl IntoView {
 
     let (active_tab, set_active_tab) = create_signal("Pending to Submit".to_string());
 
-
     view! {
         <Suspense fallback=|| view! { "Loading matches..." }>
-            {move || matches_data.get().map(|matches| match matches {
-                None => view! { <div>"Error loading matches."</div> },
-                Some(matches) => {
-                    // Classify matches here based on the current time
-                    let (pending, submitted) = classify_match_results(matches);
+            {move || pending_results.get().map(|pending | match pending {
+                None => view! { <div>"Error loading matches." </div> },
+                Some(pending) => {
 
                     view! {
                         <div class="p-3">
@@ -81,15 +96,14 @@ pub fn UploadResult() -> impl IntoView {
                             </div>
                             <div class="tab-content mt-4">
                                 { match &*active_tab.get() {
-                                    "Pending to Submit" => view! { <MatchList matches=pending.clone() bettable=true /> }.into_view(),
-                                    "Submitted" => view! { <MatchList matches=submitted.clone() bettable=false /> }.into_view(),
+                                    "Submitted" => view! { <MatchList matches=submitted_results.get().unwrap().unwrap() submitted=false /> }.into_view(),
+                                    "Pending to Submit" => view! { <MatchList matches=pending.clone() submitted=true /> }.into_view(),
                                     _ => view! { <div>"Unknown tab"</div> }.into_view(),
                                 } }
                             </div>
                         </div>
                     }
-                }
-            })}
+                }})}
         </Suspense>
     }
 }
@@ -162,7 +176,7 @@ pub fn Match(match_data: Match, submitted: bool) -> impl IntoView {
 }
 
 #[component]
-pub fn MatchList(matches: Vec<Match>, bettable: bool) -> impl IntoView {
+pub fn MatchList(matches: Vec<Match>, submitted: bool) -> impl IntoView {
     view! {
         <div class="grid gap-2">
             <For
@@ -173,24 +187,10 @@ pub fn MatchList(matches: Vec<Match>, bettable: bool) -> impl IntoView {
                         match_item.clone()
                     });
                     view! {
-                        <Match match_data=match_memo() submitted=bettable />
+                        <Match match_data=match_memo() submitted=submitted />
                     }
                 }
             />
         </div>
     }
-}
-
-fn classify_match_results(matches: Vec<Match>) -> (Vec<Match>, Vec<Match>) {
-    let mut pending = vec![];
-    let mut submitted = vec![];
-
-    for match_item in matches {
-        let match_item2 = match_item.clone();
-
-        pending.push(match_item);
-        submitted.push(match_item2);
-    }
-
-    (pending, submitted)
 }
