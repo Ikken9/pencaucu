@@ -1,6 +1,7 @@
 package com.bd.pencaucu.services;
 
 import com.bd.pencaucu.models.User;
+import com.bd.pencaucu.models.dto.UserDTO;
 import com.bd.pencaucu.persistance.interfaces.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,11 +15,11 @@ public class UserService {
 
     private final UserDao userDao;
 
-    public User findUserById(String username) throws UsernameNotFoundException {
+    public UserDTO findUserById(String username) throws UsernameNotFoundException {
         return userDao.findById(username);
     }
 
-    public List<User> getAllUsers() {
+    public List<UserDTO> getAllUsers() {
         return userDao.findAll();
     }
 

@@ -1,6 +1,7 @@
 package com.bd.pencaucu.controllers;
 
 import com.bd.pencaucu.models.User;
+import com.bd.pencaucu.models.dto.UserDTO;
 import com.bd.pencaucu.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,15 +20,15 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@RequestBody @PathVariable String id) {
-        User user = userService.findUserById(id);
+    public ResponseEntity<UserDTO> getUserById(@PathVariable String id) {
+        UserDTO user = userService.findUserById(id);
 
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @GetMapping()
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        List<UserDTO> users = userService.getAllUsers();
 
         if (users == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
