@@ -23,11 +23,11 @@ pub async fn get_players() -> Result<Vec<Player>, reqwest::Error> {
     }
 }
 
-pub async fn get_player(id: &str) -> Result<Player, reqwest::Error> {
+pub async fn get_player(email: &str) -> Result<Player, reqwest::Error> {
     let token = web_sys::window().unwrap().session_storage().unwrap().unwrap().get_item("token").unwrap_or(None);
     let client = Client::new();
 
-    let req_builder = client.get(format!("http://localhost:8080/players/{}", id));
+    let req_builder = client.get(format!("http://localhost:8080/players/{}", email));
 
     let req = if let Some(token) = token {
         req_builder.bearer_auth(token)

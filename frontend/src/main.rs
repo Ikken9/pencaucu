@@ -6,9 +6,10 @@ use leptos::*;
 use leptos_meta::*;
 use leptos_router::*;
 use crate::routes::admin_route::AdminPanel;
-use crate::routes::bets_route::{Bet, MakeBet};
+use crate::routes::bets_route::Bets;
 use crate::routes::matches_route::*;
 use crate::routes::login_route::*;
+use crate::routes::profile_route::Profile;
 use crate::routes::ranking_route::Ranking;
 use crate::routes::register_route::*;
 use crate::routes::upload_match_route::UploadMatch;
@@ -37,7 +38,8 @@ pub fn App() -> impl IntoView {
                     <Route path="/admin-panel" view=AdminPanel/>
                     <Route path="/admin-panel/upload-match" view=UploadMatch/>
                     <Route path="/admin-panel/upload-result" view=UploadResult/>
-                    <Route path="/bets/:email/:match-id" view=MakeBet/>
+                    <Route path="/bets" view=Bets/>
+                    <Route path="/profile" view=Profile/>
                     <Route path="/*any" view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
             </main>
@@ -57,13 +59,19 @@ pub fn Navbar() -> impl IntoView {
                         </svg>
                         <span>"Matches"</span>
                     </a>
+                    <a href="/bets" class="flex flex-col items-center justify-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                        <span>"Bets"</span>
+                    </a>
                     <a href="/ranking" class="flex flex-col items-center justify-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 11h18M3 16h18M3 6h18" />
                         </svg>
                         <span>"Ranking"</span>
                     </a>
-                    <a href="#" class="flex flex-col items-center justify-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                    <a href="/profile" class="flex flex-col items-center justify-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                         <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 18.879A3.5 3.5 0 018 18h8a3.5 3.5 0 013.5 3.5V21H5v-2.121a3.5 3.5 0 01.121-1.879zM15 13a3 3 0 110-6 3 3 0 010 6z" />
                         </svg>

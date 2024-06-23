@@ -1,26 +1,34 @@
-use reqwest::Client;
+use std::collections::HashMap;
+use reqwest::{Client, Response};
 use crate::models::bet_model::Bet;
 
-pub async fn make_bet(player_email: &str, match_id: &u64) -> Result<Bet, reqwest::Error> {
+pub async fn make_bet(player_email: &str, match_id: &u32, team_score: &u8, faced_team_score: &u8) -> Result<Response, reqwest::Error> {
     let token = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("token").unwrap();
+    let mut map = HashMap::new();
+    map.insert("playerEmail", player_email.to_string());
+    map.insert("matchId", match_id.to_string());
+    map.insert("teamScore", team_score.to_string());
+    map.insert("facedTeamScore", faced_team_score.to_string());
+
     let client = Client::new();
 
-    let url = format!("http://localhost:8080/bets/{}/{}", player_email, match_id);
-    let req_builder = client.get(&url);
+    let req_builder = client.post(format!("http://localhost:8080/bets/{}/{}", player_email, match_id));
 
     let req = if let Some(token) = token {
-        req_builder.bearer_auth(token)
+        req_builder.bearer_auth(token).json(&map)
     } else {
         req_builder
     };
 
-    let res = req.send().await?;
+    let res = req.send().await;
 
-    if res.status().is_success() {
-        let bet = res.json::<Bet>().await?;
-        Ok(bet)
-    } else {
-        Err(res.error_for_status().unwrap_err())
+    match res {
+        Ok(response) => {
+            Ok(response)
+        }
+        Err(e) => {
+            Err(e)
+        }
     }
 }
 
