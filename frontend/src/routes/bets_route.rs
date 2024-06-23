@@ -1,13 +1,29 @@
 use leptos::*;
 use leptos::leptos_dom::{error, log};
+use leptos_router::{use_params, use_params_map};
 use crate::models::bet_model::Bet;
 use crate::services::{bet_service, match_service};
+use crate::services::bet_service::BetParams;
 use crate::services::match_service::timestamp_to_date;
 
 #[component]
-pub fn MakeBet(match_id: u32) -> impl IntoView {
+pub fn MakeBet() -> impl IntoView {
     let (bet_error, set_bet_error) = create_signal(None::<String>);
     let (wait_for_response, set_wait_for_response) = create_signal(false);
+
+    let params = use_params_map();
+
+    let match_id = move || {
+        params.with(|params| params.get("match-id").cloned())
+    };
+
+    if let Some(match_id) = match_id().clone() {
+        let window = web_sys::window().expect("No global window exists");
+        let local_storage = window.local_storage().expect("").expect("local storage is `None`");
+        local_storage.set_item("matchId", &match_id.to_string()).expect("should be able to save match id in the local storage");
+    } else {
+        error!("Unable to save matchId into local storage")
+    }
 
     let bet_action =
         create_action(move |(team_score, faced_team_score): &(String, String)| {
@@ -17,7 +33,16 @@ pub fn MakeBet(match_id: u32) -> impl IntoView {
             async move {
                 let email = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("email").unwrap().unwrap();
                 set_wait_for_response.update(|w| *w = true);
-                match bet_service::make_bet(&*email, &match_id, &team_score.parse::<u8>().unwrap(), &faced_team_score.parse::<u8>().unwrap()).await {
+
+                let res = bet_service::make_bet(
+                    &*email,
+                    &match_id().unwrap().parse::<u32>().unwrap(),
+                    &team_score.parse::<u8>().unwrap(),
+                    &faced_team_score.parse::<u8>().unwrap()
+                )
+                    .await;
+
+                match res {
                     Ok(_) => {
                         set_bet_error.set(None);
                     }
@@ -97,7 +122,7 @@ pub fn Bets() -> impl IntoView {
 
 #[component]
 pub fn Bet(bet_data: Bet) -> impl IntoView {
-    let match_id = bet_data.clone().match_id.to_string();
+    let match_id = bet_data.match_id.to_string();
     let match_data = create_resource(
         || (),  // The initial state for the resource
         move |_| {  // Use the `move` keyword here
@@ -167,66 +192,127 @@ pub fn BetForm(
         disabled.get() || team_score.get().is_empty() || faced_team_score.get().is_empty()
     });
 
+    let match_data = create_resource(
+        || (),  // The initial state for the resource
+        move |_| {  // Use the `move` keyword here
+            async move {
+                match web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("matchId").unwrap() {
+                    Some(match_id) => {
+                        match match_service::get_match(match_id.to_string()).await {
+                            Ok(m) => {
+                                log!("Successfully obtained match.");
+                                Some(m)
+                            }
+                            Err(e) => {
+                                error!("Error obtaining match: {:?}", e);
+                                None
+                            }
+                        }
+                    }
+                    None => {
+                        None
+                    }
+                }
+            }
+        },
+    );
+
     view! {
-        <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
-            <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-                <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-zinc-300">"Create a new account"</h2>
+        <div class="flex min-h-full flex-col justify-center p-3 ">
+            <div class= "font-kanit text-xl font-bold italic text-zinc-300 mb-2">
+            PLACE YOUR BET
             </div>
-            <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm p-4">
-                <form class="space-y-6" on:submit=move |ev| {
-                    ev.prevent_default();
-                    dispatch_action();
-                }>
-                    {move || {
-                        error.get().map(|err| {
-                            view! { <p style="color:red;">{err}</p> }
-                        })
-                    }}
-                    <div>
-                        <label for="team-score" class="block text-sm font-medium leading-6 text-zinc-300">"Username"</label>
-                        <div class="mt-2">
-                             <input id="team-score" name="team-score" type="text" autocomplete="team-score" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                placeholder=""
-                                prop:disabled=move || disabled.get()
-                                on:keyup=move |ev: ev::KeyboardEvent| {
-                                    let val = event_target_value(&ev);
-                                    set_team_score.update(|v| *v = val);
-                                }
-                                on:change=move |ev| {
-                                    let val = event_target_value(&ev);
-                                    set_team_score.update(|v| *v = val);
-                                }
-                            />
+            <Suspense fallback=|| view! { "Loading match..." }>
+                {move || match_data.get().map(|match_data| match match_data {
+                    None => view! { <div>"Error loading match data."</div> },
+                    Some(match_data) => view! {
+                        <div class="match-card flex flex-col items-center mb-1 sm:p-4 bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 p-2 rounded-lg shadow-md">
+                            <div class="flex items-start justify-between w-full">
+                                <div class="text-sm sm:text-base max-w-14 text-center">
+                                    <img class="h-14 w-14 rounded-lg mb-2 mx-auto" src={match_data.team_picture_url} alt="first-team-flag"/>
+                                    <div class="font-semibold text-slate-50">
+                                        <p>{match_data.first_team_name}</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center justify-center w-full">
+                                <div>
+                                    <form class="space-y-6" on:submit=move |ev| {
+                                        ev.prevent_default();
+                                        dispatch_action();
+                                    }>
+                                        {move || {
+                                            error.get().map(|err| {
+                                                view! { <p style="color:red;">{err}</p> }
+                                            })
+                                        }}
+                                        <div class="flex relative p-4 h-12">
+                                            <div class="float-left mr-8 width-1/2 ">
+                                                <input
+                                                    id="team-score"
+                                                    name="team-score"
+                                                    type="text"
+                                                    autocomplete="team-score"
+                                                    required
+                                                    class="w-10 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                    placeholder=""
+                                                    prop:disabled=move || disabled.get()
+                                                    on:keyup=move |ev: ev::KeyboardEvent| {
+                                                        let val = event_target_value(&ev);
+                                                        set_team_score.update(|v| *v = val);
+                                                    }
+                                                    on:change=move |ev| {
+                                                        let val = event_target_value(&ev);
+                                                        set_team_score.update(|v| *v = val);
+                                                    }
+                                                />
+                                            </div>
+                                            <div class="float-right ml-8 width-1/2">
+                                                <input
+                                                    id="faced-team-score"
+                                                    name="faced-team-score"
+                                                    type="text"
+                                                    autocomplete="faced-team-score"
+                                                    required
+                                                    class="w-10 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                    placeholder=""
+                                                    prop:disabled=move || disabled.get()
+                                                    on:keyup=move |ev: ev::KeyboardEvent| {
+                                                        let val = event_target_value(&ev);
+                                                        set_faced_team_score.update(|v| *v = val);
+                                                    }
+                                                    on:change=move |ev| {
+                                                        let val = event_target_value(&ev);
+                                                        set_faced_team_score.update(|v| *v = val);
+                                                    }
+                                                />
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                                <div class="text-sm sm:text-base max-w-14 text-center">
+                                    <img class="h-14 w-14 rounded-lg mb-2 mx-auto" src={match_data.faced_team_picture_url} alt="second-team-flag" />
+                                    <div class="font-semibold text-slate-50">
+                                        <p>{match_data.second_team_name}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-center w-full mt-4">
+                                <button
+                                    type="submit"
+                                    class="w-full mt-4 rounded-md text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-lg text-sm px-4 py-1.5 text-center"
+                                    prop:disabled=move || button_is_disabled.get()
+                                >
+                                    {action_label}
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between w-full mt-4 pt-1 text-gray-600 text-xs sm:text-sm border-t border-secondary-gray-2">
+                                <div class="text-zinc-300">{match_data.stadium_name}</div>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <label for="faced-team-score" class="block text-sm font-medium leading-6 text-zinc-300">"Email address"</label>
-                        <div class="mt-2">
-                            <input id="faced-team-score" name="faced-team-score" type="text" autocomplete="faced-team-score" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                placeholder=""
-                                prop:disabled=move || disabled.get()
-                                on:keyup=move |ev: ev::KeyboardEvent| {
-                                    let val = event_target_value(&ev);
-                                    set_faced_team_score.update(|v| *v = val);
-                                }
-                                on:change=move |ev| {
-                                    let val = event_target_value(&ev);
-                                    set_faced_team_score.update(|v| *v = val);
-                                }
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <button type="submit" class="flex w-full justify-center rounded-md text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5"
-                        prop:disabled=move || button_is_disabled.get()
-                        >
-                            {action_label}
-                        </button>
-                    </div>
-                </form>
-            </div>
+                    }
+                })}
+            </Suspense>
         </div>
     }
 }
-
-

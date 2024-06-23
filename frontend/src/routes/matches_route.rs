@@ -129,17 +129,8 @@ pub fn Match(match_data: Match, bettable: bool) -> impl IntoView {
                     <button type="button" class="mt-2 absolute left-1/2 transform -translate-x-1/2 z-10 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5"
                         on:click=move |_| {
                             let match_id = match_data.id.clone();
-                            let stored_email = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("playerEmail").unwrap();
-                            let navigate = use_navigate();
                             spawn_local(async move {
-                                match stored_email {
-                                    Some(email) => {
-                                        navigate.clone()(&format!("/bets/{}/{}", email, match_id), NavigateOptions::default());
-                                    }
-                                    None => {
-                                        error!("Unable to retrieve player email");
-                                    }
-                                }
+                                use_navigate()(&format!("/bets/bet/{}", match_id), NavigateOptions::default());
                             });
                         }
                     >
@@ -189,7 +180,7 @@ fn classify_matches(matches: Vec<Match>) -> (Vec<Match>, Vec<Match>, Vec<Match>)
     let mut ended = vec![];
 
     for match_item in matches {
-        let match_date = NaiveDateTime::from_timestamp((match_item.date / 1000) as i64, 0);
+        let match_date = NaiveDateTime::from_timestamp(match_item.date / 1000, 0);
         if match_date > now {
             pending.push(match_item);
         } else if now - match_date < chrono::Duration::minutes(90) {

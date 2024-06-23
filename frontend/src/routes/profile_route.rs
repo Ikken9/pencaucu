@@ -10,6 +10,7 @@ pub fn Profile() -> impl IntoView {
             let email = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("email").unwrap().unwrap();
             async move {
                 log!("Fetching player...");
+                log!("{}", &*email.clone());
                 let result = player_service::get_player(&*email.clone()).await;
                 match result {
                     Ok(player) => {

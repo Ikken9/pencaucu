@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use leptos_router::Params;
 use reqwest::{Client, Response};
 use crate::models::bet_model::Bet;
 
@@ -52,4 +53,9 @@ pub async fn get_bets_by_player(player_email: &str) -> Result<Vec<Bet>, reqwest:
     } else {
         Err(res.error_for_status().unwrap_err())
     }
+}
+
+#[derive(leptos::Params, PartialEq)]
+pub struct BetParams {
+    pub(crate) match_id: Option<String>
 }
