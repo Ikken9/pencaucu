@@ -73,7 +73,8 @@ public class PlayerDaoImpl implements PlayerDao {
                             "Users u ON u.email = p.player_email " +
                         "GROUP BY " +
                             "p.player_email, " +
-                            "u.username;";
+                            "u.username " +
+                        "ORDER BY player_score DESC;";
 
         return jdbcTemplate.query(sql, new PlayerDTOMapper());
     }
