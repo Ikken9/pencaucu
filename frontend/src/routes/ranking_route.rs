@@ -60,7 +60,6 @@ pub fn Ranking() -> impl IntoView {
 
 #[component]
 pub fn Player(player_data: Player) -> impl IntoView {
-    log!("Player: {}", player_data);
     let mut profile_pic = String::from("https://raw.githubusercontent.com/Ikken9/pencaucu/dev/cdn/default.jpg");
     if let Some(pic) = player_data.profile_picture {
         if !pic.is_empty() {

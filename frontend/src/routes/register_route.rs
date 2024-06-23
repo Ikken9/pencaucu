@@ -35,7 +35,7 @@ pub fn Register() -> impl IntoView {
                             StatusCode::CREATED => {
                                 let window = web_sys::window().expect("No global window exists");
                                 let local_storage = window.local_storage().expect("").expect("local storage is `None`");
-                                local_storage.set_item("playerEmail", &email_clone.to_string()).expect("should be able to save player email in the local storage");
+                                local_storage.set_item("email", &email_clone.to_string()).expect("should be able to save player email in the local storage");
 
                                 if let Some(auth_header) = res.headers().get(AUTHORIZATION) {
                                     if let Ok(token) = auth_header.to_str() {

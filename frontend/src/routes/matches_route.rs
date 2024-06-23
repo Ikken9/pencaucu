@@ -4,7 +4,7 @@ use leptos::logging::{error, log};
 use leptos_router::{NavigateOptions, use_navigate};
 use crate::models::match_model::Match;
 use crate::services::match_service;
-use crate::services::match_service::u64_to_date;
+use crate::services::match_service::timestamp_to_date;
 
 
 #[component]
@@ -115,7 +115,7 @@ pub fn Matches() -> impl IntoView {
 
 #[component]
 pub fn Match(match_data: Match, bettable: bool) -> impl IntoView {
-    let formatted_date = u64_to_date(match_data.date).format("%A %d, %B - %H:%M").to_string();
+    let formatted_date = timestamp_to_date(match_data.date).format("%A %d, %B - %H:%M").to_string();
     view! {
         <div class="match-card bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 p-2 rounded-lg shadow-md flex flex-col items-center mb-1 sm:p-4 h-24">
             <div class="flex items-center justify-between w-full">

@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 #[derive(Default, Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct Match {
     pub(crate) id: u64,
-    pub(crate) date: u64,
+    pub(crate) date: i64,
 
     #[serde(rename = "knockoutStage")]
     pub(crate) knockout_stage: Option<String>,

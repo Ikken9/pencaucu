@@ -32,7 +32,7 @@ pub fn Login() -> impl IntoView {
                         StatusCode::OK | StatusCode::NOT_MODIFIED => {
                             let window = web_sys::window().expect("No global window exists");
                             let local_storage = window.local_storage().unwrap().expect("local storage is `None`");
-                            local_storage.set_item("playerEmail", &email_clone.to_string()).expect("should be able to save player email in the local storage");
+                            local_storage.set_item("email", &email_clone.to_string()).expect("should be able to save player email in the local storage");
 
                             if let Some(auth_header) = res.headers().get(AUTHORIZATION) {
                                 if let Ok(token) = auth_header.to_str() {
