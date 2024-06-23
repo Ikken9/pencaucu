@@ -23,11 +23,11 @@ public class MatchDaoImpl implements MatchDao {
                             "r.team_score, r.faced_team_score, " +
                             "t1.flag_image, t2.flag_image " +
                                 "FROM Matches m " +
-                                    "INNER JOIN Teams t1 ON m.team_name = t1.name " +
-                                    "INNER JOIN Teams t2 ON m.faced_team_name = t2.name " +
-                                    "INNER JOIN Stadiums s ON m.stadium_id = s.id " +
-                                    "INNER JOIN Results r ON r.match_id = m.id " +
-                                    "INNER JOIN Knockout_Stage ks ON ks.name = m.knockout_stage;";
+                                    "LEFT JOIN Teams t1 ON m.team_name = t1.name " +
+                                    "LEFT JOIN Teams t2 ON m.faced_team_name = t2.name " +
+                                    "LEFT JOIN Stadiums s ON m.stadium_id = s.id " +
+                                    "LEFT JOIN Results r ON r.match_id = m.id " +
+                                    "LEFT JOIN Knockout_Stage ks ON ks.name = m.knockout_stage;";
 
         List<MatchDTO> queryResult = jdbcTemplate.query(sql, new MatchDTOMapper());
 
@@ -44,11 +44,11 @@ public class MatchDaoImpl implements MatchDao {
                             "r.team_score, r.faced_team_score, " +
                             "t1.flag_image, t2.flag_image " +
                                 "FROM Matches m " +
-                                    "INNER JOIN Teams t1 ON m.team_name = t1.name " +
-                                    "INNER JOIN Teams t2 ON m.faced_team_name = t2.name " +
-                                    "INNER JOIN Stadiums s ON m.stadium_id = s.id " +
-                                    "INNER JOIN Results r ON r.match_id = m.id " +
-                                    "INNER JOIN Knockout_Stage ks ON ks.name = m.knockout_stage " +
+                                    "LEFT JOIN Teams t1 ON m.team_name = t1.name " +
+                                    "LEFT JOIN Teams t2 ON m.faced_team_name = t2.name " +
+                                    "LEFT JOIN Stadiums s ON m.stadium_id = s.id " +
+                                    "LEFT JOIN Results r ON r.match_id = m.id " +
+                                    "LEFT JOIN Knockout_Stage ks ON ks.name = m.knockout_stage " +
                                     "WHERE m.id = ?;";
 
         List<MatchDTO> queryResult = jdbcTemplate.query(sql, new MatchDTOMapper(), id);

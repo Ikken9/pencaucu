@@ -1,6 +1,7 @@
 package com.bd.pencaucu.controllers;
 
 import com.bd.pencaucu.models.Result;
+import com.bd.pencaucu.models.dto.MatchDTO;
 import com.bd.pencaucu.services.ResultService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,32 @@ public class ResultController {
     @GetMapping
     public ResponseEntity<List<Result>> getAllResults() {
         List<Result> results = resultService.findAllResults();
+
+        if (results == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else if (!results.isEmpty()) {
+            return new ResponseEntity<>(results, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<List<MatchDTO>> getAllPendingResults() {
+        List<MatchDTO> results = resultService.findAllPendingResults();
+
+        if (results == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else if (!results.isEmpty()) {
+            return new ResponseEntity<>(results, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/submitted")
+    public ResponseEntity<List<MatchDTO>> getAllSubmittedResults() {
+        List<MatchDTO> results = resultService.findAllSubmittedResults();
 
         if (results == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

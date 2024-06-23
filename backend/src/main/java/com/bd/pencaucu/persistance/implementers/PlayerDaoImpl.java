@@ -37,7 +37,7 @@ public class PlayerDaoImpl implements PlayerDao {
                             "Matches m ON b.match_id = m.id " +
                                 "LEFT JOIN " +
                             "Users u ON u.email = p.player_email " +
-                        "WHERE u.username = ? " +
+                        "WHERE p.player_email = ? " +
                         "GROUP BY " +
                             "p.player_email, " +
                             "u.username;";
