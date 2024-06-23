@@ -29,6 +29,17 @@ public class BetController {
         return new ResponseEntity<>(bet, HttpStatus.OK);
     }
 
+    @GetMapping("/{playerEmail}")
+    public ResponseEntity<List<Bet>> getPlayerBetsById(@PathVariable String playerEmail) {
+        List<Bet> bet = betService.getPlayerBetsById(playerEmail);
+
+        if (bet == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(bet, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Bet> submitBet(@RequestBody Bet bet) {
         betService.submitBet(bet);

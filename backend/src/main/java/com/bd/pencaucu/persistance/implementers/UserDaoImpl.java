@@ -1,7 +1,8 @@
 package com.bd.pencaucu.persistance.implementers;
 
+import com.bd.pencaucu.mappers.models.dto.UserDTOMapper;
 import com.bd.pencaucu.models.User;
-import com.bd.pencaucu.mappers.models.UserMapper;
+import com.bd.pencaucu.models.dto.UserDTO;
 import com.bd.pencaucu.persistance.interfaces.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,9 +18,9 @@ public class UserDaoImpl implements UserDao {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public User findById(String id) throws UsernameNotFoundException {
+    public UserDTO findById(String id) throws UsernameNotFoundException {
         String sql = "SELECT email, username FROM Users WHERE email = ?";
-        List<User> users = jdbcTemplate.query(sql, new UserMapper(), id);
+        List<UserDTO> users = jdbcTemplate.query(sql, new UserDTOMapper(), id);
 
         if (!users.isEmpty()) {
             return users.get(0);
@@ -30,10 +31,10 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> findAll() {
+    public List<UserDTO> findAll() {
         String sql = "SELECT email, username FROM Users";
 
-        return jdbcTemplate.query(sql, new UserMapper());
+        return jdbcTemplate.query(sql, new UserDTOMapper());
     }
 
     @Override

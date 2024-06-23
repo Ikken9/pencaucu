@@ -15,6 +15,10 @@ public class BetService {
 
     public Bet getBetById(String playerEmail, int matchId) { return betDao.findById(playerEmail, matchId); }
 
+    public List<Bet> getPlayerBetsById(String playerEmail) {
+        return betDao.findPlayerBetsById(playerEmail);
+    }
+
     public void submitBet(Bet bet) { betDao.save(bet); }
 
     public void updateBet(Bet bet) { betDao.update(bet); }
