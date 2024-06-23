@@ -29,6 +29,14 @@ public class BetDaoImpl implements BetDao {
     }
 
     @Override
+    public List<Bet> findPlayerBetsById(String playerEmail) {
+        String sql =    "SELECT player_email, match_id, team_score, faced_team_score FROM Bets " +
+                        "WHERE player_email = ?";
+
+        return jdbcTemplate.query(sql, new BetMapper(), playerEmail);
+    }
+
+    @Override
     public void save(Bet bet) {
         String sql = "INSERT INTO Bets(player_email, match_id, team_score, faced_team_score) VALUES(?, ?, ?, ?)";
 
