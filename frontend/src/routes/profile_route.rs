@@ -1,5 +1,6 @@
 use leptos::*;
 use leptos::leptos_dom::{error, log};
+use crate::Navbar;
 use crate::services::player_service;
 
 #[component]
@@ -10,7 +11,6 @@ pub fn Profile() -> impl IntoView {
             let email = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("email").unwrap().unwrap();
             async move {
                 log!("Fetching player...");
-                log!("{}", &*email.clone());
                 let result = player_service::get_player(&*email.clone()).await;
                 match result {
                     Ok(player) => {
@@ -31,23 +31,20 @@ pub fn Profile() -> impl IntoView {
             { move || player_data.get().map(|p| match p {
                 None => view! { <div>"Error loading player."</div> },
                 Some(player) => {
+                    let email = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("email").unwrap().unwrap();
                     view! {
-                        <div class="flex flex-col items-center justify-center h-screen bg-gray-100">
-                            <div class="bg-white shadow-md rounded-lg p-8 max-w-sm w-full">
+                        <div class="flex flex-col items-center justify-center">
+                            <div class="bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 shadow-md rounded-lg p-8 max-w-sm w-full mt-8">
                                 <div class="flex flex-col items-center">
-                                    <img class="h-24 w-24 rounded-full object-cover" src={player.profile_picture} alt="profile-picture" />
-                                    <h2 class="mt-4 text-2xl font-semibold text-gray-900">"John Doe"</h2>
-                                    <p class="mt-2 text-gray-600">"john.doe@example.com"</p>
-                                </div>
-                                <div class="mt-8">
-                                    <button class="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md">
-                                        "Logout"
-                                    </button>
+                                    <img class="border-4 border-purple-700 h-24 w-24 rounded-full object-cover" src={player.profile_picture} alt="profile-picture" />
+                                    <h2 class="mt-4 text-2xl font-semibold text-zinc-300">{player.username}</h2>
+                                    <p class="mt-2 text-zinc-300">{&email.clone()}</p>
                                 </div>
                             </div>
                         </div>
                     }
                 }})};
         </Suspense>
+        <Navbar/>
     }
 }

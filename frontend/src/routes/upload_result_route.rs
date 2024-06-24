@@ -3,6 +3,7 @@ use leptos::*;
 use leptos::leptos_dom::{error, log};
 use leptos_router::{NavigateOptions, use_navigate, use_params_map};
 use crate::models::match_model::Match;
+use crate::Navbar;
 use crate::services::{bet_service, match_service, result_service};
 use crate::services::match_service::timestamp_to_date;
 
@@ -164,6 +165,7 @@ pub fn UploadResult() -> impl IntoView {
                     }
                 }})}
         </Suspense>
+        <Navbar/>
     }
 }
 

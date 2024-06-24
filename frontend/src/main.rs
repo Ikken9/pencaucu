@@ -25,14 +25,10 @@ pub fn App() -> impl IntoView {
         <Meta name="description" content="PencaUCU App"/>
         // adding `set_is_routing` causes the router to wait for async data to load on new pages
         <Router set_is_routing>
-            <div class="routing-progress">
-                <RoutingProgress is_routing max_time=std::time::Duration::from_millis(250)/>
-            </div>
-            <Navbar/>
             <main>
                 <Routes>
+                    <Route path="/" view=Register/>
                     <Route path="/login" view=Login/>
-                    <Route path="/register" view=Register/>
                     <Route path="/matches" view=Matches/>
                     <Route path="/bets/bet/:match-id" view=MakeBet/>
                     <Route path="/bets" view=Bets/>
@@ -52,31 +48,23 @@ pub fn App() -> impl IntoView {
 #[component]
 pub fn Navbar() -> impl IntoView {
     view! {
-        <nav class="fixed bottom-0 left-0 right-0 bg-gray-800">
+        <nav class="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl">
             <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
-                    <a href="/matches" class="flex flex-col items-center justify-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        </svg>
+                    <a href="/matches" class="flex flex-col items-center justify-center text-zinc-300 hover:bg-gray-700 py-2 rounded-md text-sm font-medium">
+                        <img src="https://raw.githubusercontent.com/Ikken9/pencaucu/dev/cdn/ball.svg" alt="Betting Icon" class="w-6 h-6"/>
                         <span>"Matches"</span>
                     </a>
-                    <a href="/bets" class="flex flex-col items-center justify-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                        </svg>
+                    <a href="/bets" class="flex flex-col items-center justify-center text-zinc-300 hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                        <img src="https://raw.githubusercontent.com/Ikken9/pencaucu/dev/cdn/bet.svg" alt="Betting Icon" class="w-6 h-6"/>
                         <span>"Bets"</span>
                     </a>
-                    <a href="/ranking" class="flex flex-col items-center justify-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 11h18M3 16h18M3 6h18" />
-                        </svg>
+                    <a href="/ranking" class="flex flex-col items-center justify-center text-zinc-300 hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                        <img src="https://raw.githubusercontent.com/Ikken9/pencaucu/dev/cdn/ranking.svg" alt="Betting Icon" class="w-6 h-6"/>
                         <span>"Ranking"</span>
                     </a>
-                    <a href="/profile" class="flex flex-col items-center justify-center text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 18.879A3.5 3.5 0 018 18h8a3.5 3.5 0 013.5 3.5V21H5v-2.121a3.5 3.5 0 01.121-1.879zM15 13a3 3 0 110-6 3 3 0 010 6z" />
-                        </svg>
+                    <a href="/profile" class="flex flex-col items-center justify-center text-zinc-300 hover:bg-gray-700 px-3 py-2 rounded-md text-sm font-medium">
+                        <img src="https://raw.githubusercontent.com/Ikken9/pencaucu/dev/cdn/profile2.svg" alt="Betting Icon" class="w-6 h-6"/>
                         <span>"Profile"</span>
                     </a>
                 </div>

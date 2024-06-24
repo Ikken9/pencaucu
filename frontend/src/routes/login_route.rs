@@ -157,7 +157,7 @@ fn LoginForm(
                     </div>
                     <p class="mt-10 text-center text-sm text-zinc-300">
                         "Don't have an account? "
-                        <A href="/register" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign Up!</A>
+                        <A href="/" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">Sign Up!</A>
                     </p>
                 </form>
             </div>

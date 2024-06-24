@@ -1,5 +1,6 @@
 use leptos::*;
 use leptos_router::*;
+use crate::Navbar;
 
 #[component]
 pub fn AdminPanel() -> impl IntoView {
@@ -17,5 +18,6 @@ pub fn AdminPanel() -> impl IntoView {
                 </div>
             </div>
         </div>
+        <Navbar/>
     }
 }

@@ -24,3 +24,7 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:80"
