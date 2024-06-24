@@ -1,6 +1,7 @@
 package com.bd.pencaucu.persistance.implementers;
 
 import com.bd.pencaucu.exceptions.ResourceAlreadyExistsException;
+import com.bd.pencaucu.mappers.models.EmailMapper;
 import com.bd.pencaucu.models.Player;
 import com.bd.pencaucu.models.dto.PlayerDTO;
 import com.bd.pencaucu.mappers.models.dto.PlayerDTOMapper;
@@ -10,6 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 @Repository
@@ -77,6 +79,13 @@ public class PlayerDaoImpl implements PlayerDao {
                         "ORDER BY player_score DESC;";
 
         return jdbcTemplate.query(sql, new PlayerDTOMapper());
+    }
+
+    @Override
+    public List<String> findAllPlayersEmails() {
+        String sql = "SELECT p.player_email FROM Players p";
+
+        return jdbcTemplate.query(sql, new EmailMapper());
     }
 
     @Override
