@@ -302,6 +302,7 @@ pub fn BetForm(
                                     type="submit"
                                     class="w-full mt-4 rounded-md text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-lg text-sm px-4 py-1.5 text-center"
                                     prop:disabled=move || button_is_disabled.get()
+                                    on:click=move |_| dispatch_action()
                                 >
                                     {action_label}
                                 </button>

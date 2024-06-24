@@ -13,7 +13,7 @@ use crate::routes::profile_route::Profile;
 use crate::routes::ranking_route::Ranking;
 use crate::routes::register_route::*;
 use crate::routes::upload_match_route::UploadMatch;
-use crate::routes::upload_result_route::UploadResult;
+use crate::routes::upload_result_route::{MakeResult, UploadResult};
 
 
 #[component]
@@ -40,6 +40,7 @@ pub fn App() -> impl IntoView {
                     <Route path="/profile" view=Profile/>
                     <Route path="/admin-panel" view=AdminPanel/>
                     <Route path="/admin-panel/upload-match" view=UploadMatch/>
+                    <Route path="/admin-panel/upload-result/:match-id" view=MakeResult/>
                     <Route path="/admin-panel/upload-result" view=UploadResult/>
                     <Route path="/*any" view=|| view! { <h1>"Not Found"</h1> }/>
                 </Routes>
