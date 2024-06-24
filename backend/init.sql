@@ -273,6 +273,33 @@ VALUES ('NRG-HSN-EEUU', 'Estados Unidos', 'Texas', 'Houston', 'NRG Stadium');
 INSERT IGNORE INTO Stadiums(id, country, state, city, name)
 VALUES ('HRS-MIA-EEUU', 'Estados Unidos', 'Florida', 'Miami', 'Hard Rock Stadium');
 
+INSERT IGNORE INTO Stadiums(id, country, state, city, name)
+VALUES ('AHS-KSC-EEUU', 'Estados Unidos', 'Missouri', 'Kansas City', 'GEHA Field at Arrowhead Stadium');
+
+INSERT IGNORE INTO Stadiums(id, country, state, city, name)
+VALUES ('Q2S-AST-EEUU', 'Estados Unidos', 'Texas', 'Austin', 'Q2 Stadium');
+
+INSERT IGNORE INTO Stadiums(id, country, state, city, name)
+VALUES ('BAS-CLE-EEUU', 'Estados Unidos', 'North Carolina', 'Charlotte', 'Bank of America Stadium');
+
+INSERT IGNORE INTO Stadiums(id, country, state, city, name)
+VALUES ('MLS-ETR-EEUU', 'Estados Unidos', 'New Jersey', 'East Rutherford', 'MetLife Stadium');
+
+INSERT IGNORE INTO Stadiums(id, country, state, city, name)
+VALUES ('SFS-GDE-EEUU', 'Estados Unidos', 'Arizona', 'Glendale', 'State Farm Stadium');
+
+INSERT IGNORE INTO Stadiums(id, country, state, city, name)
+VALUES ('SIS-IWD-EEUU', 'Estados Unidos', 'California', 'Inglewood', 'SoFi Stadium');
+
+INSERT IGNORE INTO Stadiums(id, country, state, city, name)
+VALUES ('CMP-KSC-EEUU', 'Estados Unidos', 'Kansas', 'Kansas City', 'Children’s Mercy Park');
+
+INSERT IGNORE INTO Stadiums(id, country, state, city, name)
+VALUES ('ATS-PDE-EEUU', 'Estados Unidos', 'Nevada', 'Paradise', 'Allegiant Stadium');
+
+INSERT IGNORE INTO Stadiums(id, country, state, city, name)
+VALUES ('ICS-OAO-EEUU', 'Estados Unidos', 'Florida', 'Orlando', 'Inter&Co Stadium');
+
 -- PLAYER RANKS EXAMPLE DATA INSERT
 INSERT IGNORE INTO Player_Ranks(player_email, team_name, final_position)
 VALUES ('dali.fernandez@correo.ucu.edu.uy', 'Uruguay', 1);
