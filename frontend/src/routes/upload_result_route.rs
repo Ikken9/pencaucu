@@ -2,6 +2,7 @@ use chrono::{Local, NaiveDateTime};
 use leptos::*;
 use leptos::leptos_dom::{error, log};
 use crate::models::match_model::Match;
+use crate::Navbar;
 use crate::services::{match_service, result_service};
 use crate::services::match_service::timestamp_to_date;
 
@@ -105,6 +106,7 @@ pub fn UploadResult() -> impl IntoView {
                     }
                 }})}
         </Suspense>
+        <Navbar/>
     }
 }
 

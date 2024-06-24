@@ -2,6 +2,7 @@ use leptos::*;
 use leptos::leptos_dom::{error, log};
 use leptos_router::{use_params, use_params_map};
 use crate::models::bet_model::Bet;
+use crate::Navbar;
 use crate::services::{bet_service, match_service};
 use crate::services::bet_service::BetParams;
 use crate::services::match_service::timestamp_to_date;
@@ -63,6 +64,7 @@ pub fn MakeBet() -> impl IntoView {
             error=bet_error.into()
             disabled
         />
+        <Navbar/>
     }
 }
 
@@ -117,6 +119,7 @@ pub fn Bets() -> impl IntoView {
                 }
             })}
         </Suspense>
+        <Navbar/>
     }
 }
 

@@ -3,6 +3,7 @@ use leptos::*;
 use leptos::logging::{error, log};
 use leptos_router::{NavigateOptions, use_navigate};
 use crate::models::match_model::Match;
+use crate::Navbar;
 use crate::services::match_service;
 use crate::services::match_service::timestamp_to_date;
 
@@ -110,6 +111,7 @@ pub fn Matches() -> impl IntoView {
                 }
             })}
         </Suspense>
+        <Navbar/>
     }
 }
 

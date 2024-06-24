@@ -1,6 +1,7 @@
 use leptos::*;
 use leptos::leptos_dom::{error, log};
 use reqwest::StatusCode;
+use crate::Navbar;
 use crate::services::{match_service, stadium_service, stage_service};
 
 #[component]
@@ -58,6 +59,7 @@ pub fn UploadMatch() -> impl IntoView {
             error=upload_match_error.into()
             disabled
         />
+        <Navbar/>
     }
 }
 

@@ -1,6 +1,7 @@
 use leptos::*;
 use leptos::leptos_dom::{error, log};
 use crate::models::player_model::Player;
+use crate::Navbar;
 use crate::services::player_service;
 
 #[component]
@@ -55,6 +56,7 @@ pub fn Ranking() -> impl IntoView {
                 }
             })}
         </Suspense>
+        <Navbar/>
     }
 }
 
