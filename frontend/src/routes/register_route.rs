@@ -5,7 +5,7 @@ use reqwest::header::AUTHORIZATION;
 use reqwest::StatusCode;
 use crate::models::auth_model::{Username, EmailAddress, Password};
 use crate::models::career_model::Career;
-use crate::services::{register_service, career_service};
+use crate::services::{register_service, career_service, team_service};
 
 #[component]
 pub fn Register() -> impl IntoView {
@@ -87,7 +87,6 @@ fn RegisterForm(
     let (career, set_career) = create_signal(String::new());
     let (password, set_password) = create_signal(String::new());
 
-    // Fetch careers data
     let careers_data = create_resource(
         || (),  // The initial state for the resource
         |_| async {
@@ -100,6 +99,24 @@ fn RegisterForm(
                 }
                 Err(e) => {
                     error!("Error fetching careers: {:?}", e);
+                    None
+                }
+            }
+        },
+    );
+
+    let teams_data = create_resource(
+        || (),  // The initial state for the resource
+        |_| async {
+            log!("Fetching teams...");
+            let result = team_service::get_teams().await;
+            match result {
+                Ok(teams) => {
+                    log!("Successfully fetched teams.");
+                    Some(teams)
+                }
+                Err(e) => {
+                    error!("Error fetching teams: {:?}", e);
                     None
                 }
             }
@@ -182,6 +199,52 @@ fn RegisterForm(
                                         vec![view! { <option value="">Error loading careers</option> }]
                                     }
                                 }).unwrap_or_else(|| vec![view! { <option value="">Error loading careers</option> }])}
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="champion" class="block text-sm font-medium leading-6 text-zinc-300">"Career"</label>
+                        <div class="mt-2">
+                            <select id="champion" name="champion" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                prop:disabled=move || disabled.get()
+                                on:change=move |ev| {
+                                    let val = event_target_value(&ev);
+                                    set_career.update(|v| *v = val);
+                                }
+                            >
+                                <option value="">Select a champion</option>
+                                {move || teams_data.get().map(|champions| {
+                                    if let Some(champion_list) = champions {
+                                        champion_list.iter().map(|c| {
+                                            view! { <option value={c.name.clone()}>{c.name.clone()}</option> }
+                                        }).collect::<Vec<_>>()
+                                    } else {
+                                        vec![view! { <option value="">Error loading teams</option> }]
+                                    }
+                                }).unwrap_or_else(|| vec![view! { <option value="">Error loading teams</option> }])}
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="subchampion" class="block text-sm font-medium leading-6 text-zinc-300">"Career"</label>
+                        <div class="mt-2">
+                            <select id="subchampion" name="subchampion" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                prop:disabled=move || disabled.get()
+                                on:change=move |ev| {
+                                    let val = event_target_value(&ev);
+                                    set_career.update(|v| *v = val);
+                                }
+                            >
+                                <option value="">Select a subchampion</option>
+                                {move || teams_data.get().map(|subchampions| {
+                                    if let Some(subchampion_list) = subchampions {
+                                        subchampion_list.iter().map(|sc| {
+                                            view! { <option value={sc.name.clone()}>{sc.name.clone()}</option> }
+                                        }).collect::<Vec<_>>()
+                                    } else {
+                                        vec![view! { <option value="">Error loading teams</option> }]
+                                    }
+                                }).unwrap_or_else(|| vec![view! { <option value="">Error loading teams</option> }])}
                             </select>
                         </div>
                     </div>
