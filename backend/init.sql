@@ -248,9 +248,6 @@ INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, face
 VALUES (8, '2024-04-18 20:00:00', 'Fase de Grupos', 'MBS-ATL-EEUU', 'Uruguay', 'Canada', 'martin.caraballo@correo.ucu.edu.uy');
 
 -- RESULTS EXAMPLE DATA INSERT
-INSERT IGNORE INTO Results(match_id)
-VALUES (1), (2), (3), (4), (5), (6);
-
 INSERT IGNORE INTO Results(match_id, team_score, faced_team_score)
 VALUES (7, 3, 1);
 
