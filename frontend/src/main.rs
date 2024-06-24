@@ -48,7 +48,7 @@ pub fn App() -> impl IntoView {
 #[component]
 pub fn Navbar() -> impl IntoView {
     view! {
-        <nav class="fixed bottom-0 left-0 right-0 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl">
+        <nav class="z-30 fixed bottom-0 left-0 right-0 bg-gradient-to-r from-indigo-600 to-violet-600 rounded-2xl">
             <div class="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
                     <a href="/matches" class="flex flex-col items-center justify-center text-zinc-300 hover:bg-gray-700 py-2 rounded-md text-sm font-medium">
