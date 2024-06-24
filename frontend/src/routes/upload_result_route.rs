@@ -26,6 +26,9 @@ pub fn MakeResult() -> impl IntoView {
         error!("Unable to save matchId into local storage")
     }
 
+    // TODO: SET updating TO TRUE WHEN RESULT ALREADY EXISTS.
+    let (updating, set_updating) = create_signal(false);
+
     let result_action =
         create_action(move |(team_score, faced_team_score): &(String, String)| {
             let team_score = team_score.clone();
@@ -34,12 +37,22 @@ pub fn MakeResult() -> impl IntoView {
             async move {
                 set_wait_for_response.set(true);
 
-                let res = result_service::submit_result(
-                    &match_id().unwrap().parse::<u32>().unwrap(),
-                    &team_score.parse::<u8>().unwrap(),
-                    &faced_team_score.parse::<u8>().unwrap()
-                )
-                    .await;
+                let res;
+
+                if updating.get() {
+                    res = result_service::submit_result(
+                        &match_id().unwrap().parse::<u32>().unwrap(),
+                        &team_score.parse::<u8>().unwrap(),
+                        &faced_team_score.parse::<u8>().unwrap()
+                    ).await;
+                } else {
+                    res = result_service::edit_result(
+                        &match_id().unwrap().parse::<u32>().unwrap(),
+                        &team_score.parse::<u8>().unwrap(),
+                        &faced_team_score.parse::<u8>().unwrap()
+                    ).await;
+                }
+
 
                 match res {
                     Ok(_) => {
@@ -108,7 +121,6 @@ pub fn UploadResult() -> impl IntoView {
     view! {
         <Suspense fallback=|| view! { "Loading matches..." }>
             {move || pending_results.get().map(|pending | match pending {
-                None => view! { <div>"Error loading matches." </div> },
                 Some(pending) => {
 
                     view! {
@@ -163,7 +175,37 @@ pub fn UploadResult() -> impl IntoView {
                             </div>
                         </div>
                     }
-                }})}
+                }, _ => view! {
+                    <div>
+                        <Suspense fallback=|| view! { "Loading matches..." }>
+                            {move || submitted_results.get().map(|submitted | match submitted {
+                                None => view! { <div>"Error loading matches results."</div> },
+                                Some(submitted) => {
+                                    view! {
+                                        <div class="p-3">
+                                            <div class= "font-kanit text-xl font-bold italic text-zinc-300">
+                                                UPLOAD/EDIT A RESULT
+                                            </div>
+                                            <div class="font-kanit text-sm font-medium text-center text-gray-500 border-b border-b-secondary-gray">
+                                                <ul class="justify-center justify-evenly flex flex-wrap -mb-px">
+                                                    <li class="me-1">
+                                                        <a href="#" class="inline-block p-2 border-b-2 rounded-t-lg text-zinc-300 border-b-4 border-violet-500">
+                                                            "Submitted"
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div class="tab-content mt-4">
+                                                <MatchList matches=submitted.clone() submitted=false />
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            })}
+                        </Suspense>
+                    </div>
+                }
+            })}
         </Suspense>
         <Navbar/>
     }
@@ -185,7 +227,6 @@ pub fn Match(match_data: Match, submitted: bool) -> impl IntoView {
                     <button type="button" class="mt-2 absolute left-1/2 transform -translate-x-1/2 z-10 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5"
                         on:click=move |_| {
                             let match_id = match_data.id.clone();
-                            let navigate = use_navigate().clone();
                             spawn_local(async move {
                                 spawn_local(async move {
                                     use_navigate()(&format!("/admin-panel/upload-result/{}", match_id), NavigateOptions::default());
@@ -198,8 +239,6 @@ pub fn Match(match_data: Match, submitted: bool) -> impl IntoView {
                     <button type="button" class="mt-2 absolute left-1/2 transform -translate-x-1/2 z-10 text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5"
                         on:click=move |_| {
                             let match_id = match_data.id.clone();
-                            let stored_email = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("playerEmail").unwrap();
-                            let navigate = use_navigate().clone();
                             spawn_local(async move {
                                 spawn_local(async move {
                                     use_navigate()(&format!("/admin-panel/upload-result/{}", match_id), NavigateOptions::default());
@@ -286,6 +325,31 @@ pub fn SubmitResultForm(
         },
     );
 
+    let result_data = create_resource(
+        || (),
+        move |_| {
+            async move {
+                match web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("matchId").unwrap() {
+                    Some(match_id) => {
+                        match match_service::get_match(match_id.to_string()).await {
+                            Ok(m) => {
+                                log!("Successfully obtained match.");
+                                Some(m)
+                            }
+                            Err(e) => {
+                                error!("Error obtaining match: {:?}", e);
+                                None
+                            }
+                        }
+                    }
+                    None => {
+                        None
+                    }
+                }
+            }
+        },
+    );
+
     view! {
         <div class="flex min-h-full flex-col justify-center p-3 ">
             <div class= "font-kanit text-xl font-bold italic text-zinc-300 mb-2">
@@ -324,6 +388,9 @@ pub fn SubmitResultForm(
                                                     required
                                                     class="w-10 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     placeholder=""
+                                                    value=move || format!(
+                                                        "{}", match_data.first_team_score
+                                                    )
                                                     prop:disabled=move || disabled.get()
                                                     on:keyup=move |ev: ev::KeyboardEvent| {
                                                         let val = event_target_value(&ev);
@@ -344,6 +411,9 @@ pub fn SubmitResultForm(
                                                     required
                                                     class="w-10 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     placeholder=""
+                                                    value=move || format!(
+                                                        "{}", match_data.second_team_score
+                                                    )
                                                     prop:disabled=move || disabled.get()
                                                     on:keyup=move |ev: ev::KeyboardEvent| {
                                                         let val = event_target_value(&ev);
