@@ -7,6 +7,7 @@ import java.util.List;
 public interface MatchDao {
     MatchDTO findById(String id);
     List<MatchDTO> findAll();
+    MatchDTO findFirstMatchOfTheDay();
     void save(Match match);
     void update(Match match);
     void delete(String id);

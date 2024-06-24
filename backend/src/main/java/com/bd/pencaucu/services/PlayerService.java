@@ -21,6 +21,8 @@ public class PlayerService {
         return playerDao.findById(username);
     }
 
+    public List<String> getAllPlayersEmails() { return playerDao.findAllPlayersEmails(); }
+
     public void createPlayer(Player player) {
         playerDao.save(player);
     }

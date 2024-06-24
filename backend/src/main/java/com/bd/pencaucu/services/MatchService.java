@@ -22,6 +22,8 @@ public class MatchService {
         return matchDao.findById(id);
     }
 
+    public MatchDTO getFirstMatchOfTheDay() { return matchDao.findFirstMatchOfTheDay(); }
+
     public void createMatch(Match match) {
         matchDao.save(match);
     }

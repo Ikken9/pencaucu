@@ -61,6 +61,25 @@ public class MatchDaoImpl implements MatchDao {
     }
 
     @Override
+    public MatchDTO findFirstMatchOfTheDay() {
+        String sql = "SELECT * " +
+                "FROM Matches " +
+                "WHERE date >= CURDATE() " +
+                "  AND date < CURDATE() + INTERVAL 1 DAY " +
+                "ORDER BY date " +
+                "LIMIT 1;";
+
+
+        List<MatchDTO> queryResult = jdbcTemplate.query(sql, new MatchDTOMapper());
+
+        if (!queryResult.isEmpty()) {
+            return queryResult.get(0);
+        }
+
+        return null;
+    }
+
+    @Override
     public void save(Match match) {
         String sql = "INSERT INTO Matches (" +
                         "date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email" +
