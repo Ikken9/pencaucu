@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 pub struct Career {
 
     #[serde(rename = "careerName")]
-    pub(crate) name: String
+    pub name: String
 }
 
 impl Display for Career {

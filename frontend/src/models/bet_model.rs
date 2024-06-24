@@ -4,14 +4,14 @@ use serde::{Deserialize, Serialize};
 pub struct Bet {
 
     #[serde(rename = "playerEmail")]
-    pub(crate) player_email: String,
+    pub player_email: String,
 
     #[serde(rename = "matchId")]
-    pub(crate) match_id: u64,
+    pub match_id: u64,
 
     #[serde(rename = "teamScore")]
-    pub(crate) team_score: u64,
+    pub team_score: u64,
 
     #[serde(rename = "facedTeamScore")]
-    pub(crate) faced_team_score: u64,
+    pub faced_team_score: u64,
 }
