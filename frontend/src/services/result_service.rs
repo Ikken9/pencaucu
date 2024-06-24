@@ -1,4 +1,5 @@
-use reqwest::Client;
+use std::collections::HashMap;
+use reqwest::{Client, Response};
 use crate::models::match_model::Match;
 
 pub async fn get_pending_results() -> Result<Vec<Match>, reqwest::Error> {
@@ -20,6 +21,35 @@ pub async fn get_pending_results() -> Result<Vec<Match>, reqwest::Error> {
         Ok(pending_results)
     } else {
         Err(res.error_for_status().unwrap_err())
+    }
+}
+
+pub async fn submit_result(match_id: &u32, team_score: &u8, faced_team_score: &u8) -> Result<Response, reqwest::Error> {
+    let token = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("token").unwrap();
+    let mut map = HashMap::new();
+    map.insert("matchId", match_id.to_string());
+    map.insert("teamScore", team_score.to_string());
+    map.insert("facedTeamScore", faced_team_score.to_string());
+
+    let client = Client::new();
+
+    let req_builder = client.post("http://localhost:8080/results");
+
+    let req = if let Some(token) = token {
+        req_builder.bearer_auth(token).json(&map)
+    } else {
+        req_builder
+    };
+
+    let res = req.send().await;
+
+    match res {
+        Ok(response) => {
+            Ok(response)
+        }
+        Err(e) => {
+            Err(e)
+        }
     }
 }
 
