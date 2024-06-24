@@ -32,7 +32,7 @@ En resumen, la aplicación estará orientada a ofrecer una experiencia intuitiva
     
 3. Abra la aplicación **Docker Desktop** (o en su defecto inicialice el *Docker daemon*)
     
-4. Ejecute en consola el siguiente comando para ejecutar la aplicación:
+4. Ejecute en consola el siguiente comando para levantar la aplicación:
     - `docker compose up`
 	
 5. Puede acceder a la aplicación desde:
@@ -42,7 +42,7 @@ En resumen, la aplicación estará orientada a ofrecer una experiencia intuitiva
 
 El script de inicialización de la Base de Datos MySQL se encuentra ubicado entro de la carpeta "backend" bajo el nombre de "**init.sql**"
 
-# Integrantes
+## Integrantes
 
 - Piero Saucedo
 - Martín Caraballo
