@@ -3,6 +3,7 @@ package com.bd.pencaucu.controllers;
 import com.bd.pencaucu.models.Match;
 import com.bd.pencaucu.models.dto.MatchDTO;
 import com.bd.pencaucu.services.MatchService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class MatchController {
     }
 
     @GetMapping("/{id}")
+    @Cacheable(value = "matches", key = "#id")
     public ResponseEntity<MatchDTO> getMatchById(@PathVariable String id) {
         MatchDTO match = matchService.getMatchById(id);
 
