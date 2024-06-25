@@ -10,9 +10,11 @@ public class TeamMapper implements RowMapper<Team> {
     public Team mapRow(ResultSet rs, int rowNum) throws SQLException {
         Team team = new Team();
         String teamName = rs.getString("name");
-        String teamPicture = rs.getString("flag");
+        String teamGroupLetter = rs.getString("group_letter");
+        String teamPicture = rs.getString("flag_image");
         
         team.setName(teamName);
+        team.setGroupLetter(teamGroupLetter);
         team.setPictureUrl(teamPicture);
 
         return team;

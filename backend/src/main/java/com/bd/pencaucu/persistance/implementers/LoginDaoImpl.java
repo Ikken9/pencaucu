@@ -45,7 +45,9 @@ public class LoginDaoImpl implements LoginDao {
 
     @Override
     public void update(Login login) {
+        String sql = "UPDATE Logins SET password = ? WHERE user_email = ?";
 
+        jdbcTemplate.update(sql, login.getPassword(), login.getEmail());
     }
 
     @Override

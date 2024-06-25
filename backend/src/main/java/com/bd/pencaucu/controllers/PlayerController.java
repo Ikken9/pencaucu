@@ -6,6 +6,7 @@ import com.bd.pencaucu.services.PlayerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,10 @@ public class PlayerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PlayerDTO> getPlayerById(@RequestBody @PathVariable String id) {
+        if (!userHaveAccess(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         PlayerDTO player = playerService.getPlayerById(id);
 
         if (player != null) {
@@ -47,6 +52,9 @@ public class PlayerController {
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Player> createPlayer(@RequestBody Player player) {
+        if (!userHaveAccess(player.getEmail())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
         playerService.createPlayer(player);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -54,6 +62,10 @@ public class PlayerController {
     @PutMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Player> updatePlayer(@RequestBody Player player) {
+        if (!userHaveAccess(player.getEmail())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         playerService.updatePlayer(player);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -61,7 +73,16 @@ public class PlayerController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Player> deletePlayer(@PathVariable String id) {
+        if (!userHaveAccess(id)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         playerService.deletePlayer(id);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private boolean userHaveAccess(String id) {
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        return user.equals(id);
     }
 }

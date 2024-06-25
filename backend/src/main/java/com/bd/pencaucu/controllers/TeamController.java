@@ -5,6 +5,7 @@ import com.bd.pencaucu.models.Team;
 import com.bd.pencaucu.services.TeamService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -58,18 +59,21 @@ public class TeamController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Team> createTeam(@RequestBody Team team) {
         teamService.createTeam(team);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Team> updateTeam(@RequestBody Team team) {
         teamService.updateTeam(team);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Team> deleteTeam(@PathVariable String id) {
         teamService.deleteTeam(id);
         return new ResponseEntity<>(HttpStatus.OK);

@@ -3,9 +3,11 @@ package com.bd.pencaucu.controllers;
 import com.bd.pencaucu.config.TokenProvider;
 import com.bd.pencaucu.models.Login;
 import com.bd.pencaucu.models.Player;
+import com.bd.pencaucu.models.Rank;
 import com.bd.pencaucu.models.User;
 import com.bd.pencaucu.exceptions.InvalidUserRegistrationException;
 import com.bd.pencaucu.services.LoginService;
+import com.bd.pencaucu.services.PlayerRankService;
 import com.bd.pencaucu.services.PlayerService;
 import com.bd.pencaucu.services.UserService;
 import org.springframework.http.HttpHeaders;
@@ -31,16 +33,19 @@ public class AuthController {
     private final UserService userService;
     private final LoginService loginService;
     private final PlayerService playerService;
+    private final PlayerRankService playerRankService;
     private final TokenProvider tokenProvider;
 
     public AuthController(UserService userService,
                           LoginService loginService,
                           PlayerService playerService,
+                          PlayerRankService playerRankService,
                           PasswordEncoder passwordEncoder,
                           AuthenticationManager authenticationManager, TokenProvider tokenProvider) {
         this.userService = userService;
         this.loginService = loginService;
         this.playerService = playerService;
+        this.playerRankService = playerRankService;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
         this.tokenProvider = tokenProvider;
@@ -67,6 +72,12 @@ public class AuthController {
         userService.createUser(user);
         loginService.saveLoginUser(login);
         playerService.createPlayer(player);
+
+        Rank championRank = new Rank(user.getEmail(), user.getChampion(), 1);
+        playerRankService.savePlayerRank(championRank);
+
+        Rank subChamionRank = new Rank(user.getEmail(), user.getSubchampion(), 2);
+        playerRankService.savePlayerRank(subChamionRank);
 
         return new ResponseEntity<>(
                 String.format("User with email %s has been registered.", user.getEmail()),

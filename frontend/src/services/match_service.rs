@@ -53,7 +53,7 @@ pub async fn upload_match(team_name: String, faced_team_name: String, date: Stri
     let timestamp = input_date_to_timestamp(date);
     let mut map = HashMap::new();
     map.insert("date", timestamp);
-    map.insert("knockoutStageId", stage_name);
+    map.insert("knockoutStage", stage_name);
     map.insert("stadiumId", stadium_id);
     map.insert("teamName", team_name);
     map.insert("facedTeamName", faced_team_name);

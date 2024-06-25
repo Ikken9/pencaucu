@@ -6,6 +6,7 @@ import com.bd.pencaucu.services.MatchService;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,18 +47,21 @@ public class MatchController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Match> createMatch(@RequestBody Match match) {
         matchService.createMatch(match);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Match> updateMatch(@RequestBody Match match) {
         matchService.updateMatch(match);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Match> deleteMatch(@PathVariable String id) {
         matchService.deleteMatch(id);
         return new ResponseEntity<>(HttpStatus.OK);

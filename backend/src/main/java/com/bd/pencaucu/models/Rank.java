@@ -7,10 +7,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class Team {
-    private String name;
-    private String groupLetter;
-    private String pictureUrl;
+@NoArgsConstructor
+public class Rank {
+    private String playerEmail;
+    private String teamName;
+    private int finalPosition;
 }

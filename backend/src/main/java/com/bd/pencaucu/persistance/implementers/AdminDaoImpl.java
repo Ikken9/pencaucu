@@ -45,7 +45,9 @@ public class AdminDaoImpl implements AdminDao {
 
     @Override
     public void update(Admin admin) {
+        String sql = "UPDATE Admins SET admin_email = ? WHERE admin_email = ?";
 
+        jdbcTemplate.update(sql, admin.getEmail(), admin.getEmail());
     }
 
     @Override

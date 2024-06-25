@@ -100,6 +100,9 @@ public class PlayerDaoImpl implements PlayerDao {
 
     @Override
     public void update(Player player) {
+        String sql = "UPDATE Players SET career_name = ?, profile_picture = ? WHERE player_email = ?";
+
+        jdbcTemplate.update(sql, player.getCareerName(), player.getProfilePictureUrl(), player.getEmail());
 
     }
 

@@ -2,7 +2,7 @@ use leptos::*;
 use leptos::leptos_dom::{error, log};
 use reqwest::StatusCode;
 use crate::Navbar;
-use crate::services::{match_service, stadium_service, stage_service};
+use crate::services::{match_service, stadium_service, stage_service, team_service};
 
 #[component]
 pub fn UploadMatch() -> impl IntoView {
@@ -120,6 +120,25 @@ fn UploadMatchForm(
             }
         },
     );
+
+    let teams_data = create_resource(
+        || (),  // The initial state for the resource
+        |_| async {
+            log!("Fetching knockout stages...");
+            let result = team_service::get_teams_names().await;
+            match result {
+                Ok(stages) => {
+                    log!("Successfully fetched teams names.");
+                    Some(stages)
+                }
+                Err(e) => {
+                    error!("Error fetching teams names: {:?}", e);
+                    None
+                }
+            }
+        },
+    );
+
     view! {
         <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div class="sm:mx-auto sm:w-full sm:max-w-sm">
@@ -153,7 +172,7 @@ fn UploadMatchForm(
                     <div>
                         <label for="stage" class="block text-sm font-medium leading-6 text-zinc-300">"Knockout Stage"</label>
                         <div class="mt-2">
-                            <select id="stages" name="stages" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            <select id="stage" name="stages" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 prop:disabled=move || disabled.get()
                                 on:change=move |ev| {
                                     let val = event_target_value(&ev);
@@ -176,7 +195,7 @@ fn UploadMatchForm(
                     <div>
                         <label for="stadium" class="block text-sm font-medium leading-6 text-zinc-300">"Stadium"</label>
                         <div class="mt-2">
-                            <select id="stadiums" name="stadiums" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            <select id="stadium" name="stadiums" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 prop:disabled=move || disabled.get()
                                 on:change=move |ev| {
                                     let val = event_target_value(&ev);
@@ -197,48 +216,49 @@ fn UploadMatchForm(
                         </div>
                     </div>
                     <div>
-                        <div class="flex items-center justify-between">
-                            <label for="team-name" class="block text-sm font-medium leading-6 text-zinc-300">Team Name</label>
-                        </div>
+                        <label for="team-name" class="block text-sm font-medium leading-6 text-zinc-300">"Team Name"</label>
                         <div class="mt-2">
-                            <input id="team-name" name="team-name" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 ring-gradient-to-r from-purple-500 via-purple-600 to-purple-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
-                                placeholder="Team Name"
+                            <select id="team-name" name="team names" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 prop:disabled=move || disabled.get()
-                                on:keyup=move |ev: ev::KeyboardEvent| {
-                                    let val = event_target_value(&ev);
-                                    set_team_name.update(|v| *v = val);
-                                }
                                 on:change=move |ev| {
                                     let val = event_target_value(&ev);
                                     set_team_name.update(|v| *v = val);
                                 }
-                            />
+                            >
+                                <option value="">Select a Team Name</option>
+                                {move || teams_data.get().map(|teams| {
+                                    if let Some(teams_list) = teams {
+                                        teams_list.iter().map(|t| {
+                                            view! { <option value={t.clone()}>{t.clone()}</option> }
+                                        }).collect::<Vec<_>>()
+                                    } else {
+                                        vec![view! { <option value="">Error loading teams</option> }]
+                                    }
+                                }).unwrap_or_else(|| vec![view! { <option value="">Error loading teams</option> }])}
+                            </select>
                         </div>
                     </div>
                     <div>
-                        <div class="flex items-center justify-between">
-                            <label for="faced-team-name" class="block text-sm font-medium leading-6 text-zinc-300">Faced Team Score</label>
-                        </div>
+                        <label for="faced-team-name" class="block text-sm font-medium leading-6 text-zinc-300">"Faced Team Name"</label>
                         <div class="mt-2">
-                            <input id="faced-team-name" name="faced-team-name" type="text" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 ring-gradient-to-r from-purple-500 via-purple-600 to-purple-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-purple-600 sm:text-sm sm:leading-6"
-                                placeholder="Faced Team name"
+                            <select id="faced-team-name" name="team names" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 prop:disabled=move || disabled.get()
-                                on:keyup=move |ev: ev::KeyboardEvent| {
-                                    match &*ev.key() {
-                                        "Enter" => {
-                                            upload_match_action();
-                                        }
-                                        _ => {
-                                            let val = event_target_value(&ev);
-                                            set_team_name.update(|p| *p = val);
-                                        }
-                                    }
-                                }
                                 on:change=move |ev| {
                                     let val = event_target_value(&ev);
-                                    set_faced_team_name.update(|p| *p = val);
+                                    set_faced_team_name.update(|v| *v = val);
                                 }
-                            />
+                            >
+                                <option value="">Select a Faced Team Name</option>
+                                {move || teams_data.get().map(|teams| {
+                                    if let Some(teams_list) = teams {
+                                        teams_list.iter().map(|t| {
+                                            view! { <option value={t.clone()}>{t.clone()}</option> }
+                                        }).collect::<Vec<_>>()
+                                    } else {
+                                        vec![view! { <option value="">Error loading teams</option> }]
+                                    }
+                                }).unwrap_or_else(|| vec![view! { <option value="">Error loading teams</option> }])}
+                            </select>
                         </div>
                     </div>
                     <div>

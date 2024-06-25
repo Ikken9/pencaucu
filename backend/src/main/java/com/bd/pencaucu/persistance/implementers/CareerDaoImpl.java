@@ -30,7 +30,9 @@ public class CareerDaoImpl implements CareerDao {
 
     @Override
     public void update(Career career) {
+        String sql = "UPDATE Careers SET career_name = ? WHERE career_name = ?";
 
+        jdbcTemplate.update(sql, career.getCareerName(), career.getCareerName());
     }
 
     @Override
