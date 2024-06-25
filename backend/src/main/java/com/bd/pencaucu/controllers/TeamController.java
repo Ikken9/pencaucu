@@ -44,6 +44,20 @@ public class TeamController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+
+    @GetMapping("/names")
+    public ResponseEntity<List<String>> getAllTeamNames() {
+        List<String> teamsNames = teamService.getAllTeamNames();
+
+        if (teamsNames == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else if (!teamsNames.isEmpty()) {
+            return new ResponseEntity<>(teamsNames, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
     @PostMapping
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Team> createTeam(@RequestBody Team team) {

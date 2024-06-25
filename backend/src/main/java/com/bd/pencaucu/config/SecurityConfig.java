@@ -27,7 +27,7 @@ public class SecurityConfig {
                             "/register",
                             "/login",
                             "/careers",
-                            "/teams",
+                            "/teams/names",
                             "/players/**").permitAll()
                     .requestMatchers(
                             "/admins/**").hasAuthority("ROLE_ADMIN")

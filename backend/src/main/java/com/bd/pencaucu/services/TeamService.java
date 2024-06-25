@@ -16,6 +16,10 @@ public class TeamService {
         return teamDao.findAll();
     }
 
+    public List<String> getAllTeamNames() {
+        return teamDao.findAllTeamNames();
+    }
+
     public Team getTeamById(String id) {
         return teamDao.findById(id);
     }

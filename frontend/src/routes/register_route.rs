@@ -14,10 +14,12 @@ pub fn Register() -> impl IntoView {
     let navigate = use_navigate();
 
     let register_action =
-        create_action(move |(username, email, career, password): &(String, String, String, String)| {
+        create_action(move |(username, email, career, champion, subchampion, password): &(String, String, String, String, String, String)| {
             let username = Username(username.to_string());
             let email = EmailAddress(email.to_string());
             let career = Career { name: career.clone() };
+            let champion = champion.clone();
+            let subchampion = subchampion.clone();
             let password = Password(password.to_string());
 
             let email_clone = email.clone();
@@ -25,7 +27,7 @@ pub fn Register() -> impl IntoView {
             let value = navigate.clone();
             async move {
                 set_wait_for_response.update(|w| *w = true);
-                match register_service::register(username, email, career, password).await {
+                match register_service::register(username, email, career, champion, subchampion, password).await {
                     Ok(res) => {
                         let status_code = res.status();
                         match status_code {
@@ -78,13 +80,15 @@ pub fn Register() -> impl IntoView {
 #[component]
 fn RegisterForm(
     action_label: &'static str,
-    action: Action<(String, String, String, String), ()>,
+    action: Action<(String, String, String, String, String, String), ()>,
     error: Signal<Option<String>>,
     disabled: Signal<bool>,
 ) -> impl IntoView {
     let (username, set_username) = create_signal(String::new());
     let (email, set_email) = create_signal(String::new());
     let (career, set_career) = create_signal(String::new());
+    let (champion, set_champion) = create_signal(String::new());
+    let (subchampion, set_subchampion) = create_signal(String::new());
     let (password, set_password) = create_signal(String::new());
 
     let careers_data = create_resource(
@@ -109,7 +113,7 @@ fn RegisterForm(
         || (),  // The initial state for the resource
         |_| async {
             log!("Fetching teams...");
-            let result = team_service::get_teams().await;
+            let result = team_service::get_teams_names().await;
             match result {
                 Ok(teams) => {
                     log!("Successfully fetched teams.");
@@ -123,10 +127,16 @@ fn RegisterForm(
         },
     );
 
-    let dispatch_action = move || action.dispatch((username.get(), email.get(), career.get(), password.get()));
+    let dispatch_action = move || action.dispatch((username.get(), email.get(), career.get(), champion.get(), subchampion.get(), password.get()));
 
     let button_is_disabled = Signal::derive(move || {
-        disabled.get() || username.get().is_empty() || email.get().is_empty() || career.get().is_empty() || password.get().is_empty()
+        disabled.get()
+            || username.get().is_empty()
+            || email.get().is_empty()
+            || career.get().is_empty()
+            || champion.get().is_empty()
+            || subchampion.get().is_empty()
+            || password.get().is_empty()
     });
 
     view! {
@@ -203,20 +213,20 @@ fn RegisterForm(
                         </div>
                     </div>
                     <div>
-                        <label for="champion" class="block text-sm font-medium leading-6 text-zinc-300">"Career"</label>
+                        <label for="champion" class="block text-sm font-medium leading-6 text-zinc-300">"Champion"</label>
                         <div class="mt-2">
                             <select id="champion" name="champion" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 prop:disabled=move || disabled.get()
                                 on:change=move |ev| {
                                     let val = event_target_value(&ev);
-                                    set_career.update(|v| *v = val);
+                                    set_champion.update(|v| *v = val);
                                 }
                             >
                                 <option value="">Select a champion</option>
                                 {move || teams_data.get().map(|champions| {
                                     if let Some(champion_list) = champions {
                                         champion_list.iter().map(|c| {
-                                            view! { <option value={c.name.clone()}>{c.name.clone()}</option> }
+                                            view! { <option value={c.clone()}>{c.clone()}</option> }
                                         }).collect::<Vec<_>>()
                                     } else {
                                         vec![view! { <option value="">Error loading teams</option> }]
@@ -226,20 +236,20 @@ fn RegisterForm(
                         </div>
                     </div>
                     <div>
-                        <label for="subchampion" class="block text-sm font-medium leading-6 text-zinc-300">"Career"</label>
+                        <label for="subchampion" class="block text-sm font-medium leading-6 text-zinc-300">"Subchampion"</label>
                         <div class="mt-2">
                             <select id="subchampion" name="subchampion" required class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 prop:disabled=move || disabled.get()
                                 on:change=move |ev| {
                                     let val = event_target_value(&ev);
-                                    set_career.update(|v| *v = val);
+                                    set_subchampion.update(|v| *v = val);
                                 }
                             >
                                 <option value="">Select a subchampion</option>
                                 {move || teams_data.get().map(|subchampions| {
                                     if let Some(subchampion_list) = subchampions {
                                         subchampion_list.iter().map(|sc| {
-                                            view! { <option value={sc.name.clone()}>{sc.name.clone()}</option> }
+                                            view! { <option value={sc.clone()}>{sc.clone()}</option> }
                                         }).collect::<Vec<_>>()
                                     } else {
                                         vec![view! { <option value="">Error loading teams</option> }]
