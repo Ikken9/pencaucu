@@ -26,10 +26,7 @@ pub fn MakeResult() -> impl IntoView {
         error!("Unable to save matchId into local storage")
     }
 
-    // TODO: SET updating TO TRUE WHEN RESULT ALREADY EXISTS.
-    let (updating, set_updating) = create_signal(false);
-
-    let result_action =
+    let submit_result_action =
         create_action(move |(team_score, faced_team_score): &(String, String)| {
             let team_score = team_score.clone();
             let faced_team_score = faced_team_score.clone();
@@ -37,26 +34,43 @@ pub fn MakeResult() -> impl IntoView {
             async move {
                 set_wait_for_response.set(true);
 
-                let res;
-
-                if updating.get() {
-                    res = result_service::submit_result(
-                        &match_id().unwrap().parse::<u32>().unwrap(),
-                        &team_score.parse::<u8>().unwrap(),
-                        &faced_team_score.parse::<u8>().unwrap()
+                let res = result_service::submit_result(
+                        &match_id().unwrap(),
+                        &team_score,
+                        &faced_team_score
                     ).await;
-                } else {
-                    res = result_service::edit_result(
-                        &match_id().unwrap().parse::<u32>().unwrap(),
-                        &team_score.parse::<u8>().unwrap(),
-                        &faced_team_score.parse::<u8>().unwrap()
-                    ).await;
-                }
-
 
                 match res {
                     Ok(_) => {
                         set_result_error.set(None);
+                        use_navigate()("/admin-panel/upload-result", NavigateOptions::default())
+                    }
+                    Err(e) => {
+                        set_result_error.set(Some(e.to_string()));
+                    }
+                }
+                set_wait_for_response.set(false);
+            }
+        });
+
+    let update_result_action =
+        create_action(move |(team_score, faced_team_score): &(String, String)| {
+            let team_score = team_score.clone();
+            let faced_team_score = faced_team_score.clone();
+
+            async move {
+                set_wait_for_response.set(true);
+
+                let res = result_service::edit_result(
+                    &match_id().unwrap(),
+                    &team_score,
+                    &faced_team_score
+                ).await;
+
+                match res {
+                    Ok(_) => {
+                        set_result_error.set(None);
+                        use_navigate()("/admin-panel/upload-result", NavigateOptions::default())
                     }
                     Err(e) => {
                         set_result_error.set(Some(e.to_string()));
@@ -71,7 +85,8 @@ pub fn MakeResult() -> impl IntoView {
     view! {
         <SubmitResultForm
             action_label="Submit Match Result"
-            action=result_action
+            action=submit_result_action
+            update_action=update_result_action
             error=result_error.into()
             disabled
         />
@@ -122,7 +137,6 @@ pub fn UploadResult() -> impl IntoView {
         <Suspense fallback=|| view! { "Loading matches..." }>
             {move || pending_results.get().map(|pending | match pending {
                 Some(pending) => {
-
                     view! {
                         <div class="p-3">
                             <div class= "font-kanit text-xl font-bold italic text-zinc-300">
@@ -168,7 +182,16 @@ pub fn UploadResult() -> impl IntoView {
                             </div>
                             <div class="tab-content mt-4">
                                 { match &*active_tab.get() {
-                                    "Submitted" => view! { <MatchList matches=submitted_results.get().unwrap().unwrap() submitted=false /> }.into_view(),
+                                    "Submitted" => view! {
+                                        {move || submitted_results.get().map(|submitted | match submitted {
+                                            None => view! { <div>"No submitted results to show."</div> },
+                                            Some(submitted) => view! {
+                                                <div>
+                                                    <MatchList matches=submitted submitted=false />
+                                                </div>
+                                            }
+                                        })}
+                                    }.into_view(),
                                     "Pending to Submit" => view! { <MatchList matches=pending.clone() submitted=true /> }.into_view(),
                                     _ => view! { <div>"Unknown tab"</div> }.into_view(),
                                 } }
@@ -288,13 +311,18 @@ pub fn MatchList(matches: Vec<Match>, submitted: bool) -> impl IntoView {
 pub fn SubmitResultForm(
     action_label: &'static str,
     action: Action<(String, String), ()>,
+    update_action: Action<(String, String), ()>,
     error: Signal<Option<String>>,
     disabled: Signal<bool>,
 ) -> impl IntoView {
     let (team_score, set_team_score) = create_signal(String::new());
     let (faced_team_score, set_faced_team_score) = create_signal(String::new());
 
+    let (updating, set_updating) = create_signal(false);
+
     let dispatch_action = move || action.dispatch((team_score.get(), faced_team_score.get()));
+
+    let dispatch_update_action = move || update_action.dispatch((team_score.get(), faced_team_score.get()));
 
     let button_is_disabled = Signal::derive(move || {
         disabled.get() || team_score.get().is_empty() || faced_team_score.get().is_empty()
@@ -331,13 +359,16 @@ pub fn SubmitResultForm(
             async move {
                 match web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("matchId").unwrap() {
                     Some(match_id) => {
-                        match match_service::get_match(match_id.to_string()).await {
-                            Ok(m) => {
-                                log!("Successfully obtained match.");
-                                Some(m)
+                        match result_service::get_result_by_id(match_id.to_string()).await {
+                            Ok(result) => {
+                                log!("Successfully obtained result.");
+                                set_updating.set(true);
+                                set_team_score.set(result.first_team_score.to_string());
+                                set_faced_team_score.set(result.second_team_score.to_string());
+                                Some(result)
                             }
                             Err(e) => {
-                                error!("Error obtaining match: {:?}", e);
+                                error!("Error obtaining result: {:?}", e);
                                 None
                             }
                         }
@@ -437,12 +468,18 @@ pub fn SubmitResultForm(
                                 </div>
                             </div>
                             <div class="flex justify-center w-full mt-4">
-                                <button type="submit" class="flex w-full justify-center rounded-md text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5"
-                                prop:disabled=move || button_is_disabled.get()
-                                on:click=move |_| dispatch_action()
-                                >
-                                    {action_label}
-                                </button>
+                                <Show when=move || {!updating.get()} fallback=move || view! {
+                                    <button type="submit" class="flex w-full justify-center rounded-md text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5"
+                                        on:click=move |_| dispatch_update_action()
+                                    >
+                                        {action_label}
+                                    </button>}>
+                                    <button type="submit" class="flex w-full justify-center rounded-md text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-4 py-1.5 text-center me-1.5 mb-0.5"
+                                        on:click=move |_| dispatch_action()
+                                    >
+                                        {action_label}
+                                    </button>
+                                </Show>
                             </div>
                             <div class="flex items-center justify-between w-full mt-4 pt-1 text-gray-600 text-xs sm:text-sm border-t border-secondary-gray-2">
                                 <div class="text-zinc-300">{match_data.stadium_name}</div>

@@ -1,10 +1,9 @@
 use leptos::*;
 use leptos::leptos_dom::{error, log};
-use leptos_router::{use_params, use_params_map};
+use leptos_router::{NavigateOptions, use_navigate, use_params, use_params_map};
 use crate::models::bet_model::Bet;
 use crate::Navbar;
 use crate::services::{bet_service, match_service};
-use crate::services::bet_service::BetParams;
 use crate::services::match_service::timestamp_to_date;
 
 #[component]
@@ -46,6 +45,37 @@ pub fn MakeBet() -> impl IntoView {
                 match res {
                     Ok(_) => {
                         set_bet_error.set(None);
+                        use_navigate()("/bets", NavigateOptions::default())
+                    }
+                    Err(e) => {
+                        set_bet_error.set(Some(e.to_string()));
+                    }
+                }
+                set_wait_for_response.update(|w| *w = false);
+            }
+        });
+
+    let update_bet_action =
+        create_action(move |(team_score, faced_team_score): &(String, String)| {
+            let team_score = team_score.clone();
+            let faced_team_score = faced_team_score.clone();
+
+            async move {
+                let email = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("email").unwrap().unwrap();
+                set_wait_for_response.update(|w| *w = true);
+
+                let res = bet_service::edit_bet(
+                    &*email,
+                    &match_id().unwrap().parse::<u32>().unwrap(),
+                    &team_score.parse::<u8>().unwrap(),
+                    &faced_team_score.parse::<u8>().unwrap()
+                )
+                    .await;
+
+                match res {
+                    Ok(_) => {
+                        set_bet_error.set(None);
+                        use_navigate()("/bets", NavigateOptions::default())
                     }
                     Err(e) => {
                         set_bet_error.set(Some(e.to_string()));
@@ -61,6 +91,7 @@ pub fn MakeBet() -> impl IntoView {
         <BetForm
             action_label="Bet"
             action=bet_action
+            update_action=update_bet_action
             error=bet_error.into()
             disabled
         />
@@ -183,13 +214,18 @@ pub fn Bet(bet_data: Bet) -> impl IntoView {
 pub fn BetForm(
     action_label: &'static str,
     action: Action<(String, String), ()>,
+    update_action: Action<(String, String), ()>,
     error: Signal<Option<String>>,
     disabled: Signal<bool>,
 ) -> impl IntoView {
     let (team_score, set_team_score) = create_signal(String::new());
     let (faced_team_score, set_faced_team_score) = create_signal(String::new());
 
+    let (updating, set_updating) = create_signal(false);
+
     let dispatch_action = move || action.dispatch((team_score.get(), faced_team_score.get()));
+
+    let dispatch_update_action = move || update_action.dispatch((team_score.get(), faced_team_score.get()));
 
     let button_is_disabled = Signal::derive(move || {
         disabled.get() || team_score.get().is_empty() || faced_team_score.get().is_empty()
@@ -218,6 +254,36 @@ pub fn BetForm(
                 }
             }
         },
+    );
+
+    let bet_data = create_resource(
+        || (),
+        move |_| {
+            async move {
+                match web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("matchId").unwrap() {
+                    Some(match_id) => {
+                        let email = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("email").unwrap().unwrap();
+                        match bet_service::get_bets_by_player_by_match_id(email, match_id).await {
+                            Ok(bet) => {
+                                log!("Successfully obtained player bet.");
+                                set_updating.set(true);
+                                set_team_score.set(bet.team_score.to_string());
+                                set_faced_team_score.set(bet.faced_team_score.to_string());
+                                Some(bet)
+                            }
+                            Err(e) => {
+                                error!("Error obtaining bet: {:?}", e);
+                                None
+                            }
+                        }
+
+                    }
+                    None => {
+                        None
+                    }
+                }
+            }
+        }
     );
 
     view! {
@@ -258,6 +324,9 @@ pub fn BetForm(
                                                     required
                                                     class="w-10 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     placeholder=""
+                                                    value=move || format!(
+                                                        "{}", team_score.get()
+                                                    )
                                                     prop:disabled=move || disabled.get()
                                                     on:keyup=move |ev: ev::KeyboardEvent| {
                                                         let val = event_target_value(&ev);
@@ -278,6 +347,9 @@ pub fn BetForm(
                                                     required
                                                     class="w-10 h-10 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                                     placeholder=""
+                                                    value=move || format!(
+                                                        "{}", faced_team_score()
+                                                    )
                                                     prop:disabled=move || disabled.get()
                                                     on:keyup=move |ev: ev::KeyboardEvent| {
                                                         let val = event_target_value(&ev);
@@ -301,14 +373,24 @@ pub fn BetForm(
                                 </div>
                             </div>
                             <div class="flex justify-center w-full mt-4">
-                                <button
-                                    type="submit"
-                                    class="w-full mt-4 rounded-md text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-lg text-sm px-4 py-1.5 text-center"
-                                    prop:disabled=move || button_is_disabled.get()
-                                    on:click=move |_| dispatch_action()
-                                >
-                                    {action_label}
-                                </button>
+                                <Show when=move || {!updating.get()} fallback=move || view! {
+                                    <button
+                                        type="submit"
+                                        class="w-full mt-4 rounded-md text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-lg text-sm px-4 py-1.5 text-center"
+                                        prop:disabled=move || button_is_disabled.get()
+                                        on:click=move |_| dispatch_update_action()
+                                    >
+                                        {action_label}
+                                    </button>}>
+                                    <button
+                                        type="submit"
+                                        class="w-full mt-4 rounded-md text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-lg text-sm px-4 py-1.5 text-center"
+                                        prop:disabled=move || button_is_disabled.get()
+                                        on:click=move |_| dispatch_action()
+                                    >
+                                        {action_label}
+                                    </button>
+                                </Show>
                             </div>
                             <div class="flex items-center justify-between w-full mt-4 pt-1 text-gray-600 text-xs sm:text-sm border-t border-secondary-gray-2">
                                 <div class="text-zinc-300">{match_data.stadium_name}</div>

@@ -102,7 +102,7 @@ pub fn Matches() -> impl IntoView {
                                 { match &*active_tab.get() {
                                     "Playing" => view! { <MatchList matches=playing.clone() bettable=false /> }.into_view(),
                                     "Pending" => view! { <MatchList matches=pending.clone() bettable=true /> }.into_view(),
-                                    "Ended" => view! { <MatchList matches=ended.clone() bettable=false /> }.into_view(),
+                                    "Ended" => view! { <EndedMatchList matches=ended.clone() /> }.into_view(),
                                     _ => view! { <div>"Unknown tab"</div> }.into_view(),
                                 } }
                             </div>
@@ -116,7 +116,7 @@ pub fn Matches() -> impl IntoView {
 }
 
 #[component]
-pub fn Match(match_data: Match, bettable: bool) -> impl IntoView {
+pub fn Match(match_data: Match, bettable: bool, ended: bool) -> impl IntoView {
     let formatted_date = timestamp_to_date(match_data.date).format("%A %d, %B - %H:%M").to_string();
     view! {
         <div class="match-card bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 p-2 rounded-lg shadow-md flex flex-col items-center mb-1 sm:p-4 h-24">
@@ -139,6 +139,11 @@ pub fn Match(match_data: Match, bettable: bool) -> impl IntoView {
                         Bet
                     </button>
                 </Show>
+                <div class="mt-2 absolute left-1/2 transform -translate-x-1/2">
+                    <Show when=move || {ended == true} fallback=|| view! { <div></div> }>
+                        <div class="font-kanit font-semi-bold text-4xl text-zinc-300">{match_data.first_team_score} : {match_data.second_team_score}</div>
+                    </Show>
+                </div>
                 <div class="flex items-center relative z-10">
                     <div class="mr-2 text-sm sm:mr-4 sm:text-base">
                         <div class="font-semibold text-slate-50">{&match_data.second_team_name}</div>
@@ -166,7 +171,27 @@ pub fn MatchList(matches: Vec<Match>, bettable: bool) -> impl IntoView {
                         match_item.clone()
                     });
                     view! {
-                        <Match match_data=match_memo() bettable=bettable />
+                        <Match match_data=match_memo() bettable=bettable ended=false />
+                    }
+                }
+            />
+        </div>
+    }
+}
+
+#[component]
+pub fn EndedMatchList(matches: Vec<Match>) -> impl IntoView {
+    view! {
+        <div class="grid gap-2">
+            <For
+                each=move || matches.clone().into_iter().enumerate()
+                key=|(_, match_data)| match_data.id.clone()
+                children=move |(_, match_item)| {
+                    let match_memo = create_memo(move |_| {
+                        match_item.clone()
+                    });
+                    view! {
+                        <Match match_data=match_memo() bettable=false ended=true />
                     }
                 }
             />

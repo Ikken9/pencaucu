@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use leptos::leptos_dom::log;
 use reqwest::{Client, Response};
 use crate::models::result_model::MatchResult;
 use crate::models::match_model::Match;
@@ -25,7 +26,7 @@ pub async fn get_pending_results() -> Result<Vec<Match>, reqwest::Error> {
     }
 }
 
-pub async fn get_result_by_id(id: &u32) -> Result<Vec<MatchResult>, reqwest::Error> {
+pub async fn get_result_by_id(id: String) -> Result<MatchResult, reqwest::Error> {
     let token = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("token").unwrap();
     let client = Client::new();
 
@@ -40,19 +41,19 @@ pub async fn get_result_by_id(id: &u32) -> Result<Vec<MatchResult>, reqwest::Err
     let res = req.send().await?;
 
     if res.status().is_success() {
-        let pending_results = res.json::<Vec<MatchResult>>().await?;
-        Ok(pending_results)
+        let match_result = res.json::<MatchResult>().await?;
+        Ok(match_result)
     } else {
         Err(res.error_for_status().unwrap_err())
     }
 }
 
-pub async fn submit_result(match_id: &u32, team_score: &u8, faced_team_score: &u8) -> Result<Response, reqwest::Error> {
+pub async fn submit_result(match_id: &String, team_score: &String, faced_team_score: &String) -> Result<Response, reqwest::Error> {
     let token = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("token").unwrap();
     let mut map = HashMap::new();
-    map.insert("matchId", match_id.to_string());
-    map.insert("teamScore", team_score.to_string());
-    map.insert("facedTeamScore", faced_team_score.to_string());
+    map.insert("matchId", match_id);
+    map.insert("teamScore", team_score);
+    map.insert("facedTeamScore", faced_team_score);
 
     let client = Client::new();
 
@@ -76,12 +77,12 @@ pub async fn submit_result(match_id: &u32, team_score: &u8, faced_team_score: &u
     }
 }
 
-pub async fn edit_result(match_id: &u32, team_score: &u8, faced_team_score: &u8) -> Result<Response, reqwest::Error> {
+pub async fn edit_result(match_id: &String, team_score: &String, faced_team_score: &String) -> Result<Response, reqwest::Error> {
     let token = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("token").unwrap();
     let mut map = HashMap::new();
-    map.insert("matchId", match_id.to_string());
-    map.insert("teamScore", team_score.to_string());
-    map.insert("facedTeamScore", faced_team_score.to_string());
+    map.insert("matchId", match_id);
+    map.insert("teamScore", team_score);
+    map.insert("facedTeamScore", faced_team_score);
 
     let client = Client::new();
 
