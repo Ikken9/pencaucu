@@ -4,7 +4,6 @@ import com.bd.pencaucu.models.Match;
 import com.bd.pencaucu.models.dto.MatchDTO;
 import com.bd.pencaucu.persistance.interfaces.MatchDao;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +18,6 @@ public class MatchService {
         return matchDao.findAll();
     }
 
-    @Cacheable(value = "matches", key = "#id")
     public MatchDTO getMatchById(String id) {
         return matchDao.findById(id);
     }

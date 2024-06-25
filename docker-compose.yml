@@ -13,12 +13,6 @@ services:
       interval: 5s
       timeout: 50s
       retries: 10
-  redis:
-    image: redis:latest
-    volumes:
-      - ./redis-data:/data
-    ports:
-      - "6379:6379"
   backend:
     build: ./backend
     environment:
