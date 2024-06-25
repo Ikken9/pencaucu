@@ -225,79 +225,83 @@ VALUES ('Final');
 -- MATCHES EXAMPLE DATA INSERT
 
 -- GRUPO A
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-20 21:00:00', 'Fase de Grupos', 'MBS-ATL-EEUU', 'Argentina', 'Canada', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-21 21:00:00', 'Fase de Grupos', 'ATS-ARL-EEUU', 'Peru', 'Chile', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-25 19:00:00', 'Fase de Grupos', 'CMP-KSC-EEUU', 'Peru', 'Canada', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-25 22:00:00', 'Fase de Grupos', 'MLS-ETR-EEUU', 'Chile', 'Argentina', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-29 21:00:00', 'Fase de Grupos', 'HRS-MIA-EEUU', 'Argentina', 'Peru', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-29 21:00:00', 'Fase de Grupos', 'ICS-OAO-EEUU', 'Canada', 'Chile', 'martin.caraballo@correo.ucu.edu.uy');
 
 --GRUPO B
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-22 19:00:00', 'Fase de Grupos', 'LS-SC-EEUU', 'Ecuador', 'Venezuela', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-22 22:00:00', 'Fase de Grupos', 'NRG-HSN-EEUU', 'Mexico', 'Jamaica', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-26 19:00:00', 'Fase de Grupos', 'ATS-PDE-EEUU', 'Ecuador', 'Jamaica', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-26 21:00:00', 'Fase de Grupos', 'SIS-IWD-EEUU', 'Venezuela', 'Mexico', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-30 21:00:00', 'Fase de Grupos', 'SFS-GDE-EEUU', 'Mexico', 'Ecuador', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-30 21:00:00', 'Fase de Grupos', 'Q2S-AST-EEUU', 'Jamaica', 'Venezuela', 'martin.caraballo@correo.ucu.edu.uy');
 
 --GRUPO C
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-23 19:00:00', 'Fase de Grupos', 'ATS-ARL-EEUU', 'USA', 'Bolivia', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-23 22:00:00', 'Fase de Grupos', 'HRS-MIA-EEUU', 'Uruguay', 'Panama', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-27 19:00:00', 'Fase de Grupos', 'MBS-ATL-EEUU', 'Panama', 'USA', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-27 22:00:00', 'Fase de Grupos', 'MLS-ETR-EEUU', 'Uruguay', 'Bolivia', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-07-01 22:00:00', 'Fase de Grupos', 'AHS-KSC-EEUU', 'USA', 'Uruguay', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-07-01 22:00:00', 'Fase de Grupos', 'ICS-OAO-EEUU', 'Bolivia', 'Panama', 'martin.caraballo@correo.ucu.edu.uy');
 
 --GRUPO D
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-24 19:00:00', 'Fase de Grupos', 'NRG-HSN-EEUU', 'Colombia', 'Paraguay', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-24 22:00:00', 'Fase de Grupos', 'SIS-IWD-EEUU', 'Brasil', 'Costa Rica', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-28 19:00:00', 'Fase de Grupos', 'SFS-GDE-EEUU', 'Colombia', 'Costa Rica', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-28 22:00:00', 'Fase de Grupos', 'ATS-PDE-EEUU', 'Paraguay', 'Brasil', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-07-02 22:00:00', 'Fase de Grupos', 'LS-SC-EEUU', 'Brasil', 'Colombia', 'martin.caraballo@correo.ucu.edu.uy');
 
-INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
+INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-07-02 22:00:00', 'Fase de Grupos', 'Q2S-AST-EEUU', 'Costa Rica', 'Paraguay', 'martin.caraballo@correo.ucu.edu.uy');
 
 
