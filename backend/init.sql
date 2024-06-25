@@ -223,12 +223,7 @@ INSERT IGNORE INTO Knockout_Stage(name)
 VALUES ('Final');
 
 -- MATCHES EXAMPLE DATA INSERT
-
 -- GRUPO A
-<<<<<<< HEAD
-=======
-
->>>>>>> 2b51208b1ca0a59c734a9a5e50529c5b6f2206ce
 INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-20 21:00:00', 'Fase de Grupos', 'MBS-ATL-EEUU', 'Argentina', 'Canada', 'martin.caraballo@correo.ucu.edu.uy');
 
@@ -247,12 +242,8 @@ VALUES ('2024-06-29 21:00:00', 'Fase de Grupos', 'HRS-MIA-EEUU', 'Argentina', 'P
 INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-29 21:00:00', 'Fase de Grupos', 'ICS-OAO-EEUU', 'Canada', 'Chile', 'martin.caraballo@correo.ucu.edu.uy');
 
-<<<<<<< HEAD
--- GRUPO B
-=======
---GRUPO B
 
->>>>>>> 2b51208b1ca0a59c734a9a5e50529c5b6f2206ce
+-- GRUPO B
 INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-22 19:00:00', 'Fase de Grupos', 'LS-SC-EEUU', 'Ecuador', 'Venezuela', 'martin.caraballo@correo.ucu.edu.uy');
 
@@ -271,12 +262,8 @@ VALUES ('2024-06-30 21:00:00', 'Fase de Grupos', 'SFS-GDE-EEUU', 'Mexico', 'Ecua
 INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-30 21:00:00', 'Fase de Grupos', 'Q2S-AST-EEUU', 'Jamaica', 'Venezuela', 'martin.caraballo@correo.ucu.edu.uy');
 
-<<<<<<< HEAD
--- GRUPO C
-=======
---GRUPO C
 
->>>>>>> 2b51208b1ca0a59c734a9a5e50529c5b6f2206ce
+-- GRUPO C
 INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-23 19:00:00', 'Fase de Grupos', 'ATS-ARL-EEUU', 'USA', 'Bolivia', 'martin.caraballo@correo.ucu.edu.uy');
 
@@ -295,12 +282,8 @@ VALUES ('2024-07-01 22:00:00', 'Fase de Grupos', 'AHS-KSC-EEUU', 'USA', 'Uruguay
 INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-07-01 22:00:00', 'Fase de Grupos', 'ICS-OAO-EEUU', 'Bolivia', 'Panama', 'martin.caraballo@correo.ucu.edu.uy');
 
-<<<<<<< HEAD
--- GRUPO D
-=======
---GRUPO D
 
->>>>>>> 2b51208b1ca0a59c734a9a5e50529c5b6f2206ce
+-- GRUPO D
 INSERT IGNORE INTO Matches(date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email)
 VALUES ('2024-06-24 19:00:00', 'Fase de Grupos', 'NRG-HSN-EEUU', 'Colombia', 'Paraguay', 'martin.caraballo@correo.ucu.edu.uy');
 
