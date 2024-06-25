@@ -5,6 +5,7 @@ import com.bd.pencaucu.models.dto.MatchDTO;
 import com.bd.pencaucu.services.ResultService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class ResultController {
     }
 
     @GetMapping("/pending")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<MatchDTO>> getAllPendingResults() {
         List<MatchDTO> results = resultService.findAllPendingResults();
 
@@ -45,6 +47,7 @@ public class ResultController {
     }
 
     @GetMapping("/submitted")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<List<MatchDTO>> getAllSubmittedResults() {
         List<MatchDTO> results = resultService.findAllSubmittedResults();
 
@@ -69,18 +72,21 @@ public class ResultController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Result> createResult(@RequestBody Result result) {
         resultService.submitResult(result);
         return new ResponseEntity<>(result, HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Result> updateResult(@RequestBody Result result) {
         resultService.updateResult(result);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Result> deleteResultById(@PathVariable int id) {
         resultService.deleteResult(id);
         return new ResponseEntity<>(HttpStatus.OK);

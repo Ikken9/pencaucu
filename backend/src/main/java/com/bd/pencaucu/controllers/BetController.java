@@ -4,6 +4,8 @@ import com.bd.pencaucu.models.Bet;
 import com.bd.pencaucu.services.BetService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +22,10 @@ public class BetController {
 
     @GetMapping("/{playerEmail}/{matchId}")
     public ResponseEntity<Bet> getBetsById(@PathVariable String playerEmail, @PathVariable int matchId) {
+        if (!userHaveAccess(playerEmail)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         Bet bet = betService.getBetById(playerEmail, matchId);
 
         if (bet == null) {
@@ -31,6 +37,10 @@ public class BetController {
 
     @GetMapping("/{playerEmail}")
     public ResponseEntity<List<Bet>> getPlayerBetsById(@PathVariable String playerEmail) {
+        if (!userHaveAccess(playerEmail)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         List<Bet> bet = betService.getPlayerBetsById(playerEmail);
 
         if (bet == null) {
@@ -41,20 +51,40 @@ public class BetController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_PLAYER')")
     public ResponseEntity<Bet> submitBet(@RequestBody Bet bet) {
+        if (!userHaveAccess(bet.getPlayerEmail())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         betService.submitBet(bet);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_PLAYER')")
     public ResponseEntity<Bet> updateBet(@RequestBody Bet bet) {
+        if (!userHaveAccess(bet.getPlayerEmail())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         betService.updateBet(bet);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping
+    @PreAuthorize("hasAuthority('ROLE_PLAYER')")
     public ResponseEntity<Bet> deleteBet(@RequestBody Bet bet) {
+        if (!userHaveAccess(bet.getPlayerEmail())) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         betService.deleteBet(bet);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private boolean userHaveAccess(String id) {
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        return user.equals(id);
     }
 }

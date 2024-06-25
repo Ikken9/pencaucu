@@ -4,6 +4,7 @@ import com.bd.pencaucu.models.Stadium;
 import com.bd.pencaucu.services.StadiumService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,18 +44,21 @@ public class StadiumController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Stadium> createStadium(@RequestBody Stadium stadium) {
         stadiumService.createStadium(stadium);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Stadium> updateStadium(@RequestBody Stadium stadium) {
         stadiumService.updateStadium(stadium);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Stadium> deleteStadium(@PathVariable String id) {
         stadiumService.deleteStadium(id);
         return new ResponseEntity<>(HttpStatus.OK);

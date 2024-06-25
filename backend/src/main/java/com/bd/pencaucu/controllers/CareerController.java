@@ -5,6 +5,7 @@ import com.bd.pencaucu.models.Career;
 import com.bd.pencaucu.services.CareerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,12 +34,14 @@ public class CareerController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<String> createCareer(@RequestBody Career career) {
         careerService.createCareer(career);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Career> updateCareer(@RequestBody Career career) {
         careerService.updateCareer(career);
 
@@ -46,6 +49,7 @@ public class CareerController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Career> deleteCareer(@PathVariable String id) {
         careerService.deleteCareer(id);
 

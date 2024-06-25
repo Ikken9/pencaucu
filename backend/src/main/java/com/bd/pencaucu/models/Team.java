@@ -11,5 +11,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Team {
     private String name;
+    private String groupLetter;
     private String pictureUrl;
 }

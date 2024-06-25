@@ -4,6 +4,7 @@ import com.bd.pencaucu.models.dto.ProfileDTO;
 import com.bd.pencaucu.services.ProfileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,10 @@ public class ProfileController {
 
     @GetMapping("/{profileEmail}")
     public ResponseEntity<ProfileDTO> getProfileByEmail(@PathVariable String profileEmail) {
+        if (!userHaveAccess(profileEmail)) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         ProfileDTO profile = profileService.getProfileByEmail(profileEmail);
 
         if (profile != null) {
@@ -28,6 +33,11 @@ public class ProfileController {
         }
 
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    private boolean userHaveAccess(String id) {
+        String user = SecurityContextHolder.getContext().getAuthentication().getName();
+        return user.equals(id);
     }
 
 }
