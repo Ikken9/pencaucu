@@ -19,7 +19,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/pencaucu_db
       - DB_USERNAME=root
       - DB_PASSWORD=1234
-      - REDIS_HOST=redis
       - EMAIL=obligatorio_bd2@outlook.com
       - EMAIL_PASSWORD=123456789ObligatorioBD2
       - JWT_SECRET=A7F886EAD26C3515C24F3D6BECDE905E363871BBD5B750FA66F3CEDD2A4358E5
