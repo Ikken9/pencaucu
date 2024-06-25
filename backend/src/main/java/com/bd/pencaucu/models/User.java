@@ -13,5 +13,7 @@ public class User {
     private String password;
     private String career;
     private String profilePictureUrl;
+    private String champion;
+    private String subchampion;
 
 }
