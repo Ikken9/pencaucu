@@ -301,12 +301,30 @@ INSERT IGNORE INTO Matches(id, date, knockout_stage, stadium_id, team_name, face
 VALUES ('2024-07-02 22:00:00', 'Fase de Grupos', 'Q2S-AST-EEUU', 'Costa Rica', 'Paraguay', 'martin.caraballo@correo.ucu.edu.uy');
 
 
--- RESULTS EXAMPLE DATA INSERT
+    -- RESULTS EXAMPLE DATA INSERT
 INSERT IGNORE INTO Results(match_id, team_score, faced_team_score)
-VALUES (7, 3, 1);
+VALUES (1, 2, 0);
 
 INSERT IGNORE INTO Results(match_id, team_score, faced_team_score)
-VALUES (8, 4, 2);
+VALUES (2, 0, 0);
+
+INSERT IGNORE INTO Results(match_id, team_score, faced_team_score)
+VALUES (7, 1, 2);
+
+INSERT IGNORE INTO Results(match_id, team_score, faced_team_score)
+VALUES (8, 1, 0);
+
+INSERT IGNORE INTO Results(match_id, team_score, faced_team_score)
+VALUES (13, 2, 0);
+
+INSERT IGNORE INTO Results(match_id, team_score, faced_team_score)
+VALUES (14, 3, 1);
+
+INSERT IGNORE INTO Results(match_id, team_score, faced_team_score)
+VALUES (19, 2, 1);
+
+INSERT IGNORE INTO Results(match_id, team_score, faced_team_score)
+VALUES (20, 0, 0);
 
 -- STADIUMS EXAMPLE DATA INSERT
 INSERT IGNORE INTO Stadiums(id, country, state, city, name)
