@@ -1,10 +1,14 @@
 use leptos::*;
+use leptos_router::*;
 use leptos::leptos_dom::{error, log};
 use crate::Navbar;
 use crate::services::player_service;
 
 #[component]
 pub fn Profile() -> impl IntoView {
+
+    let (is_admin, set_is_admin) = create_signal(false);
+
     let player_data = create_resource(
         || (),  // The initial state for the resource
         move |_| {
@@ -18,6 +22,7 @@ pub fn Profile() -> impl IntoView {
                         Some(player)
                     }
                     Err(e) => {
+                        set_is_admin.set(true);
                         error!("Error fetching player data: {:?}", e);
                         None
                     }
@@ -29,7 +34,21 @@ pub fn Profile() -> impl IntoView {
     view! {
         <Suspense fallback=|| view! { "Loading player..." }>
             { move || player_data.get().map(|p| match p {
-                None => view! { <div>"Error loading player."</div> },
+                None => view! {
+                    <div class="p-3">
+                        <div class= "font-kanit text-xl font-bold italic text-zinc-300">
+                        ADMIN PANEL
+                        </div>
+                        <div class="container">
+                            <div class="load-match-card bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 p-2 rounded-lg shadow-md flex flex-col items-center mb-1 sm:p-4 h-15 text-zinc-300">
+                                <A href="/admin-panel/upload-match">"Load match"</A>
+                            </div>
+                            <div class="load-match-result-card bg-gradient-to-r from-primary-gray-1 to-primary-gray-2 p-2 rounded-lg shadow-md flex flex-col items-center mb-1 sm:p-4 h-15 text-zinc-300">
+                                <A href="/admin-panel/upload-result">"Load match result"</A>
+                            </div>
+                        </div>
+                    </div>
+                },
                 Some(player) => {
                     let email = web_sys::window().unwrap().local_storage().unwrap().unwrap().get_item("email").unwrap().unwrap();
                     view! {
