@@ -51,7 +51,7 @@ public class BetController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_PLAYER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Bet> submitBet(@RequestBody Bet bet) {
         if (!userHaveAccess(bet.getPlayerEmail())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -62,7 +62,7 @@ public class BetController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAuthority('ROLE_PLAYER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Bet> updateBet(@RequestBody Bet bet) {
         if (!userHaveAccess(bet.getPlayerEmail())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -73,7 +73,7 @@ public class BetController {
     }
 
     @DeleteMapping
-    @PreAuthorize("hasAuthority('ROLE_PLAYER')")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
     public ResponseEntity<Bet> deleteBet(@RequestBody Bet bet) {
         if (!userHaveAccess(bet.getPlayerEmail())) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
