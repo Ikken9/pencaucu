@@ -81,9 +81,8 @@ public class MatchDaoImpl implements MatchDao {
 
     @Override
     public void save(Match match) {
-        String sql = "INSERT INTO Matches (" +
-                        "date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email" +
-                     ") VALUES (?, ?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO Matches (date, knockout_stage, stadium_id, team_name, faced_team_name, admin_email) " +
+                        "VALUES (?, ?, (SELECT id FROM Stadiums WHERE name = ?), ?, ?, ?);";
 
         jdbcTemplate.update(sql,
                 match.getDate(),
